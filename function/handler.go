@@ -17,7 +17,7 @@ func main() {
 	}
 
 	container := bean.NewContainer()
-	mapsClient, err := maps.New(os.Getenv("GOOGLE_MAPS_API_KEY"))
+	mapsClient, err := maps.New(os.Getenv("GOOGLE_MAPS_API_KEY"), os.Getenv("GOOGLE_API_SIGNATURE"))
 	if err != nil {
 		panic(err)
 	}

@@ -54,6 +54,7 @@ type PlacePhoto struct {
 	Height           int      `json:"height,omitempty"`
 	Width            int      `json:"width,omitempty"`
 	HTMLAttributions []string `json:"html_attributions,omitempty"`
+	PhotoPath        string   `json:"photo_path,omitempty"`
 }
 
 func SearchPlaceId(ctx context.Context, container Container, requestOpt ...SearchPlaceIdRequestOptional) (response SearchPlaceIdResponse, err error) {
@@ -119,6 +120,18 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 				OpenTime:  period.Open.Time,
 				CloseDay:  period.Close.Day.String(),
 				CloseTime: period.Close.Time,
+			})
+		}
+	}
+
+	if result.Photos != nil {
+		for _, photo := range result.Photos {
+			response.Photos = append(response.Photos, PlacePhoto{
+				PhotoReference:   photo.PhotoReference,
+				Height:           photo.Height,
+				Width:            photo.Width,
+				HTMLAttributions: photo.HTMLAttributions,
+				PhotoPath:        client.SignPhotoURL(photo.PhotoReference),
 			})
 		}
 	}

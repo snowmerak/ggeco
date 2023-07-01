@@ -27,7 +27,6 @@ type SearchTextResponse struct {
 		} `json:"location"`
 	} `json:"geometry"`
 	Name             string   `json:"name"`
-	Icon             string   `json:"icon"`
 	PlaceID          string   `json:"place_id"`
 	Types            []string `json:"types"`
 	BusinessStatus   string   `json:"business_status"`
@@ -89,7 +88,6 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 				},
 			},
 			Name:           r.Name,
-			Icon:           r.Icon,
 			PlaceID:        r.PlaceID,
 			Types:          r.Types,
 			BusinessStatus: r.BusinessStatus,
@@ -112,6 +110,7 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 				Width:            p.Width,
 				HTMLAttributions: p.HTMLAttributions,
 				PhotoReference:   p.PhotoReference,
+				PhotoPath:        client.SignPhotoURL(p.PhotoReference),
 			}
 		}
 	}
