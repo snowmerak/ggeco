@@ -1,3 +1,3 @@
 cd function
-go build handler.go
+gotip build handler.go
 func start
