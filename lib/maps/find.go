@@ -16,6 +16,7 @@ type SearchPlaceIdRequest struct {
 	GetPermanentlyClosed bool
 	GetGeometryLocation  bool
 	GetPhotos            bool
+	GetPhone             bool
 }
 
 // SearchPlaceIdResponse is a response for SearchPlaceId
@@ -28,6 +29,7 @@ type SearchPlaceIdResponse struct {
 	BusinessStatus   string       `json:"business_status,omitempty"`
 	Reviews          []Review     `json:"reviews,omitempty"`
 	Photos           []PlacePhoto `json:"photos,omitempty"`
+	Phone            string       `json:"phone,omitempty"`
 }
 
 type Location struct {
@@ -87,6 +89,9 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	if request.GetPhotos {
 		fields = append(fields, maps.PlaceDetailsFieldMaskPhotos)
 	}
+	if request.GetPhone {
+		fields = append(fields, maps.PlaceDetailsFieldMaskFormattedPhoneNumber)
+	}
 
 	result, err := client.baseClient.PlaceDetails(ctx, &maps.PlaceDetailsRequest{
 		PlaceID:  request.PlaceID,
@@ -134,6 +139,10 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 				PhotoPath:        client.SignPhotoURL(photo.PhotoReference),
 			})
 		}
+	}
+
+	if result.FormattedPhoneNumber != "" {
+		response.Phone = result.FormattedPhoneNumber
 	}
 
 	return response, nil

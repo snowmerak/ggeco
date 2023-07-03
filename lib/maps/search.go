@@ -2,6 +2,7 @@ package maps
 
 import (
 	"context"
+	"fmt"
 	"github.com/snowmerak/ggeco/gen/bean"
 	"googlemaps.github.io/maps"
 )
@@ -26,17 +27,13 @@ type SearchTextResponse struct {
 			Lng float64 `json:"lng"`
 		} `json:"location"`
 	} `json:"geometry"`
-	Name             string   `json:"name"`
-	PlaceID          string   `json:"place_id"`
-	Types            []string `json:"types"`
-	BusinessStatus   string   `json:"business_status"`
-	Rating           float64  `json:"rating,omitempty"`
-	UserRatingsTotal int      `json:"user_ratings_total,omitempty"`
-	OpeningHours     struct {
-		OpenNow bool `json:"open_now"`
-	} `json:"opening_hours,omitempty"`
-	Photos     []PlacePhoto `json:"photos,omitempty"`
-	PriceLevel int          `json:"price_level,omitempty"`
+	Name    string `json:"name"`
+	PlaceID string `json:"place_id"`
+	// Types            []string `json:"types"`
+	BusinessStatus   string       `json:"business_status"`
+	Rating           float64      `json:"rating,omitempty"`
+	UserRatingsTotal int          `json:"user_ratings_total,omitempty"`
+	Photos           []PlacePhoto `json:"photos,omitempty"`
 }
 
 func SearchText(ctx context.Context, container *bean.Container, fn ...SearchTextRequestOptional) (response []*SearchTextResponse, err error) {
@@ -63,6 +60,7 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 			Lng: request.Longitude,
 		}
 	}
+	fmt.Printf("%+v\n", args)
 
 	resp, err := client.baseClient.TextSearch(ctx, args)
 	if err != nil {
@@ -87,17 +85,13 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 					Lng: r.Geometry.Location.Lng,
 				},
 			},
-			Name:           r.Name,
-			PlaceID:        r.PlaceID,
-			Types:          r.Types,
+			Name:    r.Name,
+			PlaceID: r.PlaceID,
+			// Types:          r.Types,
 			BusinessStatus: r.BusinessStatus,
 			Photos:         make([]PlacePhoto, len(r.Photos)),
-			PriceLevel:     r.PriceLevel,
 		}
 
-		if r.OpeningHours != nil && r.OpeningHours.OpenNow != nil {
-			response[i].OpeningHours.OpenNow = *r.OpeningHours.OpenNow
-		}
 		if r.Rating != 0 {
 			response[i].Rating = float64(r.Rating)
 		}

@@ -17,7 +17,8 @@ func Handler(container *bean.Container) func(w http.ResponseWriter, r *http.Requ
 		getOpeningHours, _ := strconv.ParseBool(r.URL.Query().Get("opening_hours"))
 		getPermanentlyClosed, _ := strconv.ParseBool(r.URL.Query().Get("business_status"))
 		getGeometryLocation, _ := strconv.ParseBool(r.URL.Query().Get("geometry_location"))
-		getPhotos, _ := strconv.ParseBool(r.URL.Query().Get("photos"))
+		getPhotos, _ := strconv.ParseBool(r.URL.Query().Get("photo"))
+		getPhone, _ := strconv.ParseBool(r.URL.Query().Get("phone"))
 
 		resp, err := maps.SearchPlaceId(r.Context(), container, func(request *maps.SearchPlaceIdRequest) *maps.SearchPlaceIdRequest {
 			request.PlaceID = placeId
@@ -27,6 +28,7 @@ func Handler(container *bean.Container) func(w http.ResponseWriter, r *http.Requ
 			request.GetPermanentlyClosed = getPermanentlyClosed
 			request.GetGeometryLocation = getGeometryLocation
 			request.GetPhotos = getPhotos
+			request.GetPhone = getPhone
 			return request
 		})
 		if err != nil {
