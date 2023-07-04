@@ -1,11 +1,12 @@
-package search
+package places
 
 import (
 	"encoding/json"
-	"github.com/snowmerak/ggeco/gen/bean"
-	"github.com/snowmerak/ggeco/lib/maps"
 	"net/http"
 	"strconv"
+
+	"github.com/snowmerak/ggeco/gen/bean"
+	"github.com/snowmerak/ggeco/lib/maps"
 )
 
 func Handler(container *bean.Container) func(w http.ResponseWriter, r *http.Request) {

@@ -2,17 +2,18 @@ package main
 
 import (
 	"context"
-	"github.com/snowmerak/ggeco/function/image"
-	"github.com/snowmerak/ggeco/function/place"
-	"github.com/snowmerak/ggeco/function/search"
-	"github.com/snowmerak/ggeco/gen/bean"
-	"github.com/snowmerak/ggeco/lib/maps"
-	"github.com/snowmerak/ggeco/lib/sqlserver"
-	"github.com/snowmerak/ggeco/lib/storage"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/snowmerak/ggeco/function/image"
+	"github.com/snowmerak/ggeco/function/place"
+	"github.com/snowmerak/ggeco/function/places"
+	"github.com/snowmerak/ggeco/gen/bean"
+	"github.com/snowmerak/ggeco/lib/maps"
+	"github.com/snowmerak/ggeco/lib/sqlserver"
+	"github.com/snowmerak/ggeco/lib/storage"
 )
 
 func main() {
@@ -49,7 +50,7 @@ func main() {
 	storage.PushClient(container, imageClient)
 
 	http.HandleFunc("/api/place", place.Handler(container))
-	http.HandleFunc("/api/search", search.Handler(container))
+	http.HandleFunc("/api/search", places.Handler(container))
 	http.HandleFunc("/api/image", image.Handler(container))
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))

@@ -152,7 +152,7 @@ paths:
                     type: array
                     items:
                       type: string
-  /search:
+  /places:
     get:
       summary: |
         Search places.
