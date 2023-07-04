@@ -2,7 +2,7 @@ package maps
 
 import (
 	"context"
-	"fmt"
+
 	"github.com/snowmerak/ggeco/gen/bean"
 	"googlemaps.github.io/maps"
 )
@@ -27,9 +27,9 @@ type SearchTextResponse struct {
 			Lng float64 `json:"lng"`
 		} `json:"location"`
 	} `json:"geometry"`
-	Name    string `json:"name"`
-	PlaceID string `json:"place_id"`
-	// Types            []string `json:"types"`
+	Name             string       `json:"name"`
+	PlaceID          string       `json:"place_id"`
+	Types            []string     `json:"types"`
 	BusinessStatus   string       `json:"business_status"`
 	Rating           float64      `json:"rating,omitempty"`
 	UserRatingsTotal int          `json:"user_ratings_total,omitempty"`
@@ -60,7 +60,6 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 			Lng: request.Longitude,
 		}
 	}
-	fmt.Printf("%+v\n", args)
 
 	resp, err := client.baseClient.TextSearch(ctx, args)
 	if err != nil {
@@ -85,9 +84,9 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 					Lng: r.Geometry.Location.Lng,
 				},
 			},
-			Name:    r.Name,
-			PlaceID: r.PlaceID,
-			// Types:          r.Types,
+			Name:           r.Name,
+			PlaceID:        r.PlaceID,
+			Types:          r.Types,
 			BusinessStatus: r.BusinessStatus,
 			Photos:         make([]PlacePhoto, len(r.Photos)),
 		}
