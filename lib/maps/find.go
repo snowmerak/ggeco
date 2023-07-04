@@ -2,6 +2,7 @@ package maps
 
 import (
 	"context"
+
 	"googlemaps.github.io/maps"
 )
 
@@ -30,6 +31,7 @@ type SearchPlaceIdResponse struct {
 	Reviews          []Review     `json:"reviews,omitempty"`
 	Photos           []PlacePhoto `json:"photos,omitempty"`
 	Phone            string       `json:"phone,omitempty"`
+	Types            []string     `json:"types,omitempty"`
 }
 
 type Location struct {
@@ -73,6 +75,7 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	fields := []maps.PlaceDetailsFieldMask{
 		maps.PlaceDetailsFieldMaskFormattedAddress,
 		maps.PlaceDetailsFieldMaskName,
+		maps.PlaceDetailsFieldMaskTypes,
 	}
 	if request.GetReviews {
 		fields = append(fields, maps.PlaceDetailsFieldMaskReviews)
@@ -103,6 +106,7 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	}
 
 	response.Name = result.Name
+	response.Types = result.Types
 	response.FormattedAddress = result.FormattedAddress
 	response.GeometryLocation = Location{
 		Lat: result.Geometry.Location.Lat,
