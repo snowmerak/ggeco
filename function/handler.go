@@ -50,7 +50,7 @@ func main() {
 	storage.PushClient(container, imageClient)
 
 	http.HandleFunc("/api/place", place.Handler(container))
-	http.HandleFunc("/api/search", places.Handler(container))
+	http.HandleFunc("/api/places", places.Handler(container))
 	http.HandleFunc("/api/image", image.Handler(container))
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, nil))
