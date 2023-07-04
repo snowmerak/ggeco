@@ -91,6 +91,10 @@ func SearchText(ctx context.Context, container *bean.Container, fn ...SearchText
 			Photos:         make([]PlacePhoto, len(r.Photos)),
 		}
 
+		for j := range response[i].Types {
+			response[i].Types[j] = TranslatePlaceType(response[i].Types[j])
+		}
+
 		if r.Rating != 0 {
 			response[i].Rating = float64(r.Rating)
 		}

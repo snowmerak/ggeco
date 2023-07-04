@@ -106,7 +106,6 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	}
 
 	response.Name = result.Name
-	response.Types = result.Types
 	response.FormattedAddress = result.FormattedAddress
 	response.GeometryLocation = Location{
 		Lat: result.Geometry.Location.Lat,
@@ -147,6 +146,19 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 
 	if result.FormattedPhoneNumber != "" {
 		response.Phone = result.FormattedPhoneNumber
+	}
+
+	response.Types = result.Types
+	reduces := make([]int, 0)
+	for i := range response.Types {
+		translated := TranslatePlaceType(response.Types[i])
+		if translated == "" {
+			reduces = append(reduces, i)
+		}
+		response.Types[i] = translated
+	}
+	for i := len(reduces) - 1; i >= 0; i-- {
+		response.Types = append(response.Types[:reduces[i]], response.Types[reduces[i]+1:]...)
 	}
 
 	return response, nil
