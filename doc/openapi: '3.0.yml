@@ -154,6 +154,8 @@ paths:
                       type: string
   /search:
     get:
+      summary: |
+        Search places.
       parameters:
         - name: code
           in: query
