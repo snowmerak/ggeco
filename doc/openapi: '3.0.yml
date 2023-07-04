@@ -1,0 +1,289 @@
+openapi: "3.0.2"
+info:
+  title: ggeco-api
+  version: "1.0"
+servers:
+  - url: https://ggeco-api.azurewebsites.net
+paths:
+  /place:
+    get:
+      summary: |
+        Get place details.
+      description: |
+        Get place details from Google Maps API and return it as JSON.
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Code for authorization.
+        - name: place_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Place ID from Google Maps API.
+        - name: lang
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Language for place details.
+            ko: Korean.
+            en: English.
+            ja: Japanese.
+        - name: reviews
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, get reviews from Google Maps API.
+        - name: opening_hours
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, get opening hours from Google Maps API.
+            For example, if the place is open at 10:00 AM on Monday and closes at 8:00 PM on Monday, the opening hours will be as follows.
+            open_day: Monday.
+            open_time: 10:00 AM.
+            close_day: Monday.
+            close_time: 8:00 PM.
+        - name: business_status
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, get business status from Google Maps API.
+            For example, if the place is open at 10:00 AM on Monday and closes at 8:00 PM on Monday, the business status will be as follows.
+            OPERATIONAL, CLOSED_TEMPORARILY, and CLOSED_PERMANENTLY.
+        - name: photo
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, get photos from Google Maps API.
+        - name: geometry_location
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, get geometry location from Google Maps API.
+      responses:
+        500:
+          description: Internal Server Error. Google Maps API error or json parsing error.
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  place_id:
+                    type: string
+                  formatted_address:
+                    type: string
+                  geometry_location:
+                    type: object
+                    properties:
+                      lat:
+                        type: number
+                      lng:
+                        type: number
+                  name:
+                    type: string
+                  opening_hours:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        open_day:
+                          type: string
+                        open_time:
+                          type: string
+                        close_day:
+                          type: string
+                        close_time:
+                          type: string
+                  business_status:
+                    type: string
+                  reviews:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        author_name:
+                          type: string
+                        language:
+                          type: string
+                        rating:
+                          type: number
+                        text:
+                          type: string
+                  photos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        height:
+                          type: number
+                        width:
+                          type: number
+                        photo_reference:
+                          type: string
+                        html_attributions:
+                          type: array
+                          items:
+                            type: string
+                        photo_path:
+                          type: string
+                  phone:
+                    type: string
+                  types:
+                    type: array
+                    items:
+                      type: string
+  /search:
+    get:
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Code for authorization.
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Search query.
+        - name: lang
+          in: query
+          required: false
+          schema:
+            type: string
+          description: |
+            Language for search results.
+            ko: Korean.
+            en: English.
+            ja: Japanese.
+        - name: latitude
+          in: query
+          required: false
+          schema:
+            type: number
+          description: |
+            Latitude of the reference point.
+        - name: longitude
+          in: query
+          required: false
+          schema:
+            type: number
+          description: |
+            Longitude of the reference point.
+        - name: radius
+          in: query
+          required: false
+          schema:
+            type: number
+          description: |
+            Radius of the search area.
+        - name: open_now
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: |
+            If true, only return places that are open now.
+      responses:
+        500: 
+          description: Internal Server Error. Google Maps API error or json parsing error.
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  formatted_address:
+                    type: string
+                  geometry:
+                    type: object
+                    properties:
+                      location:
+                        type: object
+                        properties:
+                          lat:
+                            type: number
+                          lng:
+                            type: number
+                  name:
+                    type: string
+                  place_id:
+                    type: string
+                  types:
+                    type: array
+                    items:
+                      type: string
+                  business_status:
+                    type: string
+                  rating:
+                    type: number
+                  user_ratings_total:
+                    type: number
+                  photos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        height:
+                          type: number
+                        width:
+                          type: number
+                        photo_reference:
+                          type: string
+                        html_attributions:
+                          type: array
+                          items:
+                            type: string
+                        photo_path:
+                          type: string
+  /image:
+    get:
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Code for authorization.
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: |
+            Path of the image.
+      responses:
+        500:
+          description: Internal Server Error. Azure Blob Storage error.
+        200:
+          description: A shared access signature (SAS) URI providing write access to the blob.
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: binary
