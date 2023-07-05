@@ -1,4 +1,4 @@
-openapi: "3.0.2"
+openapi: "3.1.0"
 info:
   title: ggeco-api
   version: "1.0"
@@ -28,7 +28,7 @@ paths:
             Place ID from Google Maps API.
         - name: lang
           in: query
-          required: true
+          required: false
           schema:
             type: string
           description: |
@@ -93,7 +93,7 @@ paths:
                   formatted_address:
                     type: string
                   geometry_location:
-                    type: object
+                    type: [object, 'null']
                     properties:
                       lat:
                         type: number
@@ -102,7 +102,7 @@ paths:
                   name:
                     type: string
                   opening_hours:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: object
                       properties:
@@ -115,9 +115,9 @@ paths:
                         close_time:
                           type: string
                   business_status:
-                    type: string
+                    type: [string, 'null']
                   reviews:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: object
                       properties:
@@ -130,7 +130,7 @@ paths:
                         text:
                           type: string
                   photos:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: object
                       properties:
@@ -147,9 +147,9 @@ paths:
                         photo_path:
                           type: string
                   phone:
-                    type: string
+                    type: [string, 'null']
                   types:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: string
   /places:
@@ -222,7 +222,7 @@ paths:
                   formatted_address:
                     type: string
                   geometry:
-                    type: object
+                    type: [object, 'null']
                     properties:
                       location:
                         type: object
@@ -236,17 +236,17 @@ paths:
                   place_id:
                     type: string
                   types:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: string
                   business_status:
                     type: string
                   rating:
-                    type: number
+                    type: [number, 'null']
                   user_ratings_total:
-                    type: number
+                    type: [number, 'null']
                   photos:
-                    type: array
+                    type: [array, 'null']
                     items:
                       type: object
                       properties:
