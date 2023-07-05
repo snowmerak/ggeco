@@ -19,8 +19,7 @@ type Client struct {
 }
 
 func New(ctx context.Context, serverHost string, port int, user string, password string, database string) (*Client, error) {
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		serverHost, user, password, port, database)
+	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;", serverHost, user, password, port, database)
 	db, err := sql.Open("sqlserver", connString)
 	if err != nil {
 		return nil, err
@@ -29,4 +28,11 @@ func New(ctx context.Context, serverHost string, port int, user string, password
 		db.Close()
 	})
 	return &Client{db, serverHost, port, user, password, database}, nil
+}
+
+type UserInfo struct {
+	Id       string `json:"id"`
+	Nickname string `json:"nickname"`
+	Age      *uint8 `json:"age,omitempty"`
+	Gender   *uint8 `json:"gender,omitempty"`
 }
