@@ -10,7 +10,7 @@ import (
 // Client is a wrapper for sql.DB
 // jetti:bean Client
 type Client struct {
-	baseClient *sql.DB
+	*sql.DB
 	serverHost string
 	port       int
 	user       string
@@ -28,11 +28,4 @@ func New(ctx context.Context, serverHost string, port int, user string, password
 		db.Close()
 	})
 	return &Client{db, serverHost, port, user, password, database}, nil
-}
-
-type UserInfo struct {
-	Id       string `json:"id"`
-	Nickname string `json:"nickname"`
-	Age      *uint8 `json:"age,omitempty"`
-	Gender   *uint8 `json:"gender,omitempty"`
 }
