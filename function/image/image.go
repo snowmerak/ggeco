@@ -2,7 +2,7 @@ package image
 
 import (
 	"github.com/snowmerak/ggeco/gen/bean"
-	"github.com/snowmerak/ggeco/lib/storage"
+	"github.com/snowmerak/ggeco/lib/client/storage"
 	"net/http"
 )
 
