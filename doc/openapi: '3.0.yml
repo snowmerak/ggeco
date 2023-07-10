@@ -26,58 +26,6 @@ paths:
             type: string
           description: |
             Place ID from Google Maps API.
-        - name: lang
-          in: query
-          required: false
-          schema:
-            type: string
-          description: |
-            Language for place details.
-            ko: Korean.
-            en: English.
-            ja: Japanese.
-        - name: reviews
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, get reviews from Google Maps API.
-        - name: opening_hours
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, get opening hours from Google Maps API.
-            For example, if the place is open at 10:00 AM on Monday and closes at 8:00 PM on Monday, the opening hours will be as follows.
-            open_day: Monday.
-            open_time: 10:00 AM.
-            close_day: Monday.
-            close_time: 8:00 PM.
-        - name: business_status
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, get business status from Google Maps API.
-            For example, if the place is open at 10:00 AM on Monday and closes at 8:00 PM on Monday, the business status will be as follows.
-            OPERATIONAL, CLOSED_TEMPORARILY, and CLOSED_PERMANENTLY.
-        - name: photo
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, get photos from Google Maps API.
-        - name: geometry_location
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, get geometry location from Google Maps API.
       responses:
         500:
           description: Internal Server Error. Google Maps API error or json parsing error.
