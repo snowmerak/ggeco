@@ -83,9 +83,6 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	if request.GetOpeningHours {
 		fields = append(fields, maps.PlaceDetailsFieldMaskOpeningHours)
 	}
-	if request.GetPermanentlyClosed {
-		fields = append(fields, maps.PlaceDetailsFieldMaskBusinessStatus)
-	}
 	if request.GetGeometryLocation {
 		fields = append(fields, maps.PlaceDetailsFieldMaskGeometryLocation)
 	}
@@ -111,7 +108,6 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 		Lat: result.Geometry.Location.Lat,
 		Lng: result.Geometry.Location.Lng,
 	}
-	response.BusinessStatus = result.BusinessStatus
 	for _, review := range result.Reviews {
 		response.Reviews = append(response.Reviews, Review{
 			AuthorName: review.AuthorName,
