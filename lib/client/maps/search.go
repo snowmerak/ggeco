@@ -2,7 +2,6 @@ package maps
 
 import (
 	"context"
-
 	"github.com/snowmerak/ggeco/gen/bean"
 	"googlemaps.github.io/maps"
 )

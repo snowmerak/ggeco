@@ -1,4 +1,4 @@
-package place
+package api
 
 import (
 	"github.com/snowmerak/ggeco/gen/bean"

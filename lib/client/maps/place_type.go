@@ -458,6 +458,8 @@ func TranslatePlaceType(source string) (result string) {
 		result = "유대교회"
 	case PlaceTypeTaxiStand:
 		result = "택시 승강장"
+	case PlaceTypeTouristAttraction:
+		result = "관광명소"
 	case PlaceTypeTrainStation:
 		result = "기차역"
 	case PlaceTypeTransitStation:

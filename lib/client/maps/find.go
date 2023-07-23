@@ -2,7 +2,6 @@ package maps
 
 import (
 	"context"
-
 	"googlemaps.github.io/maps"
 )
 
