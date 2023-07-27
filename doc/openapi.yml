@@ -1,4 +1,4 @@
-openapi: "3.1.0"
+openapi: "3.0.0"
 info:
   title: ggeco-api
   version: "1.0"
@@ -12,13 +12,6 @@ paths:
       description: |
         Get place details from Google Maps API and return it as JSON.
       parameters:
-        - name: code
-          in: query
-          required: true
-          schema:
-            type: string
-          description: |
-            Code for authorization.
         - name: place_id
           in: query
           required: true
@@ -41,7 +34,7 @@ paths:
                   formatted_address:
                     type: string
                   geometry_location:
-                    type: [object, 'null']
+                    type: object
                     properties:
                       lat:
                         type: number
@@ -50,7 +43,7 @@ paths:
                   name:
                     type: string
                   opening_hours:
-                    type: [array, 'null']
+                    type: object
                     items:
                       type: object
                       properties:
@@ -78,7 +71,7 @@ paths:
                         text:
                           type: string
                   photos:
-                    type: [array, 'null']
+                    type: array
                     items:
                       type: object
                       properties:
@@ -95,9 +88,9 @@ paths:
                         photo_path:
                           type: string
                   phone:
-                    type: [string, 'null']
+                    type: string
                   types:
-                    type: [array, 'null']
+                    type: array
                     items:
                       type: string
   /places:
@@ -105,13 +98,6 @@ paths:
       summary: |
         Search places.
       parameters:
-        - name: code
-          in: query
-          required: true
-          schema:
-            type: string
-          description: |
-            Code for authorization.
         - name: query
           in: query
           required: true
@@ -129,6 +115,7 @@ paths:
             ko: Korean.
             en: English.
             ja: Japanese.
+            default: ko
         - name: latitude
           in: query
           required: false
@@ -150,13 +137,6 @@ paths:
             type: number
           description: |
             Radius of the search area.
-        - name: open_now
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: |
-            If true, only return places that are open now.
       responses:
         500: 
           description: Internal Server Error. Google Maps API error or json parsing error.
@@ -170,7 +150,7 @@ paths:
                   formatted_address:
                     type: string
                   geometry:
-                    type: [object, 'null']
+                    type: object
                     properties:
                       location:
                         type: object
@@ -184,17 +164,17 @@ paths:
                   place_id:
                     type: string
                   types:
-                    type: [array, 'null']
+                    type: array
                     items:
                       type: string
                   business_status:
                     type: string
                   rating:
-                    type: [number, 'null']
+                    type: number
                   user_ratings_total:
-                    type: [number, 'null']
+                    type: number
                   photos:
-                    type: [array, 'null']
+                    type: array
                     items:
                       type: object
                       properties:
@@ -213,13 +193,6 @@ paths:
   /image:
     get:
       parameters:
-        - name: code
-          in: query
-          required: true
-          schema:
-            type: string
-          description: |
-            Code for authorization.
         - name: name
           in: query
           required: true
