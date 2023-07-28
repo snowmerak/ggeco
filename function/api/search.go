@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/snowmerak/ggeco/lib/client/maps"
+	"github.com/snowmerak/ggeco/lib/service/place"
 	"net/http"
 	"strconv"
 
@@ -18,15 +18,7 @@ func Search(container bean.Container) func(w http.ResponseWriter, r *http.Reques
 		longitude, _ := strconv.ParseFloat(r.URL.Query().Get("longitude"), 64)
 		openNow, _ := strconv.ParseBool(r.URL.Query().Get("opennow"))
 
-		resp, err := maps.SearchText(r.Context(), container, func(request *maps.SearchTextRequest) *maps.SearchTextRequest {
-			request.Query = query
-			request.Radius = radius
-			request.Language = lang
-			request.Latitude = latitude
-			request.Longitude = longitude
-			request.OpenNow = openNow
-			return request
-		})
+		resp, err := place.SearchText(r.Context(), container, query, radius, lang, latitude, longitude, openNow)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
