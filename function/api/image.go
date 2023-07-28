@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func Image(container *bean.Container) func(w http.ResponseWriter, r *http.Request) {
+func Image(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		filename := r.URL.Query().Get("name")
 		url, err := storage.GetSASURL(container, "image-silo", filename)

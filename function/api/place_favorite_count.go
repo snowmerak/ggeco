@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func FavoriteCount(container *bean.Container) func(w http.ResponseWriter, r *http.Request) {
+func FavoriteCount(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("place favorite count"))
 	}

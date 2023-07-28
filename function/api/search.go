@@ -9,7 +9,7 @@ import (
 	"github.com/snowmerak/ggeco/gen/bean"
 )
 
-func Search(container *bean.Container) func(w http.ResponseWriter, r *http.Request) {
+func Search(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query().Get("query")
 		radius, _ := strconv.ParseInt(r.URL.Query().Get("radius"), 10, 64)

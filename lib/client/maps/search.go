@@ -2,7 +2,6 @@ package maps
 
 import (
 	"context"
-	"github.com/snowmerak/ggeco/gen/bean"
 	"googlemaps.github.io/maps"
 )
 
@@ -35,7 +34,7 @@ type SearchTextResponse struct {
 	Photos           []PlacePhoto `json:"photos,omitempty"`
 }
 
-func SearchText(ctx context.Context, container *bean.Container, fn ...SearchTextRequestOptional) (response []*SearchTextResponse, err error) {
+func SearchText(ctx context.Context, container Container, fn ...SearchTextRequestOptional) (response []*SearchTextResponse, err error) {
 	client, err := GetClient(container)
 	if err != nil {
 		return response, err

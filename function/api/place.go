@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func Place(container *bean.Container) func(w http.ResponseWriter, r *http.Request) {
+func Place(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		placeId := r.URL.Query().Get("place_id")
 
@@ -19,7 +19,6 @@ func Place(container *bean.Container) func(w http.ResponseWriter, r *http.Reques
 		}
 
 		encoder := json.NewEncoder(w)
-		encoder.SetIndent("", "  ")
 		if err := encoder.Encode(resp); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(err.Error()))
