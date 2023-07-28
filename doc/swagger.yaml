@@ -1,0 +1,203 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: snowmerak@outlook.com
+    name: snowmerak
+  description: The ggeco API Documentation
+  title: ggeco
+  version: 1.0.0
+paths:
+  /image:
+    get:
+      description: Get Path of the Image
+      parameters:
+      - in: query
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: A shared access signature (SAS) URI providing write access
+            to the blob.
+        "500":
+          description: Internal Server Error. Azure Blob Storage error.
+      summary: Get Image Path
+  /place:
+    get:
+      description: Get Place details from Google Maps API or cached
+      parameters:
+      - in: query
+        name: place_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaceInformation'
+          description: OK
+        "500":
+          description: Internal Server Error or Google Maps API Error.
+      summary: Get place details
+  /places:
+    get:
+      description: Search Places from google maps api
+      parameters:
+      - description: Search query
+        in: query
+        name: query
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: lang
+        schema:
+          type: string
+      - in: query
+        name: latitude
+        schema:
+          type: number
+      - in: query
+        name: longitude
+        schema:
+          type: number
+      - in: query
+        name: radius
+        schema:
+          type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapsSearchTextResponse'
+          description: OK
+      summary: Search Places
+components:
+  schemas:
+    MapsLocation:
+      properties:
+        lat:
+          type: number
+        lng:
+          type: number
+      type: object
+    MapsPlacePhoto:
+      properties:
+        height:
+          type: integer
+        html_attributions:
+          items:
+            type: string
+          type: array
+        photo_path:
+          type: string
+        photo_reference:
+          type: string
+        width:
+          type: integer
+      type: object
+    MapsReview:
+      properties:
+        author_name:
+          type: string
+        language:
+          type: string
+        rating:
+          type: integer
+        text:
+          type: string
+      type: object
+    MapsSearchPlaceIdResponse:
+      properties:
+        business_status:
+          type: string
+        formatted_address:
+          type: string
+        geometry_location:
+          $ref: '#/components/schemas/MapsLocation'
+        name:
+          type: string
+        opening_hours:
+          items:
+            $ref: '#/components/schemas/MapsTimeShift'
+          type: array
+        phone:
+          type: string
+        photos:
+          items:
+            $ref: '#/components/schemas/MapsPlacePhoto'
+          type: array
+        place_id:
+          type: string
+        reviews:
+          items:
+            $ref: '#/components/schemas/MapsReview'
+          type: array
+        types:
+          items:
+            type: string
+          type: array
+      type: object
+    MapsSearchTextResponse:
+      properties:
+        business_status:
+          type: string
+        formatted_address:
+          type: string
+        geometry:
+          properties:
+            location:
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+              type: object
+          type: object
+        name:
+          type: string
+        photos:
+          items:
+            $ref: '#/components/schemas/MapsPlacePhoto'
+          type: array
+        place_id:
+          type: string
+        rating:
+          type: number
+        types:
+          items:
+            type: string
+          nullable: true
+          type: array
+        user_ratings_total:
+          type: integer
+      type: object
+    MapsTimeShift:
+      properties:
+        close_day:
+          type: string
+        close_time:
+          type: string
+        open_day:
+          type: string
+        open_time:
+          type: string
+      type: object
+    PlaceInformation:
+      properties:
+        Data:
+          $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+        id:
+          type: string
+        last_update:
+          format: date-time
+          type: string
+      type: object
