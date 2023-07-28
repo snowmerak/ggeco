@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"github.com/snowmerak/ggeco/lib/client/maps"
 	"github.com/snowmerak/ggeco/lib/service/place"
 	"github.com/swaggest/openapi-go/openapi3"
 	"net/http"
+	"os"
 )
 
 func wrap[T any](t T) *T {
@@ -86,6 +86,16 @@ func main() {
 					},
 				},
 			},
+		}, openapi3.ParameterOrRef{
+			Parameter: &openapi3.Parameter{
+				Name: "opennow",
+				In:   "query",
+				Schema: &openapi3.SchemaOrRef{
+					Schema: &openapi3.Schema{
+						Type: wrap(openapi3.SchemaTypeBoolean),
+					},
+				},
+			},
 		})
 	reflector.SetJSONResponse(&placesGetOp, maps.SearchTextResponse{}, http.StatusOK)
 	reflector.Spec.AddOperation(http.MethodGet, "/places", placesGetOp)
@@ -162,5 +172,13 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(string(value))
+	f, err := os.Create("./doc/swagger.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = f.Write(value)
+	if err != nil {
+		panic(err)
+	}
 }
