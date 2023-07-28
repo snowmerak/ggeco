@@ -15,6 +15,9 @@ require (
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/microsoft/go-mssqldb v1.3.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
+	github.com/swaggest/jsonschema-go v0.3.52 // indirect
+	github.com/swaggest/openapi-go v0.2.33 // indirect
+	github.com/swaggest/refl v1.1.0 // indirect
 	go.opencensus.io v0.22.3 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
@@ -22,4 +25,5 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	googlemaps.github.io/maps v1.5.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
