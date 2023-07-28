@@ -9,13 +9,13 @@ import (
 	"time"
 )
 
-type Place struct {
+type Information struct {
 	ID         string                     `json:"id,omitempty"`
 	Data       maps.SearchPlaceIdResponse `json:"Data,omitempty"`
 	LastUpdate time.Time                  `json:"last_update,omitempty"`
 }
 
-func GetPlace(container sqlserver.Container, placeId string) (place Place, err error) {
+func GetPlace(container sqlserver.Container, placeId string) (place Information, err error) {
 	sqlClient, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
