@@ -97,7 +97,7 @@ func main() {
 				},
 			},
 		})
-	reflector.SetJSONResponse(&placesGetOp, maps.SearchTextResponse{}, http.StatusOK)
+	reflector.SetJSONResponse(&placesGetOp, []maps.SearchTextResponse{}, http.StatusOK)
 	reflector.Spec.AddOperation(http.MethodGet, "/places", placesGetOp)
 
 	placeGetOp := openapi3.Operation{}

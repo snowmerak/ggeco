@@ -72,12 +72,18 @@ paths:
         name: radius
         schema:
           type: number
+      - in: query
+        name: opennow
+        schema:
+          type: boolean
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MapsSearchTextResponse'
+                items:
+                  $ref: '#/components/schemas/MapsSearchTextResponse'
+                type: array
           description: OK
       summary: Search Places
 components:
