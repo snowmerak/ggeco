@@ -69,10 +69,16 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/swaggest/jsonschema-go v0.3.52 h1:cFk0Ma34MuZvA+JJ8S5WuQMedwxzUa+9+qrGwtoE39U=
 github.com/swaggest/jsonschema-go v0.3.52/go.mod h1:sRly7iaIIvbheAqsyvnKU3H7ogWbF0wtUBXyGpRXNm4=
+github.com/swaggest/jsonschema-go v0.3.54 h1:kRwXd7tqrub8vmtAVV5IElGTE1hiEuo/n9gHrsX7ySY=
+github.com/swaggest/jsonschema-go v0.3.54/go.mod h1:iQdEa2VW62As5W+884vA13TC2pEwnKjlQGaQe2pj+fc=
 github.com/swaggest/openapi-go v0.2.33 h1:5S9XCSuaex9KkLQVNiH0SYukiTEWCa2z66k7QQ+UUiQ=
 github.com/swaggest/openapi-go v0.2.33/go.mod h1:h7dk9ApzrU9yJ7O8TSoW+a1PyT7R+bnYHDw/NpexlYA=
+github.com/swaggest/openapi-go v0.2.35 h1:QP2+++u7S2m3jFHtolxeKiQ+TWQVW3xnrZXgGy/+7Dg=
+github.com/swaggest/openapi-go v0.2.35/go.mod h1:wgybcQi56LsN3oB1n9wUpAptG7ZsnSAIuuZovbQTPoY=
 github.com/swaggest/refl v1.1.0 h1:a+9a75Kv6ciMozPjVbOfcVTEQe81t2R3emvaD9oGQGc=
 github.com/swaggest/refl v1.1.0/go.mod h1:g3Qa6ki0A/L2yxiuUpT+cuBURuRaltF5SDQpg1kMZSY=
+github.com/swaggest/refl v1.2.0 h1:Qqqhfwi7REXF6/4cwJmj3gQMzl0Q0cYquxTYdD0kvi0=
+github.com/swaggest/refl v1.2.0/go.mod h1:CkC6g7h1PW33KprTuYRSw8UUOslRUt4lF3oe7tTIgNU=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 go.opencensus.io v0.22.3 h1:8sGtKOrtQqkN1bp2AtX+misvLIlOmsEsNd+9NIcPEm8=
 go.opencensus.io v0.22.3/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=

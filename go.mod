@@ -15,9 +15,9 @@ require (
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/microsoft/go-mssqldb v1.3.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
-	github.com/swaggest/jsonschema-go v0.3.52 // indirect
-	github.com/swaggest/openapi-go v0.2.33 // indirect
-	github.com/swaggest/refl v1.1.0 // indirect
+	github.com/swaggest/jsonschema-go v0.3.54 // indirect
+	github.com/swaggest/openapi-go v0.2.35 // indirect
+	github.com/swaggest/refl v1.2.0 // indirect
 	go.opencensus.io v0.22.3 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
