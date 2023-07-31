@@ -9,13 +9,17 @@ import (
 	"time"
 )
 
-type Information struct {
+type GetPlaceRequest struct {
+	PlaceId string `query:"place_id" required:"true"`
+}
+
+type GetPlaceResponse struct {
 	ID         string                     `json:"id,omitempty"`
 	Data       maps.SearchPlaceIdResponse `json:"Data,omitempty"`
 	LastUpdate time.Time                  `json:"last_update,omitempty"`
 }
 
-func GetPlace(container sqlserver.Container, placeId string) (place Information, err error) {
+func GetPlace(container sqlserver.Container, placeId string) (place GetPlaceResponse, err error) {
 	sqlClient, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
