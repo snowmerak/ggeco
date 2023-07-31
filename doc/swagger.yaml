@@ -13,7 +13,6 @@ paths:
       parameters:
       - in: query
         name: name
-        required: true
         schema:
           type: string
       responses:
@@ -22,10 +21,9 @@ paths:
             text/plain:
               schema:
                 type: string
-          description: A shared access signature (SAS) URI providing write access
-            to the blob.
+          description: OK
         "500":
-          description: Internal Server Error. Azure Blob Storage error.
+          description: Internal Server Error
       summary: Get Image Path
   /place:
     get:
@@ -41,17 +39,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PlaceInformation'
+                $ref: '#/components/schemas/PlaceGetPlaceResponse'
           description: OK
         "500":
-          description: Internal Server Error or Google Maps API Error.
+          description: Internal Server Error
       summary: Get place details
   /places:
     get:
       description: Search Places from google maps api
       parameters:
-      - description: Search query
-        in: query
+      - in: query
         name: query
         required: true
         schema:
@@ -71,7 +68,7 @@ paths:
       - in: query
         name: radius
         schema:
-          type: number
+          type: integer
       - in: query
         name: opennow
         schema:
@@ -85,6 +82,8 @@ paths:
                   $ref: '#/components/schemas/MapsSearchTextResponse'
                 type: array
           description: OK
+        "500":
+          description: Internal Server Error
       summary: Search Places
 components:
   schemas:
@@ -197,7 +196,7 @@ components:
         open_time:
           type: string
       type: object
-    PlaceInformation:
+    PlaceGetPlaceResponse:
       properties:
         Data:
           $ref: '#/components/schemas/MapsSearchPlaceIdResponse'

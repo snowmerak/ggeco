@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/snowmerak/ggeco/lib/client/maps"
+	"github.com/snowmerak/ggeco/lib/service/image"
 	"github.com/snowmerak/ggeco/lib/service/place"
+	"github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi3"
 	"net/http"
 	"os"
@@ -31,141 +33,49 @@ func main() {
 			Email: &email,
 		})
 
-	placesGetOp := openapi3.Operation{}
-	placesGetOp.WithDescription("Search Places from google maps api").
-		WithSummary("Search Places").
-		WithParameters(openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name:     "query",
-				In:       "query",
-				Required: wrap(true),
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeString),
-					},
-				},
-				Description: wrap("Search query"),
-			},
-		}, openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name: "lang",
-				In:   "query",
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeString),
-					},
-				},
-			},
-		}, openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name: "latitude",
-				In:   "query",
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeNumber),
-					},
-				},
-			},
-		}, openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name: "longitude",
-				In:   "query",
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeNumber),
-					},
-				},
-			},
-		}, openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name: "radius",
-				In:   "query",
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeNumber),
-					},
-				},
-			},
-		}, openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name: "opennow",
-				In:   "query",
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeBoolean),
-					},
-				},
-			},
-		})
-	reflector.SetJSONResponse(&placesGetOp, []maps.SearchTextResponse{}, http.StatusOK)
-	reflector.Spec.AddOperation(http.MethodGet, "/places", placesGetOp)
+	placesGetOp, err := reflector.NewOperationContext(http.MethodGet, "/places")
+	if err != nil {
+		panic(err)
+	}
+	placesGetOp.SetDescription("Search Places from google maps api")
+	placesGetOp.SetSummary("Search Places")
+	placesGetOp.AddReqStructure(place.SearchTextRequest{})
+	placesGetOp.AddRespStructure([]maps.SearchTextResponse{})
+	placesGetOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error or Google Maps API Error."
+	}))
+	reflector.AddOperation(placesGetOp)
 
-	placeGetOp := openapi3.Operation{}
-	placeGetOp.WithDescription("Get Place details from Google Maps API or cached").
-		WithSummary("Get place details").
-		WithParameters(openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name:     "place_id",
-				In:       "query",
-				Required: wrap(true),
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeString),
-					},
-				},
-			},
-		}).
-		WithResponses(openapi3.Responses{
-			MapOfResponseOrRefValues: map[string]openapi3.ResponseOrRef{
-				"500": {
-					Response: &openapi3.Response{
-						Description: "Internal Server Error or Google Maps API Error.",
-					},
-				},
-			},
-		})
-	reflector.SetJSONResponse(&placeGetOp, place.Information{}, http.StatusOK)
-	reflector.Spec.AddOperation(http.MethodGet, "/place", placeGetOp)
+	placeGetOp, err := reflector.NewOperationContext(http.MethodGet, "/place")
+	if err != nil {
+		panic(err)
+	}
+	placeGetOp.SetDescription("Get Place details from Google Maps API or cached")
+	placeGetOp.SetSummary("Get place details")
+	placeGetOp.AddReqStructure(place.GetPlaceRequest{})
+	placeGetOp.AddRespStructure(place.GetPlaceResponse{})
+	placeGetOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error or Google Maps API Error."
+	}))
+	reflector.AddOperation(placeGetOp)
 
-	imageGetOp := openapi3.Operation{}
-	imageGetOp.WithDescription("Get Path of the Image").
-		WithSummary("Get Image Path").
-		WithParameters(openapi3.ParameterOrRef{
-			Parameter: &openapi3.Parameter{
-				Name:     "name",
-				In:       "query",
-				Required: wrap(true),
-				Schema: &openapi3.SchemaOrRef{
-					Schema: &openapi3.Schema{
-						Type: wrap(openapi3.SchemaTypeString),
-					},
-				},
-			},
-		}).
-		WithResponses(openapi3.Responses{
-			MapOfResponseOrRefValues: map[string]openapi3.ResponseOrRef{
-				"500": {
-					Response: &openapi3.Response{
-						Description: "Internal Server Error. Azure Blob Storage error.",
-					},
-				},
-				"200": {
-					Response: &openapi3.Response{
-						Description: "A shared access signature (SAS) URI providing write access to the blob.",
-						Content: map[string]openapi3.MediaType{
-							"text/plain": {
-								Schema: &openapi3.SchemaOrRef{
-									Schema: &openapi3.Schema{
-										Type: wrap(openapi3.SchemaTypeString),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		})
-	reflector.Spec.AddOperation(http.MethodGet, "/image", imageGetOp)
+	imageGetOp, err := reflector.NewOperationContext(http.MethodGet, "/image")
+	if err != nil {
+		panic(err)
+	}
+	imageGetOp.SetDescription("Get Path of the Image")
+	imageGetOp.SetSummary("Get Image Path")
+	imageGetOp.AddReqStructure(image.GetImageURLRequest{})
+	imageGetOp.AddRespStructure("", func(cu *openapi.ContentUnit) {
+		cu.ContentType = "text/plain"
+	})
+	imageGetOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure Blob Storage error."
+	}))
+	reflector.AddOperation(imageGetOp)
 
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {
