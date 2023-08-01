@@ -8,6 +8,14 @@ type GetCourseRequest struct {
 	CourseName *string `query:"course_name"`
 }
 
+type GetCourseResponse struct {
+	Id       string `json:"id,omitempty"`
+	AuthorID string `json:"author_id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	RegDate  string `json:"reg_date,omitempty"`
+	Review   string `json:"review,omitempty"`
+}
+
 func Get(container sqlserver.Container, id sqlserver.UUID) (result Course, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
