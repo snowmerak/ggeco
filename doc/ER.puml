@@ -15,21 +15,21 @@ entity KakaoUsers {
     * user_id: uniqueidentifier
     ---
     kakao_id: bigint
-    info: ntext
+    info: nvarchar(max)
 }
 
 entity NaverUsers {
 	* user_id: uniqueidentifier
     ---
     naver_id: chat(128)
-    info: ntext
+    info: nvarchar(max)
 }
 
 entity Badges {
     * id: uniqueidentifier
     ---
     name: nvarchar(30)
-    description: nvarchar(100)
+    description: nvarchar(max)
 }
 
 entity EarnedBadges {
@@ -48,13 +48,14 @@ entity Places {
 }
 
 entity PlaceReviews {
-	* id: varchar(4096)
+	* id: uniqueidentifier
     ---
+    place_id: varchar(4096)
     course_id: uniqueidentifier
     user_id: uniqueidentifier
     latitude: float
     longitude: float
-    review: ntext
+    review: nvarchar(max)
 }
 
 entity PlaceReviewPictures {
@@ -72,7 +73,7 @@ entity Courses {
 	author_id: uniqueidentifier
 	name: nchar(40)
 	registered_at: datetime
-	review: ntext
+	review: nvarchar(max)
 }
 
 entity CoursePlaces {
