@@ -3,9 +3,12 @@ package courses
 import "github.com/snowmerak/ggeco/lib/client/sqlserver"
 
 type GetCourseRequest struct {
-	CourseID   *string `query:"course_id"`
-	AuthorID   *string `query:"author_id"`
-	CourseName *string `query:"course_name"`
+	CourseID string `query:"course_id" required:"true"`
+}
+
+type GetCourseListRequest struct {
+	AuthorID   string `query:"author_id" required:"true"`
+	CourseName string `query:"course_name"`
 }
 
 type GetCourseResponse struct {
