@@ -9,7 +9,7 @@ info:
 paths:
   /api/course:
     get:
-      description: Get Course data by course id or author id or course name
+      description: Get Course data by course id
       parameters:
       - in: query
         name: course_id
@@ -34,6 +34,35 @@ paths:
                 $ref: '#/components/schemas/CoursesCourse'
           description: OK
       summary: Get Course data
+  /api/course/list:
+    get:
+      description: Get Course data by author id or course name
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          nullable: true
+          type: string
+      - in: query
+        name: author_id
+        schema:
+          nullable: true
+          type: string
+      - in: query
+        name: course_name
+        schema:
+          nullable: true
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CoursesCourse'
+                type: array
+          description: OK
+      summary: Get Course List
   /api/image:
     get:
       description: Get Path of the Image

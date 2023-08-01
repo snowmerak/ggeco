@@ -82,20 +82,21 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	courseGetOp.SetDescription("Get Course data by course id or author id or course name")
+	courseGetOp.SetDescription("Get Course data by course id")
 	courseGetOp.SetSummary("Get Course data")
 	courseGetOp.AddReqStructure(courses.GetCourseRequest{})
-	courseGetOp.AddRespStructure([]courses.Course{}, openapi.ContentOption(func(cu *openapi.ContentUnit) {
-		cu.ContentType = "application/json"
-		cu.Description = "returns course list when course_id is empty, author_id is exist, and course_name is exist or empty."
-		cu.HTTPStatus = http.StatusOK
-	}))
-	courseGetOp.AddRespStructure(courses.Course{}, openapi.ContentOption(func(cu *openapi.ContentUnit) {
-		cu.ContentType = "application/json"
-		cu.Description = "returns course when course_id is exist, author_id is empty, and course_name is empty."
-		cu.HTTPStatus = http.StatusOK
-	}))
+	courseGetOp.AddRespStructure(courses.Course{})
 	reflector.AddOperation(courseGetOp)
+
+	courseListGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/course/list")
+	courseListGetOp.SetDescription("Get Course data by author id or course name")
+	courseListGetOp.SetSummary("Get Course List")
+	courseListGetOp.AddReqStructure(courses.GetCourseRequest{})
+	if err != nil {
+		panic(err)
+	}
+	courseListGetOp.AddRespStructure([]courses.Course{})
+	reflector.AddOperation(courseListGetOp)
 
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {
