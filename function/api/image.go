@@ -1,13 +1,14 @@
 package api
 
 import (
+	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/gen/bean"
 	"github.com/snowmerak/ggeco/lib/client/storage"
 	"net/http"
 )
 
-func Image(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func Image(container bean.Container) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		filename := r.URL.Query().Get("name")
 		url, err := storage.GetSASURL(container, "image-silo", filename)
 		if err != nil {

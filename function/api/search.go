@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/lib/service/place"
 	"net/http"
 	"strconv"
@@ -9,8 +10,8 @@ import (
 	"github.com/snowmerak/ggeco/gen/bean"
 )
 
-func Search(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func Search(container bean.Container) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		query := r.URL.Query().Get("query")
 		radius, _ := strconv.ParseInt(r.URL.Query().Get("radius"), 10, 64)
 		lang := r.URL.Query().Get("lang")

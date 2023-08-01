@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/function/api"
 	"github.com/snowmerak/ggeco/lib/client/maps"
 	"github.com/snowmerak/ggeco/lib/client/sqlserver"
@@ -47,10 +48,15 @@ func main() {
 	}
 	storage.PushClient(container, imageClient)
 
-	http.HandleFunc("/api/place", api.Place(container))
-	http.HandleFunc("/api/place/favorite/count", api.FavoriteCount(container))
-	http.HandleFunc("/api/places", api.Search(container))
-	http.HandleFunc("/api/image", api.Image(container))
+	router := httprouter.New()
+
+	router.GET("/api/place", api.Place(container))
+	router.GET("/api/place/favorite/count", api.FavoriteCount(container))
+	router.GET("/api/places", api.Search(container))
+
+	router.GET("/api/image", api.Image(container))
+
+	router.GET("/api/course", api.GetCourse(container))
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
-	log.Fatal(http.ListenAndServe(listenAddr, nil))
+	log.Fatal(http.ListenAndServe(listenAddr, router))
 }

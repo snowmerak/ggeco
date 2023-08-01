@@ -2,13 +2,14 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/gen/bean"
 	"github.com/snowmerak/ggeco/lib/service/place"
 	"net/http"
 )
 
-func Place(container bean.Container) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func Place(container bean.Container) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		placeId := r.URL.Query().Get("place_id")
 
 		resp, err := place.GetPlace(container, placeId)
