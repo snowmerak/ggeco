@@ -57,6 +57,7 @@ func main() {
 	router.GET("/api/image", api.Image(container))
 
 	router.GET("/api/course", api.GetCourse(container))
+	router.GET("/api/course/list", api.GetCourse(container))
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, router))
 }
