@@ -91,7 +91,7 @@ func main() {
 	courseListGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/course/list")
 	courseListGetOp.SetDescription("Get Course data by author id or course name")
 	courseListGetOp.SetSummary("Get Course List")
-	courseListGetOp.AddReqStructure(courses.GetCourseRequest{})
+	courseListGetOp.AddReqStructure(courses.GetCourseListRequest{})
 	if err != nil {
 		panic(err)
 	}

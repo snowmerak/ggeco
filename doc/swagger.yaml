@@ -13,18 +13,8 @@ paths:
       parameters:
       - in: query
         name: course_id
+        required: true
         schema:
-          nullable: true
-          type: string
-      - in: query
-        name: author_id
-        schema:
-          nullable: true
-          type: string
-      - in: query
-        name: course_name
-        schema:
-          nullable: true
           type: string
       responses:
         "200":
@@ -39,19 +29,13 @@ paths:
       description: Get Course data by author id or course name
       parameters:
       - in: query
-        name: course_id
-        schema:
-          nullable: true
-          type: string
-      - in: query
         name: author_id
+        required: true
         schema:
-          nullable: true
           type: string
       - in: query
         name: course_name
         schema:
-          nullable: true
           type: string
       responses:
         "200":
