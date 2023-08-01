@@ -2,13 +2,24 @@ package courses
 
 import "github.com/snowmerak/ggeco/lib/client/sqlserver"
 
+type AddCourseRequest struct {
+	AuthorID string `json:"author_id" required:"true"`
+	Name     string `json:"name" required:"true"`
+	RegDate  string `json:"reg_date" required:"true"`
+	Review   string `json:"review" required:"true"`
+}
+
+type AddCourseResponse struct {
+	Id string `json:"id" required:"true"`
+}
+
 func Add(container sqlserver.Container, author sqlserver.UUID, name string, regDate string, review string) (id sqlserver.UUID, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
 	}
 
-	row := client.QueryRow(`DECLARE @InsertedId TABLE (id uniqueidentifier)
+	row := client.QueryRow(`DECLARE @InsertedId uniqueidentifier
 INSERT INTO [dbo].[Courses] ([author_id], [name], [reg_date], [review]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P3, @P4)
 SELECT id from @InsertedId`, author, name, regDate, review)
 	if err := row.Err(); err != nil {
@@ -20,6 +31,11 @@ SELECT id from @InsertedId`, author, name, regDate, review)
 	}
 
 	return
+}
+
+type UpdateCourseNameRequest struct {
+	CourseID string `json:"course_id" required:"true"`
+	Name     string `json:"name" required:"true"`
 }
 
 func UpdateName(container sqlserver.Container, id sqlserver.UUID, name string) (err error) {
@@ -37,6 +53,11 @@ func UpdateName(container sqlserver.Container, id sqlserver.UUID, name string) (
 	_, err = stmt.Exec(name, id)
 
 	return
+}
+
+type UpdateCourseReviewRequest struct {
+	CourseID string `json:"course_id" required:"true"`
+	Review   string `json:"review" required:"true"`
 }
 
 func UpdateReview(container sqlserver.Container, id sqlserver.UUID, review string) (err error) {
