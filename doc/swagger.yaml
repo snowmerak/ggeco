@@ -7,7 +7,34 @@ info:
   title: ggeco
   version: 1.0.0
 paths:
-  /image:
+  /api/course:
+    get:
+      description: Get Course data by course id or author id or course name
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          nullable: true
+          type: string
+      - in: query
+        name: author_id
+        schema:
+          nullable: true
+          type: string
+      - in: query
+        name: course_name
+        schema:
+          nullable: true
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoursesCourse'
+          description: OK
+      summary: Get Course data
+  /api/image:
     get:
       description: Get Path of the Image
       parameters:
@@ -25,7 +52,7 @@ paths:
         "500":
           description: Internal Server Error
       summary: Get Image Path
-  /place:
+  /api/place:
     get:
       description: Get Place details from Google Maps API or cached
       parameters:
@@ -44,7 +71,7 @@ paths:
         "500":
           description: Internal Server Error
       summary: Get place details
-  /places:
+  /api/places:
     get:
       description: Search Places from google maps api
       parameters:
@@ -87,6 +114,19 @@ paths:
       summary: Search Places
 components:
   schemas:
+    CoursesCourse:
+      properties:
+        author_id:
+          $ref: '#/components/schemas/SqlserverUUID'
+        id:
+          $ref: '#/components/schemas/SqlserverUUID'
+        name:
+          type: string
+        reg_date:
+          type: string
+        review:
+          type: string
+      type: object
     MapsLocation:
       properties:
         lat:
@@ -206,3 +246,8 @@ components:
           format: date-time
           type: string
       type: object
+    SqlserverUUID:
+      items:
+        minimum: 0
+        type: integer
+      type: array

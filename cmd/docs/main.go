@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/snowmerak/ggeco/lib/client/maps"
+	"github.com/snowmerak/ggeco/lib/service/courses"
 	"github.com/snowmerak/ggeco/lib/service/image"
 	"github.com/snowmerak/ggeco/lib/service/place"
 	"github.com/swaggest/openapi-go"
@@ -33,7 +34,7 @@ func main() {
 			Email: &email,
 		})
 
-	placesGetOp, err := reflector.NewOperationContext(http.MethodGet, "/places")
+	placesGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/places")
 	if err != nil {
 		panic(err)
 	}
@@ -47,7 +48,7 @@ func main() {
 	}))
 	reflector.AddOperation(placesGetOp)
 
-	placeGetOp, err := reflector.NewOperationContext(http.MethodGet, "/place")
+	placeGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/place")
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +62,7 @@ func main() {
 	}))
 	reflector.AddOperation(placeGetOp)
 
-	imageGetOp, err := reflector.NewOperationContext(http.MethodGet, "/image")
+	imageGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/image")
 	if err != nil {
 		panic(err)
 	}
@@ -76,6 +77,25 @@ func main() {
 		cu.Description = "Internal Server Error. Azure Blob Storage error."
 	}))
 	reflector.AddOperation(imageGetOp)
+
+	courseGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/course")
+	if err != nil {
+		panic(err)
+	}
+	courseGetOp.SetDescription("Get Course data by course id or author id or course name")
+	courseGetOp.SetSummary("Get Course data")
+	courseGetOp.AddReqStructure(courses.GetCourseRequest{})
+	courseGetOp.AddRespStructure([]courses.Course{}, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.ContentType = "application/json"
+		cu.Description = "returns course list when course_id is empty, author_id is exist, and course_name is exist or empty."
+		cu.HTTPStatus = http.StatusOK
+	}))
+	courseGetOp.AddRespStructure(courses.Course{}, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.ContentType = "application/json"
+		cu.Description = "returns course when course_id is exist, author_id is empty, and course_name is empty."
+		cu.HTTPStatus = http.StatusOK
+	}))
+	reflector.AddOperation(courseGetOp)
 
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {

@@ -37,13 +37,13 @@ entity EarnedBadges {
     ---
     user_id: uniqueidentifier
     badge_id: uniqueidentifier
-    earned_at: datetime
+    earned_at: datetime2
 }
 
 entity Places {
 	* id: uniqueidentifier
 	---
-	last_update: datetime
+	last_update: datetime2
 	data: varbinary(MAX)
 }
 
@@ -62,9 +62,9 @@ entity PlaceReviewPictures {
 	* id: uniqueidentifier
 	---
 	review_id: varchar(4096)
-	order: tinyint
-	picture_url: nvarchar(MAX)
-	thumnail_url: nvarchar(MAX)
+	order: int
+	picture_url: varchar(MAX)
+	thumnail_url: varchar(MAX)
 }
 
 entity Courses {
@@ -81,7 +81,7 @@ entity CoursePlaces {
     ---
     course_id: uniqueidentifier
     place_id: uniqueidentifier
-    order: tinyint
+    order: int
 }
 
 entity CourseBadges {
@@ -96,15 +96,15 @@ entity FavoriteCourses {
     ---
     user_id: uniqueidentifier
     course_id: uniqueidentifier
-    registered_at: datetime
+    registered_at: datetime2
 }
 
 entity FavoritePlaces {
 	* id: uniqueidentifier
     ---
     user_id: uniqueidentifier
-    place_id: uniqueidentifier
-    registered_at: datetime
+    place_id: varchar(4096)
+    registered_at: datetime2
 }
 
 entity UserVisitCounts {
