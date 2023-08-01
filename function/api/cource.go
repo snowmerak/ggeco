@@ -33,7 +33,14 @@ func GetCourse(container bean.Container) httprouter.Handle {
 					wr.Write([]byte(err.Error()))
 					return
 				}
-				if err := encoder.Encode(data); err != nil {
+				rs := courses.GetCourseResponse{
+					Id:       base64.URLEncoding.EncodeToString(data.Id),
+					AuthorID: base64.URLEncoding.EncodeToString(data.AuthorID),
+					Name:     data.Name,
+					RegDate:  data.RegDate,
+					Review:   data.Review,
+				}
+				if err := encoder.Encode(rs); err != nil {
 					wr.WriteHeader(http.StatusInternalServerError)
 					wr.Write([]byte(err.Error()))
 					return
@@ -48,6 +55,16 @@ func GetCourse(container bean.Container) httprouter.Handle {
 					wr.Write([]byte(err.Error()))
 					return
 				}
+				list := make([]courses.GetCourseResponse, len(data))
+				for i, v := range data {
+					list[i] = courses.GetCourseResponse{
+						Id:       base64.URLEncoding.EncodeToString(v.Id),
+						AuthorID: base64.URLEncoding.EncodeToString(v.AuthorID),
+						Name:     v.Name,
+						RegDate:  v.RegDate,
+						Review:   v.Review,
+					}
+				}
 				if err := encoder.Encode(data); err != nil {
 					wr.WriteHeader(http.StatusInternalServerError)
 					wr.Write([]byte(err.Error()))
@@ -60,7 +77,17 @@ func GetCourse(container bean.Container) httprouter.Handle {
 					wr.Write([]byte(err.Error()))
 					return
 				}
-				if err := encoder.Encode(data); err != nil {
+				list := make([]courses.GetCourseResponse, len(data))
+				for i, v := range data {
+					list[i] = courses.GetCourseResponse{
+						Id:       base64.URLEncoding.EncodeToString(v.Id),
+						AuthorID: base64.URLEncoding.EncodeToString(v.AuthorID),
+						Name:     v.Name,
+						RegDate:  v.RegDate,
+						Review:   v.Review,
+					}
+				}
+				if err := encoder.Encode(list); err != nil {
 					wr.WriteHeader(http.StatusInternalServerError)
 					wr.Write([]byte(err.Error()))
 					return
