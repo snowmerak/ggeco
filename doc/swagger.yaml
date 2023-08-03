@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadgesBadge'
+                $ref: '#/components/schemas/BadgesGetBadgeResponse'
           description: OK
       summary: Get Badge data
     post:
@@ -79,7 +79,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/BadgesBadge'
+                  $ref: '#/components/schemas/BadgesGetBadgeResponse'
                 type: array
           description: OK
       summary: Get Badge data
@@ -112,14 +112,14 @@ paths:
       summary: Update Badge Summary
   /api/badges:
     get:
-      description: Get Badge data by author id or badge name
+      description: Get All Badge Data
       responses:
         "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/BadgesBadge'
+                  $ref: '#/components/schemas/BadgesGetBadgeResponse'
                 type: array
           description: OK
       summary: Get Badge List
@@ -284,10 +284,10 @@ components:
       - summary
       - image
       type: object
-    BadgesBadge:
+    BadgesGetBadgeResponse:
       properties:
         id:
-          $ref: '#/components/schemas/SqlserverUUID'
+          type: string
         image:
           type: string
         name:

@@ -140,7 +140,7 @@ func main() {
 	getBadgeOp.SetDescription("Get Badge data by badge id")
 	getBadgeOp.SetSummary("Get Badge data")
 	getBadgeOp.AddReqStructure(badges.GetBadgeRequest{})
-	getBadgeOp.AddRespStructure(badges.Badge{})
+	getBadgeOp.AddRespStructure(badges.GetBadgeResponse{})
 	reflector.AddOperation(getBadgeOp)
 
 	getBadgeByNameOp, err := reflector.NewOperationContext(http.MethodGet, "/api/badge/name")
@@ -150,16 +150,16 @@ func main() {
 	getBadgeByNameOp.SetDescription("Get Badge data by badge name")
 	getBadgeByNameOp.SetSummary("Get Badge data")
 	getBadgeByNameOp.AddReqStructure(badges.GetBadgeByNameRequest{})
-	getBadgeByNameOp.AddRespStructure([]badges.Badge{})
+	getBadgeByNameOp.AddRespStructure([]badges.GetBadgeResponse{})
 	reflector.AddOperation(getBadgeByNameOp)
 
 	getBadgeListOp, err := reflector.NewOperationContext(http.MethodGet, "/api/badges")
 	if err != nil {
 		panic(err)
 	}
-	getBadgeListOp.SetDescription("Get Badge data by author id or badge name")
+	getBadgeListOp.SetDescription("Get All Badge Data")
 	getBadgeListOp.SetSummary("Get Badge List")
-	getBadgeListOp.AddRespStructure([]badges.Badge{})
+	getBadgeListOp.AddRespStructure([]badges.GetBadgeResponse{})
 	reflector.AddOperation(getBadgeListOp)
 
 	addBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "/api/badge")
