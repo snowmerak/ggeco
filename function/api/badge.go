@@ -20,8 +20,15 @@ func GetBadge(container bean.Container) httprouter.Handle {
 			return
 		}
 
+		resp := badges.GetBadgeResponse{
+			Id:      base64.URLEncoding.EncodeToString(data.Id),
+			Name:    data.Name,
+			Summary: data.Summary,
+			Image:   data.Image,
+		}
+
 		encoder := json.NewEncoder(wr)
-		if err := encoder.Encode(data); err != nil {
+		if err := encoder.Encode(resp); err != nil {
 			wr.WriteHeader(http.StatusInternalServerError)
 			wr.Write([]byte(err.Error()))
 			return
@@ -42,8 +49,18 @@ func GetBadgeByName(container bean.Container) httprouter.Handle {
 			return
 		}
 
+		resp := make([]badges.GetBadgeResponse, len(data))
+		for i, v := range data {
+			resp[i] = badges.GetBadgeResponse{
+				Id:      base64.URLEncoding.EncodeToString(v.Id),
+				Name:    v.Name,
+				Summary: v.Summary,
+				Image:   v.Image,
+			}
+		}
+
 		encoder := json.NewEncoder(wr)
-		if err := encoder.Encode(data); err != nil {
+		if err := encoder.Encode(resp); err != nil {
 			wr.WriteHeader(http.StatusInternalServerError)
 			wr.Write([]byte(err.Error()))
 			return
@@ -62,8 +79,18 @@ func GetBadges(container bean.Container) httprouter.Handle {
 			return
 		}
 
+		resp := make([]badges.GetBadgeResponse, len(data))
+		for i, v := range data {
+			resp[i] = badges.GetBadgeResponse{
+				Id:      base64.URLEncoding.EncodeToString(v.Id),
+				Name:    v.Name,
+				Summary: v.Summary,
+				Image:   v.Image,
+			}
+		}
+
 		encoder := json.NewEncoder(wr)
-		if err := encoder.Encode(data); err != nil {
+		if err := encoder.Encode(resp); err != nil {
 			wr.WriteHeader(http.StatusInternalServerError)
 			wr.Write([]byte(err.Error()))
 			return

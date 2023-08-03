@@ -13,6 +13,13 @@ type GetBadgeRequest struct {
 	BadgeID string `query:"id" required:"true"`
 }
 
+type GetBadgeResponse struct {
+	Id      string `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Summary string `json:"summary,omitempty"`
+	Image   string `json:"image,omitempty"`
+}
+
 func Get(container sqlserver.Container, id string) (result Badge, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
