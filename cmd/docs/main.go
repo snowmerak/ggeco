@@ -89,14 +89,48 @@ func main() {
 	reflector.AddOperation(courseGetOp)
 
 	courseListGetOp, err := reflector.NewOperationContext(http.MethodGet, "/api/course/list")
-	courseListGetOp.SetDescription("Get Course data by author id or course name")
-	courseListGetOp.SetSummary("Get Course List")
-	courseListGetOp.AddReqStructure(courses.GetCourseListRequest{})
 	if err != nil {
 		panic(err)
 	}
+	courseListGetOp.SetDescription("Get Course data by author id or course name")
+	courseListGetOp.SetSummary("Get Course List")
+	courseListGetOp.AddReqStructure(courses.GetCourseListRequest{})
 	courseListGetOp.AddRespStructure([]courses.Course{})
 	reflector.AddOperation(courseListGetOp)
+
+	updateCourseNameOp, err := reflector.NewOperationContext(http.MethodPost, "/api/course/name")
+	if err != nil {
+		panic(err)
+	}
+	updateCourseNameOp.SetDescription("Update Course Name")
+	updateCourseNameOp.SetSummary("Update Course Name")
+	updateCourseNameOp.AddReqStructure(courses.UpdateCourseNameRequest{})
+	updateCourseNameOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	updateCourseNameOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(updateCourseNameOp)
+
+	updateCourseReviewOp, err := reflector.NewOperationContext(http.MethodPost, "/api/course/review")
+	if err != nil {
+		panic(err)
+	}
+	updateCourseReviewOp.SetDescription("Update Course Review")
+	updateCourseReviewOp.SetSummary("Update Course Review")
+	updateCourseReviewOp.AddReqStructure(courses.UpdateCourseReviewRequest{})
+	updateCourseReviewOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	updateCourseReviewOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(updateCourseReviewOp)
 
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {

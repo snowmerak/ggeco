@@ -47,6 +47,34 @@ paths:
                 type: array
           description: OK
       summary: Get Course List
+  /api/course/name:
+    post:
+      description: Update Course Name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursesUpdateCourseNameRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Update Course Name
+  /api/course/review:
+    post:
+      description: Update Course Review
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursesUpdateCourseReviewRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Update Course Review
   /api/image:
     get:
       description: Get Path of the Image
@@ -139,6 +167,26 @@ components:
           type: string
         review:
           type: string
+      type: object
+    CoursesUpdateCourseNameRequest:
+      properties:
+        course_id:
+          type: string
+        name:
+          type: string
+      required:
+      - course_id
+      - name
+      type: object
+    CoursesUpdateCourseReviewRequest:
+      properties:
+        course_id:
+          type: string
+        review:
+          type: string
+      required:
+      - course_id
+      - review
       type: object
     MapsLocation:
       properties:
