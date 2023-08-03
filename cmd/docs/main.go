@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/snowmerak/ggeco/lib/client/maps"
+	"github.com/snowmerak/ggeco/lib/service/badges"
 	"github.com/snowmerak/ggeco/lib/service/courses"
 	"github.com/snowmerak/ggeco/lib/service/image"
 	"github.com/snowmerak/ggeco/lib/service/place"
@@ -131,6 +132,120 @@ func main() {
 		cu.Format = "text/plain"
 	}))
 	reflector.AddOperation(updateCourseReviewOp)
+
+	getBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/api/badge")
+	if err != nil {
+		panic(err)
+	}
+	getBadgeOp.SetDescription("Get Badge data by badge id")
+	getBadgeOp.SetSummary("Get Badge data")
+	getBadgeOp.AddReqStructure(badges.GetBadgeRequest{})
+	getBadgeOp.AddRespStructure(badges.Badge{})
+	reflector.AddOperation(getBadgeOp)
+
+	getBadgeByNameOp, err := reflector.NewOperationContext(http.MethodGet, "/api/badge/name")
+	if err != nil {
+		panic(err)
+	}
+	getBadgeByNameOp.SetDescription("Get Badge data by badge name")
+	getBadgeByNameOp.SetSummary("Get Badge data")
+	getBadgeByNameOp.AddReqStructure(badges.GetBadgeByNameRequest{})
+	getBadgeByNameOp.AddRespStructure([]badges.Badge{})
+	reflector.AddOperation(getBadgeByNameOp)
+
+	getBadgeListOp, err := reflector.NewOperationContext(http.MethodGet, "/api/badges")
+	if err != nil {
+		panic(err)
+	}
+	getBadgeListOp.SetDescription("Get Badge data by author id or badge name")
+	getBadgeListOp.SetSummary("Get Badge List")
+	getBadgeListOp.AddRespStructure([]badges.Badge{})
+	reflector.AddOperation(getBadgeListOp)
+
+	addBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "/api/badge")
+	if err != nil {
+		panic(err)
+	}
+	addBadgeOp.SetDescription("Add Badge")
+	addBadgeOp.SetSummary("Add Badge")
+	addBadgeOp.AddReqStructure(badges.AddBadgeRequest{})
+	addBadgeOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	addBadgeOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(addBadgeOp)
+
+	updateBadgeNameOp, err := reflector.NewOperationContext(http.MethodPost, "/api/badge/name")
+	if err != nil {
+		panic(err)
+	}
+	updateBadgeNameOp.SetDescription("Update Badge Name")
+	updateBadgeNameOp.SetSummary("Update Badge Name")
+	updateBadgeNameOp.AddReqStructure(badges.UpdateBadgeNameRequest{})
+	updateBadgeNameOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	updateBadgeNameOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(updateBadgeNameOp)
+
+	updateBadgeSummaryOp, err := reflector.NewOperationContext(http.MethodPost, "/api/badge/summary")
+	if err != nil {
+		panic(err)
+	}
+	updateBadgeSummaryOp.SetDescription("Update Badge Summary")
+	updateBadgeSummaryOp.SetSummary("Update Badge Summary")
+	updateBadgeSummaryOp.AddReqStructure(badges.UpdateBadgeSummaryRequest{})
+	updateBadgeSummaryOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	updateBadgeSummaryOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(updateBadgeSummaryOp)
+
+	updateBadgeImageOp, err := reflector.NewOperationContext(http.MethodPost, "/api/badge/image")
+	if err != nil {
+		panic(err)
+	}
+	updateBadgeImageOp.SetDescription("Update Badge Image")
+	updateBadgeImageOp.SetSummary("Update Badge Image")
+	updateBadgeImageOp.AddReqStructure(badges.UpdateBadgeImageRequest{})
+	updateBadgeImageOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	updateBadgeImageOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(updateBadgeImageOp)
+
+	deleteBadgeOp, err := reflector.NewOperationContext(http.MethodDelete, "/api/badge")
+	if err != nil {
+		panic(err)
+	}
+	deleteBadgeOp.SetDescription("Delete Badge")
+	deleteBadgeOp.SetSummary("Delete Badge")
+	deleteBadgeOp.AddReqStructure(badges.DeleteBadgeRequest{})
+	deleteBadgeOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+	}))
+	deleteBadgeOp.AddRespStructure(nil, openapi.ContentOption(func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error. Azure SQL Database error."
+		cu.Format = "text/plain"
+	}))
+	reflector.AddOperation(deleteBadgeOp)
 
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {

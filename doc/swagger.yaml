@@ -7,6 +7,122 @@ info:
   title: ggeco
   version: 1.0.0
 paths:
+  /api/badge:
+    delete:
+      description: Delete Badge
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Delete Badge
+    get:
+      description: Get Badge data by badge id
+      parameters:
+      - in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadgesBadge'
+          description: OK
+      summary: Get Badge data
+    post:
+      description: Add Badge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadgesAddBadgeRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Add Badge
+  /api/badge/image:
+    post:
+      description: Update Badge Image
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadgesUpdateBadgeImageRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Update Badge Image
+  /api/badge/name:
+    get:
+      description: Get Badge data by badge name
+      parameters:
+      - in: query
+        name: name
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BadgesBadge'
+                type: array
+          description: OK
+      summary: Get Badge data
+    post:
+      description: Update Badge Name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadgesUpdateBadgeNameRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Update Badge Name
+  /api/badge/summary:
+    post:
+      description: Update Badge Summary
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadgesUpdateBadgeSummaryRequest'
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Update Badge Summary
+  /api/badges:
+    get:
+      description: Get Badge data by author id or badge name
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BadgesBadge'
+                type: array
+          description: OK
+      summary: Get Badge List
   /api/course:
     get:
       description: Get Course data by course id
@@ -155,6 +271,60 @@ paths:
       summary: Search Places
 components:
   schemas:
+    BadgesAddBadgeRequest:
+      properties:
+        image:
+          type: string
+        name:
+          type: string
+        summary:
+          type: string
+      required:
+      - name
+      - summary
+      - image
+      type: object
+    BadgesBadge:
+      properties:
+        id:
+          $ref: '#/components/schemas/SqlserverUUID'
+        image:
+          type: string
+        name:
+          type: string
+        summary:
+          type: string
+      type: object
+    BadgesUpdateBadgeImageRequest:
+      properties:
+        badge_id:
+          type: string
+        image:
+          type: string
+      required:
+      - badge_id
+      - image
+      type: object
+    BadgesUpdateBadgeNameRequest:
+      properties:
+        badge_id:
+          type: string
+        name:
+          type: string
+      required:
+      - badge_id
+      - name
+      type: object
+    BadgesUpdateBadgeSummaryRequest:
+      properties:
+        badge_id:
+          type: string
+        summary:
+          type: string
+      required:
+      - badge_id
+      - summary
+      type: object
     CoursesCourse:
       properties:
         author_id:
