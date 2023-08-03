@@ -19,7 +19,7 @@ func Add(container sqlserver.Container, author sqlserver.UUID, name string, regD
 		return
 	}
 
-	row := client.QueryRow(`DECLARE @InsertedId uniqueidentifier
+	row := client.QueryRow(`DECLARE @InsertedId table(id uniqueidentifier)
 INSERT INTO [dbo].[Courses] ([author_id], [name], [reg_date], [review]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P3, @P4)
 SELECT id from @InsertedId`, author, name, regDate, review)
 	if err := row.Err(); err != nil {
