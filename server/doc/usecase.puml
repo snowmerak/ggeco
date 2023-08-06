@@ -1,0 +1,9 @@
+@startuml
+
+actor client
+
+client -> (get_place_info): GET /place
+
+client -> (search_places): GET /place/search
+
+@enduml

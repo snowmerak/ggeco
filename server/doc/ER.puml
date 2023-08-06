@@ -1,0 +1,144 @@
+@startuml
+
+entity Users {
+	* id: uniqueidentifier
+	---
+	nickname: nvarchar(30)
+	created_at: datetime
+	last_signed_in_at: datetime
+	badge: uniqueidentifier
+	age?: tinyint
+	gender?: nvarchar(10)
+}
+
+entity KakaoUsers {
+    * user_id: uniqueidentifier
+    ---
+    kakao_id: bigint
+    info: nvarchar(max)
+}
+
+entity NaverUsers {
+	* user_id: uniqueidentifier
+    ---
+    naver_id: char(128)
+    info: nvarchar(max)
+}
+
+entity Badges {
+    * id: uniqueidentifier
+    ---
+    name: nvarchar(30)
+    description: nvarchar(max)
+    image: varchar(max)
+}
+
+entity EarnedBadges {
+    * id: uniqueidentifier
+    ---
+    user_id: uniqueidentifier
+    badge_id: uniqueidentifier
+    earned_at: datetime2
+}
+
+entity Places {
+	* id: uniqueidentifier
+	---
+	last_update: datetime2
+	data: varbinary(MAX)
+}
+
+entity PlaceReviews {
+	* id: uniqueidentifier
+    ---
+    place_id: varchar(4096)
+    course_id: uniqueidentifier
+    user_id: uniqueidentifier
+    latitude: float
+    longitude: float
+    review: nvarchar(max)
+}
+
+entity PlaceReviewPictures {
+	* id: uniqueidentifier
+	---
+	review_id: varchar(4096)
+	order: int
+	picture_url: varchar(MAX)
+	thumnail_url: varchar(MAX)
+}
+
+entity Courses {
+	* id: uniqueidentifier
+	---
+	author_id: uniqueidentifier
+	name: nchar(40)
+	registered_at: datetime
+	review: nvarchar(max)
+}
+
+entity CoursePlaces {
+    * id: uniqueidentifier
+    ---
+    course_id: uniqueidentifier
+    place_id: uniqueidentifier
+    order: int
+}
+
+entity CourseBadges {
+	* id: uniqueidentifier
+    ---
+    course_id: uniqueidentifier
+    badge_id: uniqueidentifier
+}
+
+entity FavoriteCourses {
+	* id: uniqueidentifier
+    ---
+    user_id: uniqueidentifier
+    course_id: uniqueidentifier
+    registered_at: datetime2
+}
+
+entity FavoritePlaces {
+	* id: uniqueidentifier
+    ---
+    user_id: uniqueidentifier
+    place_id: varchar(4096)
+    registered_at: datetime2
+}
+
+entity UserVisitCounts {
+    * id: uniqueidentifier
+    ---
+    user_id: uniqueidentifier
+    place_type: nvarchar(30)
+    count: bigint
+}
+
+Users ||--o{ KakaoUsers
+Users ||--o{ NaverUsers
+
+Users ||--o{ EarnedBadges
+Badges ||--o{ EarnedBadges
+
+Users ||--o{ FavoriteCourses
+Courses ||--o{ FavoriteCourses
+
+Users ||--o{ FavoritePlaces
+Places ||--o{ FavoritePlaces
+
+Users ||--o{ Courses
+
+Courses ||--o{ CoursePlaces
+Places ||--o{ CoursePlaces
+Places ||--o{ PlaceReviews
+
+PlaceReviews ||--o{ PlaceReviewPictures
+
+Courses ||--o{ CourseBadges
+Badges ||--o{ CourseBadges
+
+Users ||--o{ UserVisitCounts
+
+@enduml
