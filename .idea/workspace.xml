@@ -6,10 +6,28 @@
   <component name="ChangeListManager">
     <list default="true" id="65af343c-6c12-4c33-ae44-225103c1a0b9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/server/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/cmd/docs/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/cmd/docs/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/doc/ER.puml" beforeDir="false" afterPath="$PROJECT_DIR$/server/doc/ER.puml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/function/api/badge.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/badge.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/function/api/cource.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/cource.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/api/course_modiy.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/course_modiy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/api/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/image.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/api/place.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/place.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/api/place_favorite_count.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/place_favorite_count.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/api/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/search.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/function/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/server/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/server/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/lib/service/badges/badges.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/badges/badges.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/courses.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/courses.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/get.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/modify.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/modify.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/image/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/image/image.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/place/list.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/place/list.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/place/place.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/place/place.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/users/kakao.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/kakao.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/users/naver.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/naver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/lib/service/users/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/users.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
