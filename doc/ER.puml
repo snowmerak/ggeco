@@ -30,6 +30,7 @@ entity Badges {
     ---
     name: nvarchar(30)
     description: nvarchar(max)
+    image: varchar(max)
 }
 
 entity EarnedBadges {
