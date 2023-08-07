@@ -74,6 +74,20 @@ func main() {
 	router.GET("/api/badge/earned", api.GetEarnedBadgesByUserId(container))
 	router.GET("/api/badge/earned/count", api.CountUsersEarnedBadge(container))
 
+	router.GET("/api/course/place", api.GetCoursePlaces(container))
+	router.POST("/api/course/place", api.SetCoursePlaces(container))
+
+	router.GET("/api/course/place/reviews", api.GetPlaceReviewsOfCourse(container))
+	router.POST("/api/course/place/review", api.CreatePlaceReview(container))
+	router.PATCH("/api/course/place/review", api.UpdatePlaceReview(container))
+	router.DELETE("/api/course/place/review", api.DeletePlaceReview(container))
+
+	router.GET("/api/course/place/review/pic", api.GetPlaceReviewPictures(container))
+	router.POST("/api/course/place/review/pic", api.SetPlaceReviewPictures(container))
+
+	router.GET("/api/course/badges", api.GetCourseBadges(container))
+	router.POST("/api/course/badges", api.SetCourseBadges(container))
+
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, router))
 }
