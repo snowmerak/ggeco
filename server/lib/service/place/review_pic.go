@@ -80,23 +80,39 @@ func SetReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID, p
 
 	stmt, err := tx.Prepare("DELETE FROM [dbo].[PlaceReviewPictures] WHERE [review_id] = @P1")
 	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
+
 		return err
 	}
 	defer stmt.Close()
 
 	_, err = stmt.Exec(reviewId)
 	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
+
 		return err
 	}
 
 	stmt, err = tx.Prepare("INSERT INTO [dbo].[PlaceReviewPictures] ([review_id], [order], [picture_url], [thumbnail_url]) VALUES (@P1, @P2, @P3, @P4)")
 	if err != nil {
+		if err := tx.Rollback(); err != nil {
+			return err
+		}
+
 		return err
 	}
 
 	for i, pictureUrl := range pictureUrls {
 		_, err = stmt.Exec(reviewId, i, pictureUrl, thumbnailUrls[i])
 		if err != nil {
+			if err := tx.Rollback(); err != nil {
+				return err
+			}
+
 			return err
 		}
 	}
