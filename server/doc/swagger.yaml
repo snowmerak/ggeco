@@ -123,6 +123,53 @@ paths:
                 type: array
           description: OK
       summary: Get Badge List
+  /api/badges/earned:
+    get:
+      description: Get Earned Badges By User Id
+      parameters:
+      - in: query
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/BadgesGetEarnedBadgeResponse'
+                type: array
+          description: OK
+      summary: Get Earned Badges By User Id
+    post:
+      description: Add Earned Badge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BadgesAddEarnedBadgeRequest'
+      responses:
+        "200":
+          description: OK
+      summary: Add Earned Badge
+  /api/badges/earned/count:
+    get:
+      description: Count Users Earned Badge
+      parameters:
+      - in: query
+        name: badge_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadgesCountUsersEarnedBadgeResponse'
+          description: OK
+      summary: Count Users Earned Badge
   /api/course:
     get:
       description: Get Course data by course id
@@ -284,6 +331,18 @@ components:
       - summary
       - image
       type: object
+    BadgesAddEarnedBadgeRequest:
+      properties:
+        badge_id:
+          type: string
+        user_id:
+          type: string
+      type: object
+    BadgesCountUsersEarnedBadgeResponse:
+      properties:
+        count:
+          type: integer
+      type: object
     BadgesGetBadgeResponse:
       properties:
         id:
@@ -293,6 +352,18 @@ components:
         name:
           type: string
         summary:
+          type: string
+      type: object
+    BadgesGetEarnedBadgeResponse:
+      properties:
+        badge_id:
+          type: string
+        earned_at:
+          format: date-time
+          type: string
+        id:
+          type: string
+        user_id:
           type: string
       type: object
     BadgesUpdateBadgeImageRequest:
