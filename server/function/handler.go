@@ -70,6 +70,10 @@ func main() {
 	router.POST("/api/badge/image", api.UpdateBadgeImage(container))
 	router.DELETE("/api/badge", api.DeleteBadge(container))
 
+	router.POST("/api/badge/earned", api.AddEarnedBadge(container))
+	router.GET("/api/badge/earned", api.GetEarnedBadgesByUserId(container))
+	router.GET("/api/badge/earned/count", api.CountUsersEarnedBadge(container))
+
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, router))
 }
