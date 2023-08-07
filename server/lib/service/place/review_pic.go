@@ -19,8 +19,8 @@ type GetReviewPicturesRequest struct {
 }
 
 type GetReviewPicturesResponse struct {
-	Pictures  []string `json:"pictures"`
-	Thumbnail []string `json:"thumbnail"`
+	Pictures   []string `json:"pictures"`
+	Thumbnails []string `json:"thumbnails"`
 }
 
 func GetReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID) (result []ReviewPicture, err error) {
@@ -58,9 +58,9 @@ func GetReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID) (
 }
 
 type SetReviewPicturesRequest struct {
-	ReviewId     string   `query:"review_id" required:"true"`
-	PictureUrls  []string `query:"picture_urls" required:"true"`
-	ThumbnailUrl []string `query:"thumbnail_urls" required:"true"`
+	ReviewId      string   `query:"review_id" required:"true"`
+	PictureUrls   []string `query:"picture_urls" required:"true"`
+	ThumbnailUrls []string `query:"thumbnail_urls" required:"true"`
 }
 
 func SetReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID, pictureUrls []string, thumbnailUrls []string) error {
