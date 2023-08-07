@@ -60,6 +60,11 @@ func GetBadgeByName(container bean.Container) httprouter.Handle {
 
 		data, err := badges.GetByName(container, name)
 		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				wr.WriteHeader(http.StatusNotFound)
+				return
+			}
+
 			wr.WriteHeader(http.StatusInternalServerError)
 			wr.Write([]byte(err.Error()))
 			return
@@ -90,6 +95,11 @@ func GetBadges(container bean.Container) httprouter.Handle {
 	return func(wr http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		data, err := badges.GetList(container)
 		if err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				wr.WriteHeader(http.StatusNotFound)
+				return
+			}
+
 			wr.WriteHeader(http.StatusInternalServerError)
 			wr.Write([]byte(err.Error()))
 			return
