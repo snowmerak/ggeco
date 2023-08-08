@@ -8,32 +8,17 @@ type Naver struct {
 	Info    string         `json:"info,omitempty"`
 }
 
-const createNaverTable = `
-CREATE TABLE [dbo].[NaverUsers] (
-    [user_id]  UNIQUEIDENTIFIER NOT NULL,
-    [naver_id] CHAR (128)       NOT NULL,
-    [info]     NTEXT            NOT NULL,
-    CONSTRAINT [PK_NaverUsers] PRIMARY KEY CLUSTERED ([user_id] ASC)
-);
-
-
-GO
-CREATE NONCLUSTERED INDEX [index_naver_id]
-    ON [dbo].[NaverUsers]([naver_id] ASC);
-`
-
-func CreateNaverTable(container sqlserver.Container) (err error) {
-	client, err := sqlserver.GetClient(container)
-	if err != nil {
-		return err
-	}
-
-	_, err = client.Exec(createNaverTable)
-
-	return
+type GetNaverUserRequest struct {
+	Id string `query:"id" required:"true"`
 }
 
-func GetNaver(container sqlserver.Container, id sqlserver.UUID) (result Naver, err error) {
+type GetNaverUserResponse struct {
+	Id      string `json:"id"`
+	NaverId string `json:"naver_id"`
+	Info    string `json:"info"`
+}
+
+func GetNaverUser(container sqlserver.Container, id sqlserver.UUID) (result Naver, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -59,7 +44,17 @@ func GetNaver(container sqlserver.Container, id sqlserver.UUID) (result Naver, e
 	return
 }
 
-func GetNaverByNaverId(container sqlserver.Container, naverId string) (result Naver, err error) {
+type GetNaverUserByNaverIdRequest struct {
+	NaverId string `query:"naver_id" required:"true"`
+}
+
+type GetNaverUserByNaverIdResponse struct {
+	Id      string `json:"id"`
+	NaverId string `json:"naver_id"`
+	Info    string `json:"info"`
+}
+
+func GetNaverUserByNaverId(container sqlserver.Container, naverId string) (result Naver, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -80,10 +75,18 @@ func GetNaverByNaverId(container sqlserver.Container, naverId string) (result Na
 		return result, err
 	}
 
+	result.NaverId = naverId
+
 	return
 }
 
-func AddNaver(container sqlserver.Container, id sqlserver.UUID, naverId string, info string) (err error) {
+type AddNaverUserRequest struct {
+	Id      string `json:"id"`
+	NaverId string `json:"naver_id"`
+	Info    string `json:"info"`
+}
+
+func AddNaverUser(container sqlserver.Container, id sqlserver.UUID, naverId string, info string) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -100,7 +103,13 @@ func AddNaver(container sqlserver.Container, id sqlserver.UUID, naverId string, 
 	return
 }
 
-func UpdateNaver(container sqlserver.Container, id sqlserver.UUID, naverId string, info string) (err error) {
+type UpdateNaverUserRequest struct {
+	Id      string `json:"id"`
+	NaverId string `json:"naver_id"`
+	Info    string `json:"info"`
+}
+
+func UpdateNaverUser(container sqlserver.Container, id sqlserver.UUID, naverId string, info string) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -117,7 +126,11 @@ func UpdateNaver(container sqlserver.Container, id sqlserver.UUID, naverId strin
 	return
 }
 
-func DeleteNaver(container sqlserver.Container, id sqlserver.UUID) (err error) {
+type DeleteNaverUserRequest struct {
+	Id string `query:"id" required:"true"`
+}
+
+func DeleteNaverUser(container sqlserver.Container, id sqlserver.UUID) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return

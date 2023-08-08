@@ -8,32 +8,17 @@ type Kakao struct {
 	Info    string         `json:"info,omitempty"`
 }
 
-const createKakaoTable = `
-CREATE TABLE [dbo].[KakaoUsers] (
-    [user_id]  UNIQUEIDENTIFIER NOT NULL,
-    [kakao_id] BIGINT           NOT NULL,
-    [info]     NTEXT            NOT NULL,
-    CONSTRAINT [PK_KakaoUsers] PRIMARY KEY CLUSTERED ([user_id] ASC)
-);
-
-
-GO
-CREATE NONCLUSTERED INDEX [index_kakao_id]
-    ON [dbo].[KakaoUsers]([kakao_id] ASC);
-`
-
-func CreateKakaoTable(container sqlserver.Container) (err error) {
-	client, err := sqlserver.GetClient(container)
-	if err != nil {
-		return err
-	}
-
-	_, err = client.Exec(createKakaoTable)
-
-	return
+type GetKakaoUserRequest struct {
+	Id string `query:"id" required:"true"`
 }
 
-func GetKakao(container sqlserver.Container, id sqlserver.UUID) (result Kakao, err error) {
+type GetKakaoUserResponse struct {
+	Id      string `json:"id"`
+	KakaoId int64  `json:"kakao_id"`
+	Info    string `json:"info"`
+}
+
+func GetKakaoUser(container sqlserver.Container, id sqlserver.UUID) (result Kakao, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -56,10 +41,22 @@ func GetKakao(container sqlserver.Container, id sqlserver.UUID) (result Kakao, e
 		return result, err
 	}
 
+	result.UserId = id
+
 	return
 }
 
-func GetKakaoByKakaoId(container sqlserver.Container, kakaoId int64) (result Kakao, err error) {
+type GetKakaoUserByKakaoIdRequest struct {
+	KakaoId int64 `query:"kakao_id" required:"true"`
+}
+
+type GetKakaoUserByKakaoIdResponse struct {
+	Id      string `json:"id"`
+	KakaoId int64  `json:"kakao_id"`
+	Info    string `json:"info"`
+}
+
+func GetKakaoUserByKakaoId(container sqlserver.Container, kakaoId int64) (result Kakao, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -80,27 +77,41 @@ func GetKakaoByKakaoId(container sqlserver.Container, kakaoId int64) (result Kak
 		return result, err
 	}
 
+	result.KakaoId = kakaoId
+
 	return
 }
 
-func AddKakao(container sqlserver.Container, kakaoId int64, info string) (err error) {
+type AddKakaoUserRequest struct {
+	UserId  sqlserver.UUID `json:"user_id" required:"true"`
+	KakaoId int64          `json:"kakao_id" required:"true"`
+	Info    string         `json:"info" required:"true"`
+}
+
+func AddKakaoUser(container sqlserver.Container, userId sqlserver.UUID, kakaoId int64, info string) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
 	}
 
-	stmt, err := client.Prepare("INSERT INTO [dbo].[KakaoUsers] ([user_id], [kakao_id], [info]) VALUES (NEWID(), @P1, @P2)")
+	stmt, err := client.Prepare("INSERT INTO [dbo].[KakaoUsers] ([user_id], [kakao_id], [info]) VALUES (@P1, @P2, @P3)")
 	if err != nil {
 		return
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(kakaoId, info)
+	_, err = stmt.Exec(userId, kakaoId, info)
 
 	return
 }
 
-func UpdateKakao(container sqlserver.Container, id sqlserver.UUID, kakaoId int64, info string) (err error) {
+type UpdateKakaoUserRequest struct {
+	Id      sqlserver.UUID `json:"id" required:"true"`
+	KakaoId int64          `json:"kakao_id" required:"true"`
+	Info    string         `json:"info" required:"true"`
+}
+
+func UpdateKakaoUser(container sqlserver.Container, id sqlserver.UUID, kakaoId int64, info string) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -117,7 +128,11 @@ func UpdateKakao(container sqlserver.Container, id sqlserver.UUID, kakaoId int64
 	return
 }
 
-func DeleteKakao(container sqlserver.Container, id sqlserver.UUID) (err error) {
+type DeleteKakaoUserRequest struct {
+	Id sqlserver.UUID `query:"id" required:"true"`
+}
+
+func DeleteKakaoUser(container sqlserver.Container, id sqlserver.UUID) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return

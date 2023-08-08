@@ -1,9 +1,7 @@
 package users
 
 import (
-	"database/sql"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
-	"log"
 	"time"
 )
 
@@ -12,47 +10,41 @@ type User struct {
 	Nickname   string         `json:"nickname,omitempty"`
 	Age        *uint8         `json:"age,omitempty"`
 	Gender     *uint8         `json:"gender,omitempty"`
-	CreateAt   string         `json:"create_at,omitempty"`
-	LastSignin string         `json:"last_signin,omitempty"`
+	CreateAt   time.Time      `json:"create_at,omitempty"`
+	LastSignin time.Time      `json:"last_signin,omitempty"`
+	Badge      sqlserver.UUID `json:"badge,omitempty"`
 }
 
-const createTable = `
-CREATE TABLE [dbo].[Users] (
-	[id]          UNIQUEIDENTIFIER CONSTRAINT [DEFAULT_Users_id] DEFAULT (newid()) NOT NULL,
-	[nickname]    NCHAR (18)       NOT NULL,
-	[age]         TINYINT          NULL,
-	[gender]      TINYINT          NULL,
-	[create_at]   DATE             NOT NULL,
-	[last_signin] DATE             NOT NULL,
-	CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED ([id] ASC)
-);
-`
-
-func CreateTable(container sqlserver.Container) (err error) {
-	client, err := sqlserver.GetClient(container)
-	if err != nil {
-		return err
-	}
-
-	_, err = client.Exec(createTable)
-
-	return
+type GetUserRequest struct {
+	Id string `query:"id" required:"true"`
 }
 
-func Get(container sqlserver.Container, id string) (result User, err error) {
+type GetUserResponse struct {
+	Id         string    `json:"id"`
+	Nickname   string    `json:"nickname"`
+	CreateAt   time.Time `json:"create_at"`
+	LastSignin time.Time `json:"last_signin"`
+	Badge      string    `json:"badge"`
+}
+
+func GetUser(container sqlserver.Container, id sqlserver.UUID) (result User, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
 	}
 
-	row := client.QueryRow("SELECT [id], [nickname], [age], [gender] from [dbo].[Users]")
-	if err := row.Err(); err != nil {
-		return result, err
+	stmt, err := client.Prepare("SELECT [id], [nickname], [create_at], [last_signin] FROM [dbo].[Users] WHERE [id] = @P1")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(id)
+	if err = row.Err(); err != nil {
+		return
 	}
 
-	if err := row.Scan(&result.Id, &result.Nickname, &result.Age, &result.Gender); err != nil {
-		return result, err
-	}
+	err = row.Scan(&result.Id, &result.Nickname, &result.CreateAt, &result.LastSignin)
 
 	return
 }
@@ -61,7 +53,15 @@ const insertUser = `DECLARE @insertedId TABLE (id UNIQUEIDENTIFIER)
 INSERT INTO [dbo].[Users] ([nickname], [create_at], [last_signin]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P2)
 SELECT id FROM @insertedId`
 
-func Add(container sqlserver.Container, nickname string) (id sqlserver.UUID, err error) {
+type AddUserRequest struct {
+	Nickname string `json:"nickname" required:"true"`
+}
+
+type AddUserResponse struct {
+	Id string `json:"id"`
+}
+
+func AddUser(container sqlserver.Container, nickname string) (id sqlserver.UUID, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -71,11 +71,7 @@ func Add(container sqlserver.Container, nickname string) (id sqlserver.UUID, err
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	t := time.Now().Format(sqlserver.DateFormat)
 	row := stmt.QueryRow(nickname, t)
@@ -92,6 +88,11 @@ func Add(container sqlserver.Container, nickname string) (id sqlserver.UUID, err
 
 const updateAge = `UPDATE [dbo].[Users] SET [age] = @P1 WHERE [id] = @P2`
 
+type UpdateAgeRequest struct {
+	Id  string `json:"id" required:"true"`
+	Age uint8  `json:"age" required:"true"`
+}
+
 func UpdateAge(container sqlserver.Container, id sqlserver.UUID, age uint8) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
@@ -102,11 +103,7 @@ func UpdateAge(container sqlserver.Container, id sqlserver.UUID, age uint8) (err
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	_, err = stmt.Exec(age, id)
 	if err != nil {
@@ -118,6 +115,11 @@ func UpdateAge(container sqlserver.Container, id sqlserver.UUID, age uint8) (err
 
 const updateGender = `UPDATE [dbo].[Users] SET [gender] = @P1 WHERE [id] = @P2`
 
+type UpdateGenderRequest struct {
+	Id     string `json:"id" required:"true"`
+	Gender uint8  `json:"gender" required:"true"`
+}
+
 func UpdateGender(container sqlserver.Container, id sqlserver.UUID, gender uint8) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
@@ -128,11 +130,7 @@ func UpdateGender(container sqlserver.Container, id sqlserver.UUID, gender uint8
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	_, err = stmt.Exec(gender, id)
 	if err != nil {
@@ -144,6 +142,10 @@ func UpdateGender(container sqlserver.Container, id sqlserver.UUID, gender uint8
 
 const updateLastSignin = `UPDATE [dbo].[Users] SET [last_signin] = @P1 WHERE [id] = @P2`
 
+type UpdateLastSigninRequest struct {
+	Id string `json:"id" required:"true"`
+}
+
 func UpdateLastSignin(container sqlserver.Container, id sqlserver.UUID) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
@@ -154,11 +156,7 @@ func UpdateLastSignin(container sqlserver.Container, id sqlserver.UUID) (err err
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	_, err = stmt.Exec(time.Now().Format(sqlserver.DateFormat), id)
 
@@ -167,7 +165,11 @@ func UpdateLastSignin(container sqlserver.Container, id sqlserver.UUID) (err err
 
 const deleteUser = `DELETE FROM [dbo].[Users] WHERE [id] = @P1`
 
-func Delete(container sqlserver.Container, id sqlserver.UUID) (err error) {
+type DeleteUserRequest struct {
+	Id string `query:"id" required:"true"`
+}
+
+func DeleteUser(container sqlserver.Container, id sqlserver.UUID) (err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
@@ -177,11 +179,7 @@ func Delete(container sqlserver.Container, id sqlserver.UUID) (err error) {
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	_, err = stmt.Exec(id)
 
@@ -189,6 +187,11 @@ func Delete(container sqlserver.Container, id sqlserver.UUID) (err error) {
 }
 
 const updateNickname = `UPDATE [dbo].[Users] SET [nickname] = @P1 WHERE [id] = @P2`
+
+type UpdateNicknameRequest struct {
+	Id       string `json:"id" required:"true"`
+	Nickname string `json:"nickname" required:"true"`
+}
 
 func UpdateNickname(container sqlserver.Container, id sqlserver.UUID, nickname string) (err error) {
 	client, err := sqlserver.GetClient(container)
@@ -200,11 +203,7 @@ func UpdateNickname(container sqlserver.Container, id sqlserver.UUID, nickname s
 	if err != nil {
 		return
 	}
-	defer func(stmt *sql.Stmt) {
-		if err := stmt.Close(); err != nil {
-			log.Println(err)
-		}
-	}(stmt)
+	defer stmt.Close()
 
 	_, err = stmt.Exec(nickname, id)
 
