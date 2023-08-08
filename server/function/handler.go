@@ -51,7 +51,6 @@ func main() {
 	router := httprouter.New()
 
 	router.GET("/api/place", api.Place(container))
-	router.GET("/api/place/favorite/count", api.FavoriteCount(container))
 	router.GET("/api/places", api.Search(container))
 
 	router.GET("/api/image", api.Image(container))
@@ -87,6 +86,34 @@ func main() {
 
 	router.GET("/api/course/badges", api.GetCourseBadges(container))
 	router.POST("/api/course/badges", api.SetCourseBadges(container))
+
+	router.GET("/api/user", api.GetUser(container))
+	router.POST("/api/user", api.AddUser(container))
+	router.PATCH("/api/user/nickname", api.UpdateUserNickname(container))
+	router.PATCH("/api/user/last_signin", api.UpdateUserLastSigninDate(container))
+	router.DELETE("/api/user", api.DeleteUser(container))
+
+	router.GET("/api/user/naver", api.GetNaverUser(container))
+	router.GET("/api/user/naver/id", api.GetNaverUserByNaverId(container))
+	router.POST("/api/user/naver", api.AddNaverUser(container))
+	router.PATCH("/api/user/naver", api.UpdateNaverUser(container))
+	router.DELETE("/api/user/naver", api.DeleteNaverUser(container))
+
+	router.GET("/api/user/kakao", api.GetKakaoUser(container))
+	router.GET("/api/user/kakao/id", api.GetKakaoUserByKakaoId(container))
+	router.POST("/api/user/kakao", api.AddKakaoUser(container))
+	router.PATCH("/api/user/kakao", api.UpdateKakaoUser(container))
+	router.DELETE("/api/user/kakao", api.DeleteKakaoUser(container))
+
+	router.GET("/api/place/favorite/user", api.GetFavoritePlacesByUserId(container))
+	router.GET("/api/place/favorite/count", api.CountFavoritePlace(container))
+	router.POST("/api/place/favorite", api.AddFavoritePlace(container))
+	router.DELETE("/api/place/favorite", api.DeleteFavoritePlace(container))
+
+	router.GET("/api/course/favorite/user", api.GetFavoriteCoursesByUserId(container))
+	router.GET("/api/course/favorite/count", api.CountFavoriteCourse(container))
+	router.POST("/api/course/favorite", api.AddFavoriteCourse(container))
+	router.DELETE("/api/course/favorite", api.DeleteFavoriteCourse(container))
 
 	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, router))
