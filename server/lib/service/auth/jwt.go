@@ -30,11 +30,17 @@ func RefreshTokenLifetime() time.Duration {
 	return 6 * 31 * 24 * time.Hour
 }
 
+const (
+	UserId    = "user_id"
+	UserNick  = "user_nick"
+	ExpiredAt = "expired_at"
+)
+
 func MakeUserToken(secretKey []byte, userId string, userNick string, lifetime time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
-		"user_id":    userId,
-		"user_nick":  userNick,
-		"expired_at": time.Now().Add(lifetime),
+		UserId:    userId,
+		UserNick:  userNick,
+		ExpiredAt: time.Now().Add(lifetime).Unix(),
 	})
 
 	value, err := token.SignedString(secretKey)
@@ -64,6 +70,15 @@ func ValidateUserToken(secretKey []byte, token string) (jwt.MapClaims, error) {
 	value, ok := claims.Claims.(jwt.MapClaims)
 	if !ok {
 		return nil, errors.New("invalid claims")
+	}
+
+	expiredAt, ok := value[ExpiredAt].(float64)
+	if !ok {
+		return nil, errors.New("invalid expired at")
+	}
+
+	if time.Now().Unix() > int64(expiredAt) {
+		return nil, errors.New("expired token")
 	}
 
 	return value, nil
