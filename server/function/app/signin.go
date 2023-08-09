@@ -19,7 +19,7 @@ import (
 type SignInRequest struct {
 	NaverAccount bool   `json:"naver_account,omitempty"`
 	KakaoAccount bool   `json:"kakao_account,omitempty"`
-	AccessToken  string `json:"access_token"`
+	AccessToken  string `json:"access_token" required:"true"`
 }
 
 type SignInResponse struct {
