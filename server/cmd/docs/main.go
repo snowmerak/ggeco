@@ -275,7 +275,7 @@ func main() {
 	//})
 	//reflector.AddOperation(addEarnedBadgeOp)
 
-	appSigninOp, err := reflector.NewOperationContext(http.MethodPost, "/app/signin")
+	appSigninOp, err := reflector.NewOperationContext(http.MethodPost, "/app/auth/signin")
 	if err != nil {
 		panic(err)
 	}
@@ -294,6 +294,28 @@ func main() {
 		cu.ContentType = "text/plain"
 	})
 	if err := reflector.AddOperation(appSigninOp); err != nil {
+		panic(err)
+	}
+
+	appRefreshOp, err := reflector.NewOperationContext(http.MethodPost, "/app/auth/refresh")
+	if err != nil {
+		panic(err)
+	}
+	appRefreshOp.SetDescription("Refresh Access Token")
+	appRefreshOp.SetSummary("Refresh Access Token")
+	appRefreshOp.AddReqStructure(app.RefreshRequest{})
+	appRefreshOp.AddRespStructure(app.RefreshResponse{})
+	appRefreshOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appRefreshOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appRefreshOp); err != nil {
 		panic(err)
 	}
 
