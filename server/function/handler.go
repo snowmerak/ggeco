@@ -126,7 +126,8 @@ func main() {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	router.POST("/app/signin", app.SignIn(container))
+	router.POST("/app/auth/signin", app.SignIn(container))
+	router.POST("/app/auth/refresh", app.Refresh(container))
 
 	listenAddr = fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
 
