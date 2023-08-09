@@ -2,11 +2,15 @@ package main
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/function/api"
+	"github.com/snowmerak/ggeco/server/function/app"
 	"github.com/snowmerak/ggeco/server/lib/client/maps"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"github.com/snowmerak/ggeco/server/lib/client/storage"
+	"github.com/snowmerak/ggeco/server/lib/service/auth"
 	"log"
 	"net/http"
 	"os"
@@ -22,6 +26,11 @@ func main() {
 	listenAddr := ":8080"
 	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
 		listenAddr = ":" + val
+	}
+
+	jwtSecretKey, err := base64.URLEncoding.DecodeString(os.Getenv("JWT_SECRET_KEY"))
+	if err != nil {
+		panic(err)
 	}
 
 	container := bean.NewContainer()
@@ -115,6 +124,19 @@ func main() {
 	router.POST("/api/course/favorite", api.AddFavoriteCourse(container))
 	router.DELETE("/api/course/favorite", api.DeleteFavoriteCourse(container))
 
-	log.Printf("About to listen on %s. Go to https://127.0.0.1%s/", listenAddr, listenAddr)
-	log.Fatal(http.ListenAndServe(listenAddr, router))
+	//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	router.POST("/app/signin", app.SignIn(container))
+
+	listenAddr = fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(wr http.ResponseWriter, r *http.Request) {
+		reqCtx := auth.WithJwtSecretKey(r.Context(), jwtSecretKey)
+		r = r.WithContext(reqCtx)
+		router.ServeHTTP(wr, r)
+	})
+
+	log.Printf("About to listen on %s. Go to %s", listenAddr, listenAddr)
+	log.Fatal(http.ListenAndServe(listenAddr, mux))
 }
