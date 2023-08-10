@@ -129,7 +129,7 @@ func main() {
 	router.POST("/app/auth/signin", app.SignIn(container))
 	router.POST("/app/auth/refresh", app.Refresh(container))
 
-	listenAddr = fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
+	listenFullAddr := fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(wr http.ResponseWriter, r *http.Request) {
@@ -138,6 +138,6 @@ func main() {
 		router.ServeHTTP(wr, r)
 	})
 
-	log.Printf("About to listen on %s. Go to %s", listenAddr, listenAddr)
+	log.Printf("About to listen on %s. Go to %s", listenAddr, listenFullAddr)
 	log.Fatal(http.ListenAndServe(listenAddr, mux))
 }
