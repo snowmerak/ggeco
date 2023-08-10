@@ -32,7 +32,7 @@ func SignIn(container bean.Container) httprouter.Handle {
 		decoder := json.NewDecoder(req.Body)
 		err := decoder.Decode(&reqBody)
 		if err != nil {
-			wr.WriteHeader(http.StatusBadRequest)
+			http.Error(wr, err.Error(), http.StatusBadRequest)
 			return
 		}
 
