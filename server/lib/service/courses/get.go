@@ -129,3 +129,36 @@ func GetNewest(container sqlserver.Container, count int) (result []Course, err e
 
 	return
 }
+
+func GetPopularInBadge(container sqlserver.Container, badgeId sqlserver.UUID, count int) (result []Course, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return nil, err
+	}
+
+	stmt, err := client.Prepare(`SELECT TOP (@P1) [cb].[course_id] FROM [dbo].[CourseBadges] AS [cb] INNER JOIN [dbo].[FavoriteCourses] [FC] on [cb].[course_id] = [FC].[course_id] WHERE [cb].[badge_id] = @P2 GROUP BY [cb].[course_id] ORDER BY COUNT([FC].[course_id])`)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(count, badgeId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id sqlserver.UUID
+		if err := rows.Scan(&id); err != nil {
+			return nil, err
+		}
+		course, err := Get(container, id)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, course)
+	}
+
+	return
+}
