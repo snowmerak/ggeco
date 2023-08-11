@@ -30,7 +30,7 @@ func GetReviewsOfCourse(container sqlserver.Container, courseId sqlserver.UUID) 
 		return
 	}
 
-	stmt, err := client.Prepare("SELECT [id], [course_id], [place_id], [author_id], [latitude], [longitude], [review] from [dbo].[PlaceReviews] WHERE [course_id] = @P1")
+	stmt, err := client.Prepare("SELECT [id], [course_id], [place_id], [author_id], [latitude], [longitude], [review] from [dbo].[PlaceReviews] WHERE [course_id] = @P1 ORDER BY [order]")
 	if err != nil {
 		return
 	}
@@ -116,7 +116,10 @@ func CreateReview(container sqlserver.Container, courseId sqlserver.UUID, placeI
 		return sqlserver.UUID{}, err
 	}
 
-	stmt, err := client.Prepare(`DECLARE @insertedId uniqueidentifier
+	stmt, err := client.Prepare(`DECLARE @maxOrder int
+SET @maxOrder = (SELECT MAX([order]) FROM [dbo].[PlaceReviews] WHERE [course_id] = @P1)
+SET @maxOrder = ISNULL(@maxOrder, 0) + 1
+DECLARE @insertedId uniqueidentifier
 INSERT INTO [dbo].[PlaceReviews] ([course_id], [place_id], [author_id], [latitude], [longitude], [review]) OUTPUT inserted.id VALUES (@P1, @P2, @P3, @P4, @P5, @P6)
 SELECT @insertedId
 `)
@@ -137,4 +140,34 @@ SELECT @insertedId
 	}
 
 	return id, nil
+}
+
+func GetReviewIds(container sqlserver.Container, courseId sqlserver.UUID) (result []sqlserver.UUID, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare("SELECT [id] from [dbo].[PlaceReviews] WHERE [course_id] = @P1 ORDER BY [order]")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(courseId)
+	if err != nil {
+		return result, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id sqlserver.UUID
+		err = rows.Scan(&id)
+		if err != nil {
+			return
+		}
+		result = append(result, id)
+	}
+
+	return
 }
