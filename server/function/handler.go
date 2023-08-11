@@ -4,6 +4,11 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/function/api"
 	"github.com/snowmerak/ggeco/server/function/app"
@@ -11,10 +16,6 @@ import (
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"github.com/snowmerak/ggeco/server/lib/client/storage"
 	"github.com/snowmerak/ggeco/server/lib/service/auth"
-	"log"
-	"net/http"
-	"os"
-	"strconv"
 
 	"github.com/snowmerak/ggeco/server/gen/bean"
 )
@@ -126,6 +127,9 @@ func main() {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	router.GET("/app", func(wr http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+		wr.Write([]byte("Hello, World!"))
+	})
 	router.POST("/app/auth/signin", app.SignIn(container))
 	router.POST("/app/auth/refresh", app.Refresh(container))
 
