@@ -25,7 +25,7 @@ func Get(container sqlserver.Container, id sqlserver.UUID) (result Course, err e
 		return
 	}
 
-	stmt, err := client.Prepare("SELECT [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] WHERE [id] = @P1")
+	stmt, err := client.Prepare("SELECT [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] WHERE [id] = @P1 AND [is_public] <> 0")
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func GetNewest(container sqlserver.Container, count int) (result []Course, err e
 		return
 	}
 
-	stmt, err := client.Prepare("SELECT TOP (@P1) [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] ORDER BY [reg_date] DESC")
+	stmt, err := client.Prepare("SELECT TOP (@P1) [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] WHERE [is_public] <> 0 ORDER BY [reg_date] DESC")
 	if err != nil {
 		return
 	}
@@ -142,7 +142,7 @@ func GetPopularInBadge(container sqlserver.Container, badgeId sqlserver.UUID, co
 	}
 	defer stmt.Close()
 
-	rows, err := stmt.Query(count, badgeId)
+	rows, err := stmt.Query(count*2, badgeId)
 	if err != nil {
 		return nil, err
 	}
@@ -155,9 +155,13 @@ func GetPopularInBadge(container sqlserver.Container, badgeId sqlserver.UUID, co
 		}
 		course, err := Get(container, id)
 		if err != nil {
-			return nil, err
+			continue
 		}
 		result = append(result, course)
+	}
+
+	if len(result) > count {
+		result = result[:count]
 	}
 
 	return
