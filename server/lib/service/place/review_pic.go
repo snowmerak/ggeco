@@ -119,3 +119,23 @@ func SetReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID, p
 
 	return tx.Commit()
 }
+
+func DeleteReviewPictures(container sqlserver.Container, reviewId sqlserver.UUID) error {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return err
+	}
+
+	stmt, err := client.Prepare("DELETE FROM [dbo].[PlaceReviewPictures] WHERE [review_id] = @P1")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(reviewId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
