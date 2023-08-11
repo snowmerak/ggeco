@@ -131,22 +131,48 @@ type DeleteFavoriteCourseRequest struct {
 	Id string `query:"id"`
 }
 
-func DeleteFavoriteCourse(container bean.Container, id sqlserver.UUID) error {
+func DeleteFavoriteCourse(container bean.Container, userId sqlserver.UUID, courseId sqlserver.UUID) error {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return err
 	}
 
-	stmt, err := client.Prepare("DELETE FROM [dbo].[FavoriteCourses] WHERE [id] = @P1")
+	stmt, err := client.Prepare("DELETE FROM [dbo].[FavoriteCourses] WHERE [user_id] = @P1 AND [course_id] = @P2")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.Exec(userId, courseId)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func CheckFavoriteCourse(container bean.Container, userId sqlserver.UUID, courseId sqlserver.UUID) (bool, error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := client.Prepare("SELECT COUNT(*) FROM [dbo].[FavoriteCourses] WHERE [user_id] = @P1 AND [course_id] = @P2")
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(userId, courseId)
+	if err := row.Err(); err != nil {
+		return false, err
+	}
+
+	count := 0
+	err = row.Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }
