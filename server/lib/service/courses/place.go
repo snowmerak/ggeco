@@ -55,7 +55,7 @@ type SetPlacesRequest struct {
 	PlaceIds []string `query:"place_ids" required:"true"`
 }
 
-func SetPlaces(container sqlserver.Container, courseId sqlserver.UUID, places []sqlserver.UUID) error {
+func SetPlaces(container sqlserver.Container, courseId sqlserver.UUID, places []string) error {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return err
@@ -93,4 +93,40 @@ func SetPlaces(container sqlserver.Container, courseId sqlserver.UUID, places []
 	}
 
 	return tx.Commit()
+}
+
+func GetCoursesFromPlace(container sqlserver.Container, placeId string, count int) ([]Course, error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return nil, err
+	}
+
+	stmt, err := client.Prepare(`SELECT TOP (@P1) [course_id] FROM [dbo].[CoursePlaces] WHERE [place_id] = @P2 ORDER BY RAND()`)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(count, placeId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	result := make([]Course, 0, count)
+	for rows.Next() {
+		courseId := sqlserver.UUID{}
+		if err := rows.Scan(&courseId); err != nil {
+			return result, err
+		}
+
+		rs, err := Get(container, courseId)
+		if err != nil {
+			return result, err
+		}
+
+		result = append(result, rs)
+	}
+
+	return result, nil
 }
