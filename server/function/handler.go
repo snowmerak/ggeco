@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/julienschmidt/httprouter"
-	"github.com/snowmerak/ggeco/server/function/api"
 	"github.com/snowmerak/ggeco/server/function/app"
 	"github.com/snowmerak/ggeco/server/lib/client/maps"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
@@ -60,78 +60,97 @@ func main() {
 
 	router := httprouter.New()
 
-	router.GET("/api/place", api.Place(container))
-	router.GET("/api/places", api.Search(container))
-
-	router.GET("/api/image", api.Image(container))
-
-	router.GET("/api/course", api.GetCourse(container))
-	router.GET("/api/course/list", api.GetCourse(container))
-	router.POST("/api/course/name", api.UpdateCourseName(container))
-	router.POST("/api/course/review", api.UpdateCourseReview(container))
-
-	router.GET("/api/badge", api.GetBadge(container))
-	router.GET("/api/badges", api.GetBadges(container))
-	router.GET("/api/badge/name", api.GetBadgeByName(container))
-	router.POST("/api/badge", api.AddBadge(container))
-	router.POST("/api/badge/name", api.UpdateBadgeName(container))
-	router.POST("/api/badge/summary", api.UpdateBadgeSummary(container))
-	router.POST("/api/badge/image", api.UpdateBadgeImage(container))
-	router.DELETE("/api/badge", api.DeleteBadge(container))
-
-	router.POST("/api/badge/earned", api.AddEarnedBadge(container))
-	router.GET("/api/badge/earned", api.GetEarnedBadgesByUserId(container))
-	router.GET("/api/badge/earned/count", api.CountUsersEarnedBadge(container))
-
-	router.GET("/api/course/place", api.GetCoursePlaces(container))
-	router.POST("/api/course/place", api.SetCoursePlaces(container))
-
-	router.GET("/api/course/place/reviews", api.GetPlaceReviewsOfCourse(container))
-	router.POST("/api/course/place/review", api.CreatePlaceReview(container))
-	router.PATCH("/api/course/place/review", api.UpdatePlaceReview(container))
-	router.DELETE("/api/course/place/review", api.DeletePlaceReview(container))
-
-	router.GET("/api/course/place/review/pic", api.GetPlaceReviewPictures(container))
-	router.POST("/api/course/place/review/pic", api.SetPlaceReviewPictures(container))
-
-	router.GET("/api/course/badges", api.GetCourseBadges(container))
-	router.POST("/api/course/badges", api.SetCourseBadges(container))
-
-	router.GET("/api/user", api.GetUser(container))
-	router.POST("/api/user", api.AddUser(container))
-	router.PATCH("/api/user/nickname", api.UpdateUserNickname(container))
-	router.PATCH("/api/user/last_signin", api.UpdateUserLastSigninDate(container))
-	router.DELETE("/api/user", api.DeleteUser(container))
-
-	router.GET("/api/user/naver", api.GetNaverUser(container))
-	router.GET("/api/user/naver/id", api.GetNaverUserByNaverId(container))
-	router.POST("/api/user/naver", api.AddNaverUser(container))
-	router.PATCH("/api/user/naver", api.UpdateNaverUser(container))
-	router.DELETE("/api/user/naver", api.DeleteNaverUser(container))
-
-	router.GET("/api/user/kakao", api.GetKakaoUser(container))
-	router.GET("/api/user/kakao/id", api.GetKakaoUserByKakaoId(container))
-	router.POST("/api/user/kakao", api.AddKakaoUser(container))
-	router.PATCH("/api/user/kakao", api.UpdateKakaoUser(container))
-	router.DELETE("/api/user/kakao", api.DeleteKakaoUser(container))
-
-	router.GET("/api/place/favorite/user", api.GetFavoritePlacesByUserId(container))
-	router.GET("/api/place/favorite/count", api.CountFavoritePlace(container))
-	router.POST("/api/place/favorite", api.AddFavoritePlace(container))
-	router.DELETE("/api/place/favorite", api.DeleteFavoritePlace(container))
-
-	router.GET("/api/course/favorite/user", api.GetFavoriteCoursesByUserId(container))
-	router.GET("/api/course/favorite/count", api.CountFavoriteCourse(container))
-	router.POST("/api/course/favorite", api.AddFavoriteCourse(container))
-	router.DELETE("/api/course/favorite", api.DeleteFavoriteCourse(container))
+	//router.GET("/api/place", api.Place(container))
+	//router.GET("/api/places", api.Search(container))
+	//
+	//router.GET("/api/image", api.Image(container))
+	//
+	//router.GET("/api/course", api.GetCourse(container))
+	//router.GET("/api/course/list", api.GetCourse(container))
+	//router.POST("/api/course/name", api.UpdateCourseName(container))
+	//router.POST("/api/course/review", api.UpdateCourseReview(container))
+	//
+	//router.GET("/api/badge", api.GetBadge(container))
+	//router.GET("/api/badges", api.GetBadges(container))
+	//router.GET("/api/badge/name", api.GetBadgeByName(container))
+	//router.POST("/api/badge", api.AddBadge(container))
+	//router.POST("/api/badge/name", api.UpdateBadgeName(container))
+	//router.POST("/api/badge/summary", api.UpdateBadgeSummary(container))
+	//router.POST("/api/badge/image", api.UpdateBadgeImage(container))
+	//router.DELETE("/api/badge", api.DeleteBadge(container))
+	//
+	//router.POST("/api/badge/earned", api.AddEarnedBadge(container))
+	//router.GET("/api/badge/earned", api.GetEarnedBadgesByUserId(container))
+	//router.GET("/api/badge/earned/count", api.CountUsersEarnedBadge(container))
+	//
+	//router.GET("/api/course/place", api.GetCoursePlaces(container))
+	//router.POST("/api/course/place", api.SetCoursePlaces(container))
+	//
+	//router.GET("/api/course/place/reviews", api.GetPlaceReviewsOfCourse(container))
+	//router.POST("/api/course/place/review", api.CreatePlaceReview(container))
+	//router.PATCH("/api/course/place/review", api.UpdatePlaceReview(container))
+	//router.DELETE("/api/course/place/review", api.DeletePlaceReview(container))
+	//
+	//router.GET("/api/course/place/review/pic", api.GetPlaceReviewPictures(container))
+	//router.POST("/api/course/place/review/pic", api.SetPlaceReviewPictures(container))
+	//
+	//router.GET("/api/course/badges", api.GetCourseBadges(container))
+	//router.POST("/api/course/badges", api.SetCourseBadges(container))
+	//
+	//router.GET("/api/user", api.GetUser(container))
+	//router.POST("/api/user", api.AddUser(container))
+	//router.PATCH("/api/user/nickname", api.UpdateUserNickname(container))
+	//router.PATCH("/api/user/last_signin", api.UpdateUserLastSigninDate(container))
+	//router.DELETE("/api/user", api.DeleteUser(container))
+	//
+	//router.GET("/api/user/naver", api.GetNaverUser(container))
+	//router.GET("/api/user/naver/id", api.GetNaverUserByNaverId(container))
+	//router.POST("/api/user/naver", api.AddNaverUser(container))
+	//router.PATCH("/api/user/naver", api.UpdateNaverUser(container))
+	//router.DELETE("/api/user/naver", api.DeleteNaverUser(container))
+	//
+	//router.GET("/api/user/kakao", api.GetKakaoUser(container))
+	//router.GET("/api/user/kakao/id", api.GetKakaoUserByKakaoId(container))
+	//router.POST("/api/user/kakao", api.AddKakaoUser(container))
+	//router.PATCH("/api/user/kakao", api.UpdateKakaoUser(container))
+	//router.DELETE("/api/user/kakao", api.DeleteKakaoUser(container))
+	//
+	//router.GET("/api/place/favorite/user", api.GetFavoritePlacesByUserId(container))
+	//router.GET("/api/place/favorite/count", api.CountFavoritePlace(container))
+	//router.POST("/api/place/favorite", api.AddFavoritePlace(container))
+	//router.DELETE("/api/place/favorite", api.DeleteFavoritePlace(container))
+	//
+	//router.GET("/api/course/favorite/user", api.GetFavoriteCoursesByUserId(container))
+	//router.GET("/api/course/favorite/count", api.CountFavoriteCourse(container))
+	//router.POST("/api/course/favorite", api.AddFavoriteCourse(container))
+	//router.DELETE("/api/course/favorite", api.DeleteFavoriteCourse(container))
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	router.GET("/app", func(wr http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		wr.Write([]byte("Hello, World!"))
-	})
 	router.POST("/app/auth/signin", app.SignIn(container))
 	router.POST("/app/auth/refresh", app.Refresh(container))
+
+	router.GET("/app/badge/list", app.GetBadges(container))
+
+	router.GET("/app/course/popular", app.GetPopularCourseOfBadge(container))
+	router.GET("/app/course/recent", app.GetRecentCourses(container))
+	router.GET("/app/course/search", app.FindCoursesBySearchPlace(container))
+	router.GET("/app/course", app.GetCourseInfo(container))
+	router.POST("/app/course", app.AddCourse(container))
+	router.POST("/app/course/edit", app.UpdateCourse(container))
+	router.GET("/app/course/favorite", app.GetFavoriteCourses(container))
+	router.POST("/app/course/favorite", app.AddFavoriteCourse(container))
+	router.DELETE("/app/course/favorite", app.RemoveFavoriteCourse(container))
+	router.GET("/app/course/favorite/check", app.IsFavoriteCourse(container))
+
+	router.GET("/app/place/search", app.SearchPlaces(container))
+	router.GET("/app/place", app.GetPlaceInfo(container))
+	router.GET("/app/place/favorite", app.GetFavoritePlaces(container))
+	router.POST("/app/place/favorite", app.AddFavoritePlace(container))
+	router.DELETE("/app/place/favorite", app.RemoveFavoritePlace(container))
+	router.GET("/app/place/favorite/check", app.IsFavoritePlace(container))
+
+	router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
 
 	listenFullAddr := fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
 
@@ -139,6 +158,15 @@ func main() {
 	mux.HandleFunc("/", func(wr http.ResponseWriter, r *http.Request) {
 		reqCtx := auth.WithJwtSecretKey(r.Context(), jwtSecretKey)
 		r = r.WithContext(reqCtx)
+		authorization := r.Header.Get("Authorization")
+		if strings.HasPrefix(authorization, "Bearer ") {
+			authorization = strings.TrimPrefix(authorization, "Bearer ")
+			claims, err := auth.ValidateUserToken(jwtSecretKey, authorization)
+			if err == nil {
+				reqCtx = auth.WithJwtClaims(reqCtx, claims)
+				r = r.WithContext(reqCtx)
+			}
+		}
 		router.ServeHTTP(wr, r)
 	})
 
