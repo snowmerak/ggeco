@@ -76,3 +76,41 @@ func UpdateReview(container sqlserver.Container, id sqlserver.UUID, review strin
 
 	return
 }
+
+func UpdateDate(container sqlserver.Container, id sqlserver.UUID, date string) (err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare("UPDATE [dbo].[Courses] SET [reg_date] = @P1 WHERE [id] = @P2")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(date, id)
+
+	return
+}
+
+func UpdateIsPublic(container sqlserver.Container, id sqlserver.UUID, isPublic bool) (err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare("UPDATE [dbo].[Courses] SET [is_public] = @P1 WHERE [id] = @P2")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	v := 0
+	if isPublic {
+		v = 1
+	}
+	_, err = stmt.Exec(v, id)
+
+	return
+}
