@@ -107,7 +107,7 @@ func GetNewest(container sqlserver.Container, count int) (result []Course, err e
 		return
 	}
 
-	stmt, err := client.Prepare("SELECT TOP (@P1) [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] ORDER BY [reg_date]")
+	stmt, err := client.Prepare("SELECT TOP (@P1) [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] ORDER BY [reg_date] DESC")
 	if err != nil {
 		return
 	}
