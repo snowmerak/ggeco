@@ -121,22 +121,43 @@ type DeleteFavoritePlaceRequest struct {
 	Id string `query:"id"`
 }
 
-func DeleteFavoritePlace(container sqlserver.Container, id sqlserver.UUID) error {
+func DeleteFavoritePlace(container sqlserver.Container, userId sqlserver.UUID, placeId string) error {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return err
 	}
 
-	stmt, err := client.Prepare("DELETE FROM [dbo].[FavoritePlaces] WHERE [id] = @P1")
+	stmt, err := client.Prepare("DELETE FROM [dbo].[FavoritePlaces] WHERE [user_id] = @P1 AND [place_id] = @P2")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(id)
+	_, err = stmt.Exec(userId, placeId)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func CheckFavoritePlace(container sqlserver.Container, userId sqlserver.UUID, placeId string) (bool, error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return false, err
+	}
+
+	stmt, err := client.Prepare("SELECT COUNT(*) FROM [dbo].[FavoritePlaces] WHERE [user_id] = @P1 AND [place_id] = @P2")
+	if err != nil {
+		return false, err
+	}
+	defer stmt.Close()
+
+	var count int
+	err = stmt.QueryRow(userId, placeId).Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
 }
