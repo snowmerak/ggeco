@@ -319,12 +319,399 @@ func main() {
 		panic(err)
 	}
 
+	appGetBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge/list")
+	if err != nil {
+		panic(err)
+	}
+	appGetBadgesOp.SetDescription("Get Badge List")
+	appGetBadgesOp.SetSummary("Get Badge List")
+	appGetBadgesOp.AddReqStructure(app.GetBadgesRequest{})
+	appGetBadgesOp.AddRespStructure(app.GetBadgesResponse{})
+	appGetBadgesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetBadgesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetBadgesOp); err != nil {
+		panic(err)
+	}
+
+	appGetPopularCourseOfBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/popular")
+	if err != nil {
+		panic(err)
+	}
+	appGetPopularCourseOfBadgeOp.SetDescription("Get Popular Course of Badge")
+	appGetPopularCourseOfBadgeOp.SetSummary("Get Popular Course of Badge")
+	appGetPopularCourseOfBadgeOp.AddReqStructure(app.GetPopularCourseOfBadgeRequest{})
+	appGetPopularCourseOfBadgeOp.AddRespStructure(app.GetPopularCourseOfBadgeResponse{})
+	appGetPopularCourseOfBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetPopularCourseOfBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetPopularCourseOfBadgeOp); err != nil {
+		panic(err)
+	}
+
+	appGetRecentCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/recent")
+	if err != nil {
+		panic(err)
+	}
+	appGetRecentCoursesOp.SetDescription("Get Recent Courses")
+	appGetRecentCoursesOp.SetSummary("Get Recent Courses")
+	appGetRecentCoursesOp.AddReqStructure(app.GetRecentCoursesRequest{})
+	appGetRecentCoursesOp.AddRespStructure(app.GetRecentCoursesResponse{})
+	appGetRecentCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetRecentCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetRecentCoursesOp); err != nil {
+		panic(err)
+	}
+
+	appFindCoursesBySearchPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/search")
+	if err != nil {
+		panic(err)
+	}
+	appFindCoursesBySearchPlaceOp.SetDescription("Find Courses by Search Place")
+	appFindCoursesBySearchPlaceOp.SetSummary("Find Courses by Search Place")
+	appFindCoursesBySearchPlaceOp.AddReqStructure(app.FindCoursesBySearchPlaceRequest{})
+	appFindCoursesBySearchPlaceOp.AddRespStructure(app.FindCoursesBySearchPlaceResponse{})
+	appFindCoursesBySearchPlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appFindCoursesBySearchPlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appFindCoursesBySearchPlaceOp); err != nil {
+		panic(err)
+	}
+
+	appGetCourseOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course")
+	if err != nil {
+		panic(err)
+	}
+	appGetCourseOp.SetDescription("Get Course Info")
+	appGetCourseOp.SetSummary("Get Course Info")
+	appGetCourseOp.AddReqStructure(app.GetCourseInfoRequest{})
+	appGetCourseOp.AddRespStructure(app.GetCourseInfoResponse{})
+	appGetCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetCourseOp); err != nil {
+		panic(err)
+	}
+
+	appAddCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course")
+	if err != nil {
+		panic(err)
+	}
+	appAddCourseOp.SetDescription("Set Course Data")
+	appAddCourseOp.SetSummary("Set Course Data")
+	appAddCourseOp.AddReqStructure(app.SetCourseRequest{})
+	appAddCourseOp.AddRespStructure(app.SetCourseResponse{})
+	appAddCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appAddCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appAddCourseOp); err != nil {
+		panic(err)
+	}
+
+	appUpdateCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course/edit")
+	if err != nil {
+		panic(err)
+	}
+	appUpdateCourseOp.SetDescription("Update Course Data")
+	appUpdateCourseOp.SetSummary("Update Course Data")
+	appUpdateCourseOp.AddReqStructure(app.UpdateCourseRequest{})
+	appUpdateCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Update Course Data Success."
+	})
+	appUpdateCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appUpdateCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appUpdateCourseOp); err != nil {
+		panic(err)
+	}
+
+	appGetFavoriteCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appGetFavoriteCoursesOp.SetDescription("Get Favorite Courses")
+	appGetFavoriteCoursesOp.SetSummary("Get Favorite Courses")
+	appGetFavoriteCoursesOp.AddRespStructure(app.GetFavoriteCoursesResponse{})
+	appGetFavoriteCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetFavoriteCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetFavoriteCoursesOp); err != nil {
+		panic(err)
+	}
+
+	appAddFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appAddFavoriteCourseOp.SetDescription("Add Favorite Course")
+	appAddFavoriteCourseOp.SetSummary("Add Favorite Course")
+	appAddFavoriteCourseOp.AddReqStructure(app.AddFavoriteCourseRequest{})
+	appAddFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Add Favorite Course Success."
+	})
+	appAddFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appAddFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appAddFavoriteCourseOp); err != nil {
+		panic(err)
+	}
+
+	appDeleteFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodDelete, "/app/course/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appDeleteFavoriteCourseOp.SetDescription("Delete Favorite Course")
+	appDeleteFavoriteCourseOp.SetSummary("Delete Favorite Course")
+	appDeleteFavoriteCourseOp.AddReqStructure(app.RemoveFavoriteCourseRequest{})
+	appDeleteFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Delete Favorite Course Success."
+	})
+	appDeleteFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appDeleteFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appDeleteFavoriteCourseOp); err != nil {
+		panic(err)
+	}
+
+	appCheckFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/favorite/check")
+	if err != nil {
+		panic(err)
+	}
+	appCheckFavoriteCourseOp.SetDescription("Check Favorite Course")
+	appCheckFavoriteCourseOp.SetSummary("Check Favorite Course")
+	appCheckFavoriteCourseOp.AddReqStructure(app.IsFavoriteCourseRequest{})
+	appCheckFavoriteCourseOp.AddRespStructure(app.IsFavoriteCourseResponse{})
+	appCheckFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appCheckFavoriteCourseOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appCheckFavoriteCourseOp); err != nil {
+		panic(err)
+	}
+
+	appSearchPlacesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/search")
+	if err != nil {
+		panic(err)
+	}
+	appSearchPlacesOp.SetDescription("Search Places")
+	appSearchPlacesOp.SetSummary("Search Places")
+	appSearchPlacesOp.AddReqStructure(app.SearchPlacesRequest{})
+	appSearchPlacesOp.AddRespStructure(app.SearchPlacesResponse{})
+	appSearchPlacesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appSearchPlacesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appSearchPlacesOp); err != nil {
+		panic(err)
+	}
+
+	appGetPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place")
+	if err != nil {
+		panic(err)
+	}
+	appGetPlaceOp.SetDescription("Get Place Info")
+	appGetPlaceOp.SetSummary("Get Place Info")
+	appGetPlaceOp.AddReqStructure(app.GetPlaceInfoRequest{})
+	appGetPlaceOp.AddRespStructure(app.GetPlaceInfoResponse{})
+	appGetPlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetPlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetPlaceOp); err != nil {
+		panic(err)
+	}
+
+	appGetFavoritePlacesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appGetFavoritePlacesOp.SetDescription("Get Favorite Places")
+	appGetFavoritePlacesOp.SetSummary("Get Favorite Places")
+	appGetFavoritePlacesOp.AddRespStructure(app.GetFavoritePlacesResponse{})
+	appGetFavoritePlacesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetFavoritePlacesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetFavoritePlacesOp); err != nil {
+		panic(err)
+	}
+
+	appAddFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodPost, "/app/place/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appAddFavoritePlaceOp.SetDescription("Add Favorite Place")
+	appAddFavoritePlaceOp.SetSummary("Add Favorite Place")
+	appAddFavoritePlaceOp.AddReqStructure(app.AddFavoritePlaceRequest{})
+	appAddFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Add Favorite Place Success."
+	})
+	appAddFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appAddFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appAddFavoritePlaceOp); err != nil {
+		panic(err)
+	}
+
+	appDeleteFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodDelete, "/app/place/favorite")
+	if err != nil {
+		panic(err)
+	}
+	appDeleteFavoritePlaceOp.SetDescription("Delete Favorite Place")
+	appDeleteFavoritePlaceOp.SetSummary("Delete Favorite Place")
+	appDeleteFavoritePlaceOp.AddReqStructure(app.RemoveFavoritePlaceRequest{})
+	appDeleteFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Delete Favorite Place Success."
+	})
+	appDeleteFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appDeleteFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appDeleteFavoritePlaceOp); err != nil {
+		panic(err)
+	}
+
+	appCheckFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/favorite/check")
+	if err != nil {
+		panic(err)
+	}
+	appCheckFavoritePlaceOp.SetDescription("Check Favorite Place")
+	appCheckFavoritePlaceOp.SetSummary("Check Favorite Place")
+	appCheckFavoritePlaceOp.AddReqStructure(app.IsFavoritePlaceRequest{})
+	appCheckFavoritePlaceOp.AddRespStructure(app.IsFavoritePlaceResponse{})
+	appCheckFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appCheckFavoritePlaceOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appCheckFavoritePlaceOp); err != nil {
+		panic(err)
+	}
+
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {
 		panic(err)
 	}
 
-	f, err := os.Create("./doc/swagger.yaml")
+	f, err := os.Create("./function/swagger/swagger.yaml")
 	if err != nil {
 		panic(err)
 	}
