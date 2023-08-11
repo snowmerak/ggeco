@@ -109,20 +109,20 @@ func AddFavoriteCourse(container bean.Container) httprouter.Handle {
 	}
 }
 
-func DeleteFavoriteCourse(container bean.Container) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		id := r.URL.Query().Get("id")
-
-		favoriteCourseId, err := base64.URLEncoding.DecodeString(id)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		err = courses.DeleteFavoriteCourse(container, favoriteCourseId)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-}
+//func DeleteFavoriteCourse(container bean.Container) httprouter.Handle {
+//	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+//		id := r.URL.Query().Get("id")
+//
+//		favoriteCourseId, err := base64.URLEncoding.DecodeString(id)
+//		if err != nil {
+//			http.Error(w, err.Error(), http.StatusBadRequest)
+//			return
+//		}
+//
+//		err = courses.DeleteFavoriteCourse(container, favoriteCourseId)
+//		if err != nil {
+//			http.Error(w, err.Error(), http.StatusInternalServerError)
+//			return
+//		}
+//	}
+//}

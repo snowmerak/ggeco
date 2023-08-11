@@ -93,19 +93,19 @@ func AddFavoritePlace(container sqlserver.Container) httprouter.Handle {
 	}
 }
 
-func DeleteFavoritePlace(container sqlserver.Container) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		id := r.URL.Query().Get("id")
-
-		favoritePlaceId, err := base64.URLEncoding.DecodeString(id)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		if err := place.DeleteFavoritePlace(container, favoritePlaceId); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-}
+//func DeleteFavoritePlace(container sqlserver.Container) httprouter.Handle {
+//	return func(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+//		id := r.URL.Query().Get("id")
+//
+//		favoritePlaceId, err := base64.URLEncoding.DecodeString(id)
+//		if err != nil {
+//			http.Error(w, err.Error(), http.StatusBadRequest)
+//			return
+//		}
+//
+//		if err := place.DeleteFavoritePlace(container, favoritePlaceId); err != nil {
+//			http.Error(w, err.Error(), http.StatusInternalServerError)
+//			return
+//		}
+//	}
+//}

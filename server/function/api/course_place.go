@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/gen/bean"
-	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"github.com/snowmerak/ggeco/server/lib/service/courses"
 	"github.com/snowmerak/ggeco/server/lib/service/place"
 	"net/http"
@@ -49,34 +48,34 @@ func GetCoursePlaces(container bean.Container) httprouter.Handle {
 	}
 }
 
-func SetCoursePlaces(container bean.Container) httprouter.Handle {
-	return func(wr http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-		req := courses.SetPlacesRequest{}
-
-		decoder := json.NewDecoder(r.Body)
-		if err := decoder.Decode(&req); err != nil {
-			http.Error(wr, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		courseUUID, err := base64.URLEncoding.DecodeString(req.CourseId)
-		if err != nil {
-			http.Error(wr, err.Error(), http.StatusBadRequest)
-			return
-		}
-
-		placeIds := make([]sqlserver.UUID, len(req.PlaceIds))
-		for i, v := range req.PlaceIds {
-			placeIds[i], err = base64.URLEncoding.DecodeString(v)
-			if err != nil {
-				http.Error(wr, err.Error(), http.StatusBadRequest)
-				return
-			}
-		}
-
-		if err := courses.SetPlaces(container, courseUUID, placeIds); err != nil {
-			http.Error(wr, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	}
-}
+//func SetCoursePlaces(container bean.Container) httprouter.Handle {
+//	return func(wr http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+//		req := courses.SetPlacesRequest{}
+//
+//		decoder := json.NewDecoder(r.Body)
+//		if err := decoder.Decode(&req); err != nil {
+//			http.Error(wr, err.Error(), http.StatusBadRequest)
+//			return
+//		}
+//
+//		courseUUID, err := base64.URLEncoding.DecodeString(req.CourseId)
+//		if err != nil {
+//			http.Error(wr, err.Error(), http.StatusBadRequest)
+//			return
+//		}
+//
+//		placeIds := make([]sqlserver.UUID, len(req.PlaceIds))
+//		for i, v := range req.PlaceIds {
+//			placeIds[i], err = base64.URLEncoding.DecodeString(v)
+//			if err != nil {
+//				http.Error(wr, err.Error(), http.StatusBadRequest)
+//				return
+//			}
+//		}
+//
+//		if err := courses.SetPlaces(container, courseUUID, placeIds); err != nil {
+//			http.Error(wr, err.Error(), http.StatusInternalServerError)
+//			return
+//		}
+//	}
+//}
