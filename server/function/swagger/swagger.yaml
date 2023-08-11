@@ -1,0 +1,889 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: snowmerak@outlook.com
+    name: snowmerak
+  description: The ggeco API Documentation
+  title: ggeco
+  version: 1.1.0
+paths:
+  /app/auth/refresh:
+    post:
+      description: Refresh Access Token
+      parameters:
+      - in: header
+        name: Authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppRefreshResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Refresh Access Token
+  /app/auth/signin:
+    post:
+      description: Sign in with OAuth2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppSignInRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppSignInResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Sign in with OAuth2
+  /app/badge/list:
+    get:
+      description: Get Badge List
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetBadgesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Badge List
+  /app/course:
+    get:
+      description: Get Course Info
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetCourseInfoResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Course Info
+    post:
+      description: Set Course Data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppSetCourseRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppSetCourseResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Set Course Data
+  /app/course/edit:
+    post:
+      description: Update Course Data
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppUpdateCourseRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Update Course Data
+  /app/course/favorite:
+    delete:
+      description: Delete Favorite Course
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Delete Favorite Course
+    get:
+      description: Get Favorite Courses
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetFavoriteCoursesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Favorite Courses
+    post:
+      description: Add Favorite Course
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppAddFavoriteCourseRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Add Favorite Course
+  /app/course/favorite/check:
+    get:
+      description: Check Favorite Course
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppIsFavoriteCourseResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Check Favorite Course
+  /app/course/popular:
+    get:
+      description: Get Popular Course of Badge
+      parameters:
+      - in: query
+        name: badge_id
+        schema:
+          type: string
+      - in: query
+        name: count
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetPopularCourseOfBadgeResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Popular Course of Badge
+  /app/course/recent:
+    get:
+      description: Get Recent Courses
+      parameters:
+      - in: query
+        name: count
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetRecentCoursesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Recent Courses
+  /app/course/search:
+    get:
+      description: Find Courses by Search Place
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+      - in: query
+        name: lat
+        schema:
+          type: number
+      - in: query
+        name: lng
+        schema:
+          type: number
+      - in: query
+        name: lang
+        schema:
+          type: string
+      - in: query
+        name: radius
+        schema:
+          type: integer
+      - in: query
+        name: count
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppFindCoursesBySearchPlaceResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Find Courses by Search Place
+  /app/place:
+    get:
+      description: Get Place Info
+      parameters:
+      - in: query
+        name: place_id
+        schema:
+          type: string
+      - in: query
+        name: course_count
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetPlaceInfoResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Place Info
+  /app/place/favorite:
+    delete:
+      description: Delete Favorite Place
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Delete Favorite Place
+    get:
+      description: Get Favorite Places
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetFavoritePlacesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Favorite Places
+    post:
+      description: Add Favorite Place
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppAddFavoritePlaceRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Add Favorite Place
+  /app/place/favorite/check:
+    get:
+      description: Check Favorite Place
+      parameters:
+      - in: query
+        name: place_id
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppIsFavoritePlaceResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Check Favorite Place
+  /app/place/search:
+    get:
+      description: Search Places
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+      - in: query
+        name: lat
+        schema:
+          type: number
+      - in: query
+        name: lng
+        schema:
+          type: number
+      - in: query
+        name: lang
+        schema:
+          type: string
+      - in: query
+        name: radius
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppSearchPlacesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Search Places
+components:
+  schemas:
+    AppAddFavoriteCourseRequest:
+      properties:
+        course_id:
+          type: string
+      type: object
+    AppAddFavoritePlaceRequest:
+      properties:
+        place_id:
+          type: string
+      type: object
+    AppBadge:
+      properties:
+        id:
+          type: string
+        image:
+          type: string
+        name:
+          type: string
+        summary:
+          type: string
+      type: object
+    AppCourse:
+      properties:
+        author_id:
+          type: string
+        favorites:
+          type: integer
+        id:
+          type: string
+        is_favorite:
+          type: boolean
+        name:
+          type: string
+        reg_date:
+          type: string
+        review:
+          type: string
+      type: object
+    AppFindCoursesBySearchPlaceResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+      type: object
+    AppGetBadgesResponse:
+      properties:
+        badges:
+          items:
+            $ref: '#/components/schemas/AppBadge'
+          nullable: true
+          type: array
+      type: object
+    AppGetCourseInfoResponse:
+      properties:
+        course:
+          $ref: '#/components/schemas/AppCourse'
+        place_photos:
+          items:
+            items:
+              $ref: '#/components/schemas/AppPlacePhoto'
+            type: array
+          nullable: true
+          type: array
+        place_reviews:
+          items:
+            $ref: '#/components/schemas/AppPlaceReview'
+          nullable: true
+          type: array
+        places:
+          items:
+            $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+          nullable: true
+          type: array
+      type: object
+    AppGetFavoriteCoursesResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+      type: object
+    AppGetFavoritePlacesResponse:
+      properties:
+        places:
+          items:
+            $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+          nullable: true
+          type: array
+      type: object
+    AppGetPlaceInfoResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+        data:
+          $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+        favorite_count:
+          type: integer
+        is_favorite:
+          type: boolean
+      type: object
+    AppGetPopularCourseOfBadgeResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+      type: object
+    AppGetRecentCoursesResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+      type: object
+    AppIsFavoriteCourseResponse:
+      properties:
+        is_favorite:
+          type: boolean
+      type: object
+    AppIsFavoritePlaceResponse:
+      properties:
+        is_favorite:
+          type: boolean
+      type: object
+    AppPlacePhoto:
+      properties:
+        origin_url:
+          type: string
+        thumbnail_url:
+          type: string
+      type: object
+    AppPlaceReview:
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+        review:
+          type: string
+      type: object
+    AppRefreshResponse:
+      properties:
+        access_token:
+          type: string
+      type: object
+    AppSearchPlacesResponse:
+      properties:
+        places:
+          items:
+            $ref: '#/components/schemas/MapsSearchTextResponse'
+          nullable: true
+          type: array
+      type: object
+    AppSetCourseRequest:
+      properties:
+        date:
+          pattern: YYYY-MM-DD HH:mm:ss
+          type: string
+        is_public:
+          type: boolean
+        name:
+          type: string
+        place_photos:
+          items:
+            items:
+              $ref: '#/components/schemas/AppPlacePhoto'
+            type: array
+          nullable: true
+          type: array
+        place_reviews:
+          items:
+            $ref: '#/components/schemas/AppPlaceReview'
+          nullable: true
+          type: array
+        places:
+          items:
+            type: string
+          nullable: true
+          type: array
+        review:
+          type: string
+      type: object
+    AppSetCourseResponse:
+      properties:
+        id:
+          type: string
+      type: object
+    AppSignInRequest:
+      properties:
+        access_token:
+          type: string
+        kakao_account:
+          type: boolean
+        naver_account:
+          type: boolean
+      required:
+      - access_token
+      type: object
+    AppSignInResponse:
+      properties:
+        refresh_token:
+          type: string
+      type: object
+    AppUpdateCourseRequest:
+      properties:
+        course_id:
+          type: string
+        date:
+          pattern: YYYY-MM-DD HH:mm:ss
+          type: string
+        is_public:
+          type: boolean
+        name:
+          type: string
+        place_photos:
+          items:
+            items:
+              $ref: '#/components/schemas/AppPlacePhoto'
+            type: array
+          nullable: true
+          type: array
+        place_reviews:
+          items:
+            $ref: '#/components/schemas/AppPlaceReview'
+          nullable: true
+          type: array
+        places:
+          items:
+            type: string
+          nullable: true
+          type: array
+        review:
+          type: string
+      type: object
+    MapsLocation:
+      properties:
+        lat:
+          type: number
+        lng:
+          type: number
+      type: object
+    MapsPlacePhoto:
+      properties:
+        height:
+          type: integer
+        html_attributions:
+          items:
+            type: string
+          type: array
+        photo_path:
+          type: string
+        photo_reference:
+          type: string
+        width:
+          type: integer
+      type: object
+    MapsReview:
+      properties:
+        author_name:
+          type: string
+        language:
+          type: string
+        rating:
+          type: integer
+        text:
+          type: string
+      type: object
+    MapsSearchPlaceIdResponse:
+      properties:
+        business_status:
+          type: string
+        formatted_address:
+          type: string
+        geometry_location:
+          $ref: '#/components/schemas/MapsLocation'
+        name:
+          type: string
+        opening_hours:
+          items:
+            $ref: '#/components/schemas/MapsTimeShift'
+          type: array
+        phone:
+          type: string
+        photos:
+          items:
+            $ref: '#/components/schemas/MapsPlacePhoto'
+          type: array
+        place_id:
+          type: string
+        reviews:
+          items:
+            $ref: '#/components/schemas/MapsReview'
+          type: array
+        types:
+          items:
+            type: string
+          type: array
+      type: object
+    MapsSearchTextResponse:
+      properties:
+        business_status:
+          type: string
+        formatted_address:
+          type: string
+        geometry:
+          properties:
+            location:
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+              type: object
+          type: object
+        name:
+          type: string
+        photos:
+          items:
+            $ref: '#/components/schemas/MapsPlacePhoto'
+          type: array
+        place_id:
+          type: string
+        rating:
+          type: number
+        types:
+          items:
+            type: string
+          nullable: true
+          type: array
+        user_ratings_total:
+          type: integer
+      type: object
+    MapsTimeShift:
+      properties:
+        close_day:
+          type: string
+        close_time:
+          type: string
+        open_day:
+          type: string
+        open_time:
+          type: string
+      type: object
