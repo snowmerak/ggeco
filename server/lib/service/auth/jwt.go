@@ -22,6 +22,21 @@ func GetJwtSecretKey(ctx context.Context) ([]byte, error) {
 	return secretKey, nil
 }
 
+type JwtClaimsKey struct{}
+
+func WithJwtClaims(ctx context.Context, claims jwt.MapClaims) context.Context {
+	return context.WithValue(ctx, JwtClaimsKey{}, claims)
+}
+
+func GetJwtClaims(ctx context.Context) (jwt.MapClaims, error) {
+	claims, ok := ctx.Value(JwtClaimsKey{}).(jwt.MapClaims)
+	if !ok {
+		return nil, errors.New("jwt claims not found")
+	}
+
+	return claims, nil
+}
+
 func AccessTokenLifetime() time.Duration {
 	return 7 * 24 * time.Hour
 }
@@ -52,6 +67,7 @@ func MakeUserToken(secretKey []byte, userId string, userNick string, lifetime ti
 }
 
 func ValidateUserToken(secretKey []byte, token string) (jwt.MapClaims, error) {
+
 	claims, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if token.Method != jwt.SigningMethodHS512 {
 			return errors.New("invalid signed method"), nil
