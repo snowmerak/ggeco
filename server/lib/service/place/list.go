@@ -3,6 +3,7 @@ package place
 import (
 	"context"
 	"github.com/snowmerak/ggeco/server/lib/client/maps"
+	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 )
 
 type SearchTextRequest struct {
@@ -29,4 +30,37 @@ func SearchText(ctx context.Context, container maps.Container, query string, rad
 	}
 
 	return resp, nil
+}
+
+func GetCourseContainsPlace(container maps.Container, placeId string, count int) ([]sqlserver.UUID, error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return nil, err
+	}
+
+	stmt, err := client.Prepare("SELECT TOP (@P2) [course_id] FROM [dbo].[CoursePlaces] WHERE [place_id] = @P1 ORDER BY RAND()")
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(placeId, count)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	step := 0
+	var result []sqlserver.UUID
+	for rows.Next() && step < count {
+		var courseId sqlserver.UUID
+		err = rows.Scan(&courseId)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, courseId)
+		step++
+	}
+
+	return result, nil
 }
