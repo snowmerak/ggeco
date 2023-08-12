@@ -31,6 +31,7 @@ type SearchPlaceIdResponse struct {
 	Photos           []PlacePhoto `json:"photos,omitempty"`
 	Phone            string       `json:"phone,omitempty"`
 	Types            []string     `json:"types,omitempty"`
+	IsFavorite       bool         `json:"is_favorite,omitempty"`
 }
 
 type Location struct {

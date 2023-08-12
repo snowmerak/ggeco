@@ -32,6 +32,7 @@ type SearchTextResponse struct {
 	Rating           float64      `json:"rating,omitempty"`
 	UserRatingsTotal int          `json:"user_ratings_total,omitempty"`
 	Photos           []PlacePhoto `json:"photos,omitempty"`
+	IsFavorite       bool         `json:"is_favorite,omitempty"`
 }
 
 func SearchText(ctx context.Context, container Container, fn ...SearchTextRequestOptional) (response []*SearchTextResponse, err error) {

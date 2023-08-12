@@ -22,7 +22,6 @@ type GetPlaceInfoResponse struct {
 	Data          maps.SearchPlaceIdResponse `json:"data"`
 	Courses       []Course                   `json:"courses"`
 	FavoriteCount int                        `json:"favorite_count"`
-	IsFavorite    bool                       `json:"is_favorite"`
 }
 
 func GetPlaceInfo(container bean.Container) httprouter.Handle {
@@ -76,7 +75,7 @@ func GetPlaceInfo(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		resp.IsFavorite = isFavorite
+		resp.Data.IsFavorite = isFavorite
 
 		courseIds, err := place.GetCourseContainsPlace(container, placeId, courseCount)
 		if err != nil {
