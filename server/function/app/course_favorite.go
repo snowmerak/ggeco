@@ -130,15 +130,8 @@ func RemoveFavoriteCourse(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		var req RemoveFavoriteCourseRequest
-		decoder := json.NewDecoder(r.Body)
-		if err := decoder.Decode(&req); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-
 		courseId := sqlserver.UUID{}
-		if err := courseId.From(req.CourseId); err != nil {
+		if err := courseId.From(r.URL.Query().Get("course_id")); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}

@@ -120,14 +120,9 @@ func RemoveFavoritePlace(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		var req RemoveFavoritePlaceRequest
-		decoder := json.NewDecoder(r.Body)
-		if err := decoder.Decode(&req); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
+		placeId := r.URL.Query().Get("place_id")
 
-		if err := place.DeleteFavoritePlace(container, userId, req.PlaceId); err != nil {
+		if err := place.DeleteFavoritePlace(container, userId, placeId); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -174,6 +169,7 @@ func GetFavoritePlaces(container bean.Container) httprouter.Handle {
 				return
 			}
 			result.Places[i] = p.Data
+			result.Places[i].IsFavorite = true
 		}
 
 		encoder := json.NewEncoder(w)
