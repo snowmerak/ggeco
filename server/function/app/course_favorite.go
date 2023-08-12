@@ -108,7 +108,7 @@ func AddFavoriteCourse(container bean.Container) httprouter.Handle {
 }
 
 type RemoveFavoriteCourseRequest struct {
-	CourseId string `json:"course_id"`
+	CourseId string `query:"course_id"`
 }
 
 func RemoveFavoriteCourse(container bean.Container) httprouter.Handle {

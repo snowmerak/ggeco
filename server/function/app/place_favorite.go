@@ -98,7 +98,7 @@ func AddFavoritePlace(container bean.Container) httprouter.Handle {
 }
 
 type RemoveFavoritePlaceRequest struct {
-	PlaceId string `json:"place_id"`
+	PlaceId string `query:"place_id"`
 }
 
 func RemoveFavoritePlace(container bean.Container) httprouter.Handle {
