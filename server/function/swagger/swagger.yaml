@@ -169,6 +169,11 @@ paths:
   /app/course/favorite:
     delete:
       description: Delete Favorite Course
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -401,6 +406,11 @@ paths:
   /app/place/favorite:
     delete:
       description: Delete Favorite Place
+      parameters:
+      - in: query
+        name: place_id
+        schema:
+          type: string
       responses:
         "200":
           description: OK
@@ -639,8 +649,6 @@ components:
           $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
         favorite_count:
           type: integer
-        is_favorite:
-          type: boolean
       type: object
     AppGetPopularCourseOfBadgeResponse:
       properties:
@@ -819,6 +827,8 @@ components:
           type: string
         geometry_location:
           $ref: '#/components/schemas/MapsLocation'
+        is_favorite:
+          type: boolean
         name:
           type: string
         opening_hours:
@@ -858,6 +868,8 @@ components:
                   type: number
               type: object
           type: object
+        is_favorite:
+          type: boolean
         name:
           type: string
         photos:
