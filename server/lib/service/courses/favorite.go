@@ -176,3 +176,24 @@ func CheckFavoriteCourse(container bean.Container, userId sqlserver.UUID, course
 
 	return count > 0, nil
 }
+
+func CountFavoriteCourseByUserId(container bean.Container, userId sqlserver.UUID) (int, error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return 0, err
+	}
+
+	stmt, err := client.Prepare("SELECT COUNT(*) FROM [dbo].[FavoriteCourses] WHERE [user_id] = @P1")
+	if err != nil {
+		return 0, err
+	}
+	defer stmt.Close()
+
+	var count int
+	err = stmt.QueryRow(userId).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
