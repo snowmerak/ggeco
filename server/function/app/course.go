@@ -6,6 +6,7 @@ import (
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/gen/bean"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+	"github.com/snowmerak/ggeco/server/lib/service/auth"
 	"github.com/snowmerak/ggeco/server/lib/service/courses"
 	"net/http"
 	"strconv"
@@ -92,6 +93,55 @@ func GetRecentCourses(container bean.Container) httprouter.Handle {
 		}
 
 		result := GetRecentCoursesResponse{}
+		for _, v := range list {
+			favoriteCount, err := courses.CountFavoriteCourse(container, v.Id)
+			if err != nil && errors.Is(err, sql.ErrNoRows) {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			result.Courses = append(result.Courses, Course{
+				Id:        v.Id.String(),
+				AuthorId:  v.AuthorID.String(),
+				Name:      v.Name,
+				RegDate:   v.RegDate,
+				Review:    v.Review,
+				Favorites: favoriteCount,
+			})
+		}
+	}
+}
+
+type GetMyCoursesResponse struct {
+	Courses []Course `json:"courses"`
+}
+
+func GetMyCourses(container bean.Container) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		claims, err := auth.GetJwtClaims(r.Context())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		userId := sqlserver.UUID{}
+		claimsUserId, ok := claims[auth.UserId].(string)
+		if !ok {
+			http.Error(w, "invalid claims", http.StatusInternalServerError)
+			return
+		}
+		if err := userId.From(claimsUserId); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		list, err := courses.GetByAuthor(container, userId)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		result := GetMyCoursesResponse{}
 		for _, v := range list {
 			favoriteCount, err := courses.CountFavoriteCourse(container, v.Id)
 			if err != nil && errors.Is(err, sql.ErrNoRows) {
