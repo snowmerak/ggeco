@@ -153,6 +153,10 @@ func main() {
 	router.DELETE("/app/place/favorite", app.RemoveFavoritePlace(container))
 	router.GET("/app/place/favorite/check", app.IsFavoritePlace(container))
 
+	router.GET("/app/user", app.GetProfile(container))
+	router.POST("/app/user/nickname", app.UpdateNickname(container))
+	router.POST("/app/user/badge", app.UpdateBadge(container))
+
 	router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
 
 	listenFullAddr := fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
