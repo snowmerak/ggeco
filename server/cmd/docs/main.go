@@ -768,6 +768,77 @@ func main() {
 		panic(err)
 	}
 
+	getUserOp, err := reflector.NewOperationContext(http.MethodGet, "/app/profile")
+	if err != nil {
+		panic(err)
+	}
+	getUserOp.SetDescription("Get User Info")
+	getUserOp.SetSummary("Get User Info")
+	getUserOp.AddRespStructure(app.GetProfileResponse{})
+	getUserOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	getUserOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(getUserOp); err != nil {
+		panic(err)
+	}
+
+	updateUserNicknameOp, err := reflector.NewOperationContext(http.MethodPost, "/app/profile/nickname")
+	if err != nil {
+		panic(err)
+	}
+	updateUserNicknameOp.SetDescription("Update User Nickname")
+	updateUserNicknameOp.SetSummary("Update User Nickname")
+	updateUserNicknameOp.AddReqStructure(app.UpdateNicknameRequest{})
+	updateUserNicknameOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Update User Nickname Success."
+	})
+	updateUserNicknameOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	updateUserNicknameOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(updateUserNicknameOp); err != nil {
+		panic(err)
+	}
+
+	updateUserBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "/app/profile/badge")
+	if err != nil {
+		panic(err)
+	}
+	updateUserBadgeOp.SetDescription("Update User Badge")
+	updateUserBadgeOp.SetSummary("Update User Badge")
+	updateUserBadgeOp.AddReqStructure(app.UpdateBadgeRequest{})
+	updateUserBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusOK
+		cu.Description = "Update User Badge Success."
+	})
+	updateUserBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	updateUserBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(updateUserBadgeOp); err != nil {
+		panic(err)
+	}
+
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {
 		panic(err)

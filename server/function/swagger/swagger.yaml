@@ -595,6 +595,77 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Search Places
+  /app/profile:
+    get:
+      description: Get User Info
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetProfileResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get User Info
+  /app/profile/badge:
+    post:
+      description: Update User Badge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppUpdateBadgeRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Update User Badge
+  /app/profile/nickname:
+    post:
+      description: Update User Nickname
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppUpdateNicknameRequest'
+      responses:
+        "200":
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Update User Nickname
 components:
   schemas:
     AppAddFavoriteCourseRequest:
@@ -739,6 +810,23 @@ components:
           nullable: true
           type: array
       type: object
+    AppGetProfileResponse:
+      properties:
+        badge_id:
+          type: string
+        badge_image:
+          type: string
+        badge_summary:
+          type: string
+        favorite_course_count:
+          type: integer
+        favorite_place_count:
+          type: integer
+        id:
+          type: string
+        nickname:
+          type: string
+      type: object
     AppGetRecentCoursesResponse:
       properties:
         courses:
@@ -836,6 +924,13 @@ components:
         refresh_token:
           type: string
       type: object
+    AppUpdateBadgeRequest:
+      properties:
+        badge_id:
+          type: string
+      required:
+      - badge_id
+      type: object
     AppUpdateCourseRequest:
       properties:
         course_id:
@@ -866,6 +961,13 @@ components:
           type: array
         review:
           type: string
+      type: object
+    AppUpdateNicknameRequest:
+      properties:
+        nickname:
+          type: string
+      required:
+      - nickname
       type: object
     MapsLocation:
       properties:
