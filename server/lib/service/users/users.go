@@ -209,3 +209,20 @@ func UpdateNickname(container sqlserver.Container, id sqlserver.UUID, nickname s
 
 	return
 }
+
+func UpdateBadge(container sqlserver.Container, id sqlserver.UUID, badge sqlserver.UUID) (err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare("UPDATE [dbo].[Users] SET [badge] = @P1 WHERE [id] = @P2")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(badge, id)
+
+	return
+}
