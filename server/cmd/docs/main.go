@@ -341,6 +341,50 @@ func main() {
 		panic(err)
 	}
 
+	appGetEarnedBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge/earned")
+	if err != nil {
+		panic(err)
+	}
+	appGetEarnedBadgesOp.SetDescription("Get Earned Badges")
+	appGetEarnedBadgesOp.SetSummary("Get Earned Badges")
+	appGetEarnedBadgesOp.AddReqStructure(app.GetEarnedBadgesRequest{})
+	appGetEarnedBadgesOp.AddRespStructure(app.GetEarnedBadgesResponse{})
+	appGetEarnedBadgesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetEarnedBadgesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetEarnedBadgesOp); err != nil {
+		panic(err)
+	}
+
+	appGetBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge")
+	if err != nil {
+		panic(err)
+	}
+	appGetBadgeOp.SetDescription("Get Badge Info")
+	appGetBadgeOp.SetSummary("Get Badge Info")
+	appGetBadgeOp.AddReqStructure(app.GetBadgeInfoRequest{})
+	appGetBadgeOp.AddRespStructure(app.GetBadgeInfoResponse{})
+	appGetBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	appGetBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(appGetBadgeOp); err != nil {
+		panic(err)
+	}
+
 	appGetPopularCourseOfBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/popular")
 	if err != nil {
 		panic(err)
@@ -406,6 +450,24 @@ func main() {
 	if err := reflector.AddOperation(appFindCoursesBySearchPlaceOp); err != nil {
 		panic(err)
 	}
+
+	getMyCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/my")
+	if err != nil {
+		panic(err)
+	}
+	getMyCoursesOp.SetDescription("Get My Courses")
+	getMyCoursesOp.SetSummary("Get My Courses")
+	getMyCoursesOp.AddRespStructure(app.GetMyCoursesResponse{})
+	getMyCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error with Error Message."
+		cu.ContentType = "text/plain"
+	})
+	getMyCoursesOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request with Error Message."
+		cu.ContentType = "text/plain"
+	})
 
 	appGetCourseOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course")
 	if err != nil {

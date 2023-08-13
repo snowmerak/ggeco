@@ -64,6 +64,57 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Sign in with OAuth2
+  /app/badge:
+    get:
+      description: Get Badge Info
+      parameters:
+      - in: query
+        name: badge_id
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetBadgeInfoResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Badge Info
+  /app/badge/earned:
+    get:
+      description: Get Earned Badges
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetEarnedBadgesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Earned Badges
   /app/badge/list:
     get:
       description: Get Badge List
@@ -584,6 +635,23 @@ components:
         review:
           type: string
       type: object
+    AppEarnedBadge:
+      properties:
+        badge_id:
+          type: string
+        earned_at:
+          type: string
+        earned_rate:
+          type: number
+        image:
+          type: string
+        is_earned:
+          type: boolean
+        name:
+          type: string
+        summary:
+          type: string
+      type: object
     AppFindCoursesBySearchPlaceResponse:
       properties:
         courses:
@@ -591,6 +659,11 @@ components:
             $ref: '#/components/schemas/AppCourse'
           nullable: true
           type: array
+      type: object
+    AppGetBadgeInfoResponse:
+      properties:
+        earned_badge:
+          $ref: '#/components/schemas/AppEarnedBadge'
       type: object
     AppGetBadgesResponse:
       properties:
@@ -619,6 +692,14 @@ components:
         places:
           items:
             $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+          nullable: true
+          type: array
+      type: object
+    AppGetEarnedBadgesResponse:
+      properties:
+        earned_badges:
+          items:
+            $ref: '#/components/schemas/AppEarnedBadge'
           nullable: true
           type: array
       type: object
