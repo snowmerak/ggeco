@@ -2,7 +2,9 @@ package badges
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+	"math"
 	"time"
 )
 
@@ -10,7 +12,7 @@ type EarnedBadge struct {
 	Id       sqlserver.UUID `json:"id,omitempty"`
 	UserId   sqlserver.UUID `json:"user_id,omitempty"`
 	BadgeId  sqlserver.UUID `json:"badge_id,omitempty"`
-	EarnedAt time.Time      `json:"earned_at,omitempty"`
+	EarnedAt string         `json:"earned_at,omitempty"`
 }
 
 const earnedBadgeCreateTableQuery = `CREATE TABLE [dbo].[EarnedBadges] (
@@ -47,10 +49,10 @@ type GetEarnedBadgesRequest struct {
 }
 
 type GetEarnedBadgeResponse struct {
-	Id       string    `json:"id"`
-	UserID   string    `json:"user_id"`
-	BadgeID  string    `json:"badge_id"`
-	EarnedAt time.Time `json:"earned_at"`
+	Id       string `json:"id"`
+	UserID   string `json:"user_id"`
+	BadgeID  string `json:"badge_id"`
+	EarnedAt string `json:"earned_at"`
 }
 
 func GetEarnedBadgesByUserId(container sqlserver.Container, userId sqlserver.UUID) (badges []EarnedBadge, err error) {
@@ -111,5 +113,100 @@ func CountUsersEarnedBadge(container sqlserver.Container, badgeId sqlserver.UUID
 
 	rows.Next()
 	err = rows.Scan(&count)
+	return
+}
+
+func CountEarnedBadges(container sqlserver.Container, userId sqlserver.UUID) (count int, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare(`SELECT COUNT(*) FROM [dbo].[EarnedBadges] WHERE [user_id] = @P1`)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(userId)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	rows.Next()
+	err = rows.Scan(&count)
+	return
+}
+
+func GetEarnedRateOfBadge(container sqlserver.Container, badgeId sqlserver.UUID) (rate float64, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare(`SELECT COUNT(*) FROM [dbo].[EarnedBadges] WHERE [badge_id] = @P1`)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(badgeId)
+	if err := row.Err(); err != nil {
+		return rate, err
+	}
+
+	var count int
+	err = row.Scan(&count)
+	if err != nil {
+		return
+	}
+
+	stmt, err = client.Prepare(`SELECT COUNT(*) FROM [dbo].[Users]`)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	row = stmt.QueryRow()
+	if err := row.Err(); err != nil {
+		return rate, err
+	}
+
+	var total int
+	err = row.Scan(&total)
+	if err != nil {
+		return
+	}
+
+	rate = math.Floor((float64(count) / float64(total)) * 100)
+	return
+}
+
+func CheckEarnedBadge(container sqlserver.Container, userId sqlserver.UUID, badgeId sqlserver.UUID) (result bool, date string, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare(`SELECT [earned_at] FROM [dbo].[EarnedBadges] WHERE [user_id] = @P1 AND [badge_id] = @P2`)
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(userId, badgeId)
+	if err := row.Err(); err != nil {
+		return result, date, err
+	}
+
+	var earnedAt string
+	err = row.Scan(&earnedAt)
+	if err != nil && errors.Is(err, sql.ErrNoRows) {
+		return
+	}
+
+	result = earnedAt != ""
+	date = earnedAt
 	return
 }
