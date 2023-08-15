@@ -7,8 +7,6 @@ from PIL import Image
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info('Python HTTP trigger function processed a request.')
-
     match req.method:
         case 'PUT':
             pass
@@ -20,13 +18,25 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     try:
         img = Image.open(req.files['image'])
+        size = req.params.get('size')
+        if size is None:
+            size = '256'
+        size = int(size)
     except Exception as e:
         return func.HttpResponse(
             "Failed to open image: " + str(e),
             status_code=400
         )
 
-    img.thumbnail((128, 128))
+    height = img.height
+    width = img.width
+    if height > width:
+        img = img.crop((0, int((height-width)/2), width, int((height+width)/2)))
+    else:
+        img = img.crop((int((width-height)/2), 0, int((width+height)/2), height))
+    img.thumbnail((size, size))
+
+    print("Image size: " + str(img.size))
 
     buffer = io.BytesIO()
     img.save(buffer, format="webp")
