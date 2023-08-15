@@ -26,7 +26,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     storage_name = req.params.get('storage_name')
 
     try:
-        thumbnail_img = Image.open(req.files['image'])
+        origin_img = Image.open(req.files['image'])
         size = req.params.get('size')
         if size is None:
             size = '64'
@@ -37,14 +37,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400
         )
 
-    origin_img = thumbnail_img.copy()
-
-    height = thumbnail_img.height
-    width = thumbnail_img.width
+    height = origin_img.height
+    width = origin_img.width
     if height > width:
-        thumbnail_img = thumbnail_img.crop((0, int((height - width) / 2), width, int((height + width) / 2)))
+        thumbnail_img = origin_img.crop((0, int((height - width) / 2), width, int((height + width) / 2)))
     else:
-        thumbnail_img = thumbnail_img.crop((int((width - height) / 2), 0, int((width + height) / 2), height))
+        thumbnail_img = origin_img.crop((int((width - height) / 2), 0, int((width + height) / 2), height))
     thumbnail_img.thumbnail((size, size))
 
     account_url = f'https://{account_name}.blob.core.windows.net'
