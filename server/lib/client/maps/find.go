@@ -32,6 +32,7 @@ type SearchPlaceIdResponse struct {
 	Phone            string       `json:"phone,omitempty"`
 	Types            []string     `json:"types,omitempty"`
 	IsFavorite       bool         `json:"is_favorite,omitempty"`
+	Rating           float64      `json:"rating,omitempty"`
 }
 
 type Location struct {
@@ -76,6 +77,7 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 		maps.PlaceDetailsFieldMaskFormattedAddress,
 		maps.PlaceDetailsFieldMaskName,
 		maps.PlaceDetailsFieldMaskTypes,
+		maps.PlaceDetailsFieldMaskRatings,
 	}
 	if request.GetReviews {
 		fields = append(fields, maps.PlaceDetailsFieldMaskReviews)
@@ -143,6 +145,8 @@ func SearchPlaceId(ctx context.Context, container Container, requestOpt ...Searc
 	if result.FormattedPhoneNumber != "" {
 		response.Phone = result.FormattedPhoneNumber
 	}
+
+	response.Rating = float64(result.Rating)
 
 	response.Types = result.Types
 	reduces := make([]int, 0)

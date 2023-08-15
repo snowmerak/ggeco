@@ -1026,6 +1026,8 @@ components:
           type: array
         place_id:
           type: string
+        rating:
+          type: number
         reviews:
           items:
             $ref: '#/components/schemas/MapsReview'
