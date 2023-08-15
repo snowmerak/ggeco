@@ -19,14 +19,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=400
             )
 
-    accountName = os.environ.get('AZURE_STORAGE_ACCOUNT')
-    storageKey = os.environ.get('AZURE_STORAGE_ACCESS_KEY')
+    account_name = os.environ.get('AZURE_STORAGE_ACCOUNT')
+    storage_key = os.environ.get('AZURE_STORAGE_ACCESS_KEY')
 
-    userId = req.params.get('user_id')
-    storageName = req.params.get('storage_name')
+    user_id = req.params.get('user_id')
+    storage_name = req.params.get('storage_name')
 
     try:
-        img = Image.open(req.files['image'])
+        thumbnail_img = Image.open(req.files['image'])
         size = req.params.get('size')
         if size is None:
             size = '64'
@@ -37,31 +37,31 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             status_code=400
         )
 
-    originImg = img.copy()
+    origin_img = thumbnail_img.copy()
 
-    height = img.height
-    width = img.width
+    height = thumbnail_img.height
+    width = thumbnail_img.width
     if height > width:
-        img = img.crop((0, int((height - width) / 2), width, int((height + width) / 2)))
+        thumbnail_img = thumbnail_img.crop((0, int((height - width) / 2), width, int((height + width) / 2)))
     else:
-        img = img.crop((int((width - height) / 2), 0, int((width + height) / 2), height))
-    img.thumbnail((size, size))
+        thumbnail_img = thumbnail_img.crop((int((width - height) / 2), 0, int((width + height) / 2), height))
+    thumbnail_img.thumbnail((size, size))
 
-    account_url = f'https://{accountName}.blob.core.windows.net'
+    account_url = f'https://{account_name}.blob.core.windows.net'
 
     try:
-        with BlobServiceClient(account_url=account_url, credential=storageKey) as storage_client:
-            with storage_client.get_container_client(storageName) as container_client:
+        with BlobServiceClient(account_url=account_url, credential=storage_key) as storage_client:
+            with storage_client.get_container_client(storage_name) as container_client:
                 salt = os.urandom(16)
-                hashed = blake3(salt + img.tobytes()).hexdigest()
-                origin_image_name = f'{userId}/{hashed}.webp'
-                thumbnail_image_name = f'{userId}/{hashed}.thumb.webp'
+                hashed = blake3(salt + thumbnail_img.tobytes()).hexdigest()
+                origin_image_name = f'{user_id}/{hashed}.webp'
+                thumbnail_image_name = f'{user_id}/{hashed}.thumb.webp'
 
                 print(origin_image_name)
                 print(thumbnail_image_name)
 
                 buffer = io.BytesIO()
-                originImg.save(buffer, format="webp")
+                origin_img.save(buffer, format="webp")
                 container_client.upload_blob(
                     name=origin_image_name,
                     data=buffer.getvalue(),
@@ -69,7 +69,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 )
 
                 buffer = io.BytesIO()
-                img.save(buffer, format="webp")
+                thumbnail_img.save(buffer, format="webp")
                 container_client.upload_blob(
                     name=thumbnail_image_name,
                     data=buffer.getvalue(),
@@ -82,8 +82,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     response = {
-        'origin_image_url': f'{account_url}/{storageName}/{origin_image_name}',
-        'thumbnail_image_url': f'{account_url}/{storageName}/{thumbnail_image_name}'
+        'origin_image_url': f'{account_url}/{storage_name}/{origin_image_name}',
+        'thumbnail_image_url': f'{account_url}/{storage_name}/{thumbnail_image_name}'
     }
 
     return func.HttpResponse(
