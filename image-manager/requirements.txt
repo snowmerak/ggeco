@@ -3,4 +3,7 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
+azure-storage-blob
+azure-identity
 pillow==10.0.0
+blake3
