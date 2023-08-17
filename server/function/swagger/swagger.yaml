@@ -7,7 +7,7 @@ info:
   title: ggeco
   version: 1.1.0
 paths:
-  /app/auth/refresh:
+  https://ggeco-func.azurewebsites.net/app/auth/refresh:
     post:
       description: Refresh Access Token
       parameters:
@@ -36,7 +36,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Refresh Access Token
-  /app/auth/signin:
+  https://ggeco-func.azurewebsites.net/app/auth/signin:
     post:
       description: Sign in with OAuth2
       requestBody:
@@ -64,7 +64,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Sign in with OAuth2
-  /app/badge:
+  https://ggeco-func.azurewebsites.net/app/badge:
     get:
       description: Get Badge Info
       parameters:
@@ -92,7 +92,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Badge Info
-  /app/badge/earned:
+  https://ggeco-func.azurewebsites.net/app/badge/earned:
     get:
       description: Get Earned Badges
       responses:
@@ -115,7 +115,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Earned Badges
-  /app/badge/list:
+  https://ggeco-func.azurewebsites.net/app/badge/list:
     get:
       description: Get Badge List
       responses:
@@ -138,7 +138,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Badge List
-  /app/course:
+  https://ggeco-func.azurewebsites.net/app/course:
     get:
       description: Get Course Info
       parameters:
@@ -193,7 +193,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Set Course Data
-  /app/course/edit:
+  https://ggeco-func.azurewebsites.net/app/course/edit:
     post:
       description: Update Course Data
       requestBody:
@@ -217,7 +217,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Update Course Data
-  /app/course/favorite:
+  https://ggeco-func.azurewebsites.net/app/course/favorite:
     delete:
       description: Delete Favorite Course
       parameters:
@@ -286,7 +286,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Add Favorite Course
-  /app/course/favorite/check:
+  https://ggeco-func.azurewebsites.net/app/course/favorite/check:
     get:
       description: Check Favorite Course
       parameters:
@@ -314,7 +314,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Check Favorite Course
-  /app/course/popular:
+  https://ggeco-func.azurewebsites.net/app/course/popular:
     get:
       description: Get Popular Course of Badge
       parameters:
@@ -346,7 +346,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Popular Course of Badge
-  /app/course/recent:
+  https://ggeco-func.azurewebsites.net/app/course/recent:
     get:
       description: Get Recent Courses
       parameters:
@@ -374,7 +374,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Recent Courses
-  /app/course/search:
+  https://ggeco-func.azurewebsites.net/app/course/search:
     get:
       description: Find Courses by Search Place
       parameters:
@@ -422,7 +422,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Find Courses by Search Place
-  /app/place:
+  https://ggeco-func.azurewebsites.net/app/place:
     get:
       description: Get Place Info
       parameters:
@@ -454,7 +454,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Place Info
-  /app/place/favorite:
+  https://ggeco-func.azurewebsites.net/app/place/favorite:
     delete:
       description: Delete Favorite Place
       parameters:
@@ -523,7 +523,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Add Favorite Place
-  /app/place/favorite/check:
+  https://ggeco-func.azurewebsites.net/app/place/favorite/check:
     get:
       description: Check Favorite Place
       parameters:
@@ -551,7 +551,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Check Favorite Place
-  /app/place/search:
+  https://ggeco-func.azurewebsites.net/app/place/search:
     get:
       description: Search Places
       parameters:
@@ -595,7 +595,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Search Places
-  /app/profile:
+  https://ggeco-func.azurewebsites.net/app/profile:
     get:
       description: Get User Info
       responses:
@@ -618,7 +618,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get User Info
-  /app/profile/badge:
+  https://ggeco-func.azurewebsites.net/app/profile/badge:
     post:
       description: Update User Badge
       requestBody:
@@ -642,7 +642,7 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Update User Badge
-  /app/profile/nickname:
+  https://ggeco-func.azurewebsites.net/app/profile/nickname:
     post:
       description: Update User Nickname
       requestBody:
@@ -666,6 +666,40 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Update User Nickname
+  https://ggeco-image-entry.azurewebsites.net/api/upload:
+    put:
+      description: Upload Image
+      parameters:
+      - in: query
+        name: size
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppUploadImageResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "401":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Unauthorized
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Upload Image
 components:
   schemas:
     AppAddFavoriteCourseRequest:
@@ -968,6 +1002,13 @@ components:
           type: string
       required:
       - nickname
+      type: object
+    AppUploadImageResponse:
+      properties:
+        origin_image_url:
+          type: string
+        thumbnail_image_url:
+          type: string
       type: object
     MapsLocation:
       properties:

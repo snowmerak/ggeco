@@ -275,7 +275,7 @@ func main() {
 	//})
 	//reflector.AddOperation(addEarnedBadgeOp)
 
-	appSigninOp, err := reflector.NewOperationContext(http.MethodPost, "/app/auth/signin")
+	appSigninOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/auth/signin")
 	if err != nil {
 		panic(err)
 	}
@@ -297,7 +297,7 @@ func main() {
 		panic(err)
 	}
 
-	appRefreshOp, err := reflector.NewOperationContext(http.MethodPost, "/app/auth/refresh")
+	appRefreshOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/auth/refresh")
 	if err != nil {
 		panic(err)
 	}
@@ -319,7 +319,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge/list")
+	appGetBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/badge/list")
 	if err != nil {
 		panic(err)
 	}
@@ -341,7 +341,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetEarnedBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge/earned")
+	appGetEarnedBadgesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/badge/earned")
 	if err != nil {
 		panic(err)
 	}
@@ -363,7 +363,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/app/badge")
+	appGetBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/badge")
 	if err != nil {
 		panic(err)
 	}
@@ -385,7 +385,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetPopularCourseOfBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/popular")
+	appGetPopularCourseOfBadgeOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/popular")
 	if err != nil {
 		panic(err)
 	}
@@ -407,7 +407,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetRecentCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/recent")
+	appGetRecentCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/recent")
 	if err != nil {
 		panic(err)
 	}
@@ -429,7 +429,7 @@ func main() {
 		panic(err)
 	}
 
-	appFindCoursesBySearchPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/search")
+	appFindCoursesBySearchPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/search")
 	if err != nil {
 		panic(err)
 	}
@@ -451,7 +451,7 @@ func main() {
 		panic(err)
 	}
 
-	getMyCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/my")
+	getMyCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/my")
 	if err != nil {
 		panic(err)
 	}
@@ -469,7 +469,7 @@ func main() {
 		cu.ContentType = "text/plain"
 	})
 
-	appGetCourseOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course")
+	appGetCourseOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course")
 	if err != nil {
 		panic(err)
 	}
@@ -491,7 +491,7 @@ func main() {
 		panic(err)
 	}
 
-	appAddCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course")
+	appAddCourseOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/course")
 	if err != nil {
 		panic(err)
 	}
@@ -513,7 +513,7 @@ func main() {
 		panic(err)
 	}
 
-	appUpdateCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course/edit")
+	appUpdateCourseOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/course/edit")
 	if err != nil {
 		panic(err)
 	}
@@ -538,7 +538,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetFavoriteCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/favorite")
+	appGetFavoriteCoursesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -559,7 +559,7 @@ func main() {
 		panic(err)
 	}
 
-	appAddFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodPost, "/app/course/favorite")
+	appAddFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/course/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -584,7 +584,7 @@ func main() {
 		panic(err)
 	}
 
-	appDeleteFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodDelete, "/app/course/favorite")
+	appDeleteFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodDelete, "https://ggeco-func.azurewebsites.net/app/course/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -609,7 +609,7 @@ func main() {
 		panic(err)
 	}
 
-	appCheckFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodGet, "/app/course/favorite/check")
+	appCheckFavoriteCourseOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course/favorite/check")
 	if err != nil {
 		panic(err)
 	}
@@ -631,7 +631,7 @@ func main() {
 		panic(err)
 	}
 
-	appSearchPlacesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/search")
+	appSearchPlacesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/place/search")
 	if err != nil {
 		panic(err)
 	}
@@ -653,7 +653,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place")
+	appGetPlaceOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/place")
 	if err != nil {
 		panic(err)
 	}
@@ -675,7 +675,7 @@ func main() {
 		panic(err)
 	}
 
-	appGetFavoritePlacesOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/favorite")
+	appGetFavoritePlacesOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/place/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -696,7 +696,7 @@ func main() {
 		panic(err)
 	}
 
-	appAddFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodPost, "/app/place/favorite")
+	appAddFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/place/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -721,7 +721,7 @@ func main() {
 		panic(err)
 	}
 
-	appDeleteFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodDelete, "/app/place/favorite")
+	appDeleteFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodDelete, "https://ggeco-func.azurewebsites.net/app/place/favorite")
 	if err != nil {
 		panic(err)
 	}
@@ -746,7 +746,7 @@ func main() {
 		panic(err)
 	}
 
-	appCheckFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodGet, "/app/place/favorite/check")
+	appCheckFavoritePlaceOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/place/favorite/check")
 	if err != nil {
 		panic(err)
 	}
@@ -768,7 +768,7 @@ func main() {
 		panic(err)
 	}
 
-	getUserOp, err := reflector.NewOperationContext(http.MethodGet, "/app/profile")
+	getUserOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/profile")
 	if err != nil {
 		panic(err)
 	}
@@ -789,7 +789,7 @@ func main() {
 		panic(err)
 	}
 
-	updateUserNicknameOp, err := reflector.NewOperationContext(http.MethodPost, "/app/profile/nickname")
+	updateUserNicknameOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/profile/nickname")
 	if err != nil {
 		panic(err)
 	}
@@ -814,7 +814,7 @@ func main() {
 		panic(err)
 	}
 
-	updateUserBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "/app/profile/badge")
+	updateUserBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/app/profile/badge")
 	if err != nil {
 		panic(err)
 	}
@@ -836,6 +836,33 @@ func main() {
 		cu.ContentType = "text/plain"
 	})
 	if err := reflector.AddOperation(updateUserBadgeOp); err != nil {
+		panic(err)
+	}
+
+	uploadImageOp, err := reflector.NewOperationContext(http.MethodPut, "https://ggeco-image-entry.azurewebsites.net/api/upload")
+	if err != nil {
+		panic(err)
+	}
+	uploadImageOp.SetDescription("Upload Image")
+	uploadImageOp.SetSummary("Upload Image")
+	uploadImageOp.AddReqStructure(app.UploadImageRequest{})
+	uploadImageOp.AddRespStructure(app.UploadImageResponse{})
+	uploadImageOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error."
+		cu.ContentType = "text/plain"
+	})
+	uploadImageOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusUnauthorized
+		cu.Description = "Unauthorized."
+		cu.ContentType = "text/plain"
+	})
+	uploadImageOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(uploadImageOp); err != nil {
 		panic(err)
 	}
 
