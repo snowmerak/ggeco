@@ -2,6 +2,9 @@ import base64
 import io
 import json
 import os
+import uuid
+
+import auth.auth as auth
 
 import azure.functions as func
 from PIL import Image
@@ -19,17 +22,32 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 status_code=400
             )
 
+    authorization = req.headers.get('Authorization')
+    if authorization is None:
+        return func.HttpResponse(
+            "Please provide an Authorization header",
+            status_code=400
+        )
+    token = authorization.split(' ')[1]
+    try:
+        claims = auth.get_claims(token)
+        user_id = uuid.UUID(bytes=base64.urlsafe_b64decode(claims['user_id']))
+    except Exception as e:
+        return func.HttpResponse(
+            "Invalid token: " + str(e),
+            status_code=400
+        )
+
     account_name = os.environ.get('AZURE_STORAGE_ACCOUNT')
     storage_key = os.environ.get('AZURE_STORAGE_ACCESS_KEY')
 
-    user_id = req.params.get('user_id')
-    storage_name = req.params.get('storage_name')
+    storage_name = os.environ.get('STORAGE_NAME')
 
     try:
         origin_img = Image.open(req.files['image'])
         size = req.params.get('size')
         if size is None:
-            size = '64'
+            size = '256'
         size = int(size)
     except Exception as e:
         return func.HttpResponse(
@@ -87,6 +105,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse(
         json.dumps(response),
         status_code=200,
-        mimetype="image/webp"
     )
 
