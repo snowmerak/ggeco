@@ -16,6 +16,7 @@ const thumbnailSize = 256
 
 type UploadImageRequest struct {
 	Image string `file:"image" required:"true"`
+	Size  int    `query:"size"`
 }
 
 type UploadImageResponse struct {
