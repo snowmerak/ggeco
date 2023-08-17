@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/snowmerak/ggeco/server/lib/client/imgmnger"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +22,12 @@ import (
 )
 
 func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println(err)
+		}
+	}()
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -57,6 +64,13 @@ func main() {
 		panic(err)
 	}
 	storage.PushClient(container, imageClient)
+
+	blobStorageUrl := os.Getenv("IMAGE_MANAGER_APP_URL")
+	if blobStorageUrl == "" {
+		panic("IMAGE_MANAGER_APP_URL is empty")
+	}
+	imageManager := imgmnger.New(blobStorageUrl)
+	imgmnger.PushClient(container, imageManager)
 
 	router := httprouter.New()
 
@@ -163,6 +177,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(wr http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
 		reqCtx := auth.WithJwtSecretKey(r.Context(), jwtSecretKey)
 		r = r.WithContext(reqCtx)
 		authorization := r.Header.Get("Authorization")
