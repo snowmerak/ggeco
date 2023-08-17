@@ -67,7 +67,6 @@ func MakeUserToken(secretKey []byte, userId string, userNick string, lifetime ti
 }
 
 func ValidateUserToken(secretKey []byte, token string) (jwt.MapClaims, error) {
-
 	claims, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		if token.Method != jwt.SigningMethodHS512 {
 			return errors.New("invalid signed method"), nil
