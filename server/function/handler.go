@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/snowmerak/ggeco/server/function/back"
 	"github.com/snowmerak/ggeco/server/lib/client/imgmnger"
 	"log"
 	"net/http"
@@ -171,13 +172,14 @@ func main() {
 	router.POST("/app/user/nickname", app.UpdateNickname(container))
 	router.POST("/app/user/badge", app.UpdateBadge(container))
 
+	router.POST("/back/badge", back.AddBadge(container))
+
 	router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
 
 	listenFullAddr := fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(wr http.ResponseWriter, r *http.Request) {
-		log.Println(r.URL.Path)
 		reqCtx := auth.WithJwtSecretKey(r.Context(), jwtSecretKey)
 		r = r.WithContext(reqCtx)
 		authorization := r.Header.Get("Authorization")
