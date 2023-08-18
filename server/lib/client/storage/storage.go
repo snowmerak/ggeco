@@ -1,6 +1,7 @@
 package storage
 
 import (
+	"context"
 	"fmt"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob/sas"
@@ -61,4 +62,19 @@ func GetSASURL(container Container, blobContainer string, fileName string) (urlV
 	parsedUrl.Path = fmt.Sprintf("%s/%s/%s", strings.TrimSuffix(parsedUrl.Path, "/"), blobContainer, fileName)
 
 	return parsedUrl.String(), nil
+}
+
+func UploadImage(container Container, blobContainer string, fileName string, file []byte) (url string, err error) {
+	client, err := GetClient(container)
+	if err != nil {
+		return "", err
+	}
+
+	loc := fmt.Sprintf("badges/%s", fileName)
+	_, err = client.baseClient.UploadBuffer(context.TODO(), blobContainer, loc, file, nil)
+	if err != nil {
+		return "", err
+	}
+
+	return client.host + blobContainer + "/" + loc, nil
 }
