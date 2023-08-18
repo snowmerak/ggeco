@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/snowmerak/ggeco/server/function/app"
+	"github.com/snowmerak/ggeco/server/function/back"
 	"github.com/swaggest/openapi-go"
 	"github.com/swaggest/openapi-go/openapi3"
 	"net/http"
@@ -863,6 +864,28 @@ func main() {
 		cu.ContentType = "text/plain"
 	})
 	if err := reflector.AddOperation(uploadImageOp); err != nil {
+		panic(err)
+	}
+
+	addBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/back/badge")
+	if err != nil {
+		panic(err)
+	}
+	addBadgeOp.SetDescription("Add Badge")
+	addBadgeOp.SetSummary("Add Badge")
+	addBadgeOp.AddReqStructure(back.AddBadgeRequest{})
+	addBadgeOp.AddRespStructure(back.AddBadgeResponse{})
+	addBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error."
+		cu.ContentType = "text/plain"
+	})
+	addBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(addBadgeOp); err != nil {
 		panic(err)
 	}
 
