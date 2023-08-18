@@ -1,15 +1,14 @@
 <script lang="ts">
     import "carbon-components-svelte/css/g10.css";
   import {Tab, TabContent, Tabs} from "carbon-components-svelte";
+    import BadgeList from "./badge/Badges.svelte";
+    import Config from "./config/Config.svelte";
 
   let selected = 0;
 
   let tabLabels = [
-          "Badge",
-  ];
-
-  let tabContents = [
-          "Badge",
+      "Config",
+      "Badge",
   ];
 </script>
 
@@ -18,8 +17,11 @@
         <Tab>{label}</Tab>
     {/each}
   <svelte:fragment slot="content">
-    {#each tabContents as content}
-        <TabContent>{content}</TabContent>
-    {/each}
+      <TabContent>
+          <Config />
+      </TabContent>
+      <TabContent>
+          <BadgeList />
+      </TabContent>
   </svelte:fragment>
 </Tabs>
