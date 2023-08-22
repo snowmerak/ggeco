@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/rs/zerolog"
 	"github.com/snowmerak/ggeco/server/function/back"
 	"github.com/snowmerak/ggeco/server/lib/client/imgmnger"
 	"log"
@@ -11,6 +12,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/function/app"
@@ -23,9 +25,12 @@ import (
 )
 
 func main() {
+	zerolog.TimeFieldFormat = time.RFC3339
+	zerolog.SetGlobalLevel(zerolog.InfoLevel)
+
 	defer func() {
 		if err := recover(); err != nil {
-			log.Println(err)
+
 		}
 	}()
 

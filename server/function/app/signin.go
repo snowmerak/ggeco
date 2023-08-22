@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/julienschmidt/httprouter"
+	"github.com/rs/zerolog/log"
 	"github.com/snowmerak/ggeco/server/gen/bean"
 	"github.com/snowmerak/ggeco/server/lib/client/oauth/kakao"
 	"github.com/snowmerak/ggeco/server/lib/client/oauth/naver"
@@ -41,12 +42,14 @@ func SignIn(container bean.Container) httprouter.Handle {
 		case reqBody.NaverAccount:
 			jwtToken, err = signInNaver(req.Context(), container, reqBody.AccessToken)
 			if err != nil {
+				log.Error().Err(err).Msg("sign in naver")
 				http.Error(wr, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		case reqBody.KakaoAccount:
 			jwtToken, err = signInKakao(req.Context(), container, reqBody.AccessToken)
 			if err != nil {
+				log.Error().Err(err).Msg("sign in kakao")
 				http.Error(wr, err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -101,6 +104,7 @@ func signInNaver(ctx context.Context, container bean.Container, token string) (s
 		rs.NaverId = ui.Response.Id
 		rs.Id = userId
 		rs.Info = info
+		log.Info().Msgf("new user: %d", userId)
 	}
 
 	user, err := users.GetUser(container, rs.Id)
