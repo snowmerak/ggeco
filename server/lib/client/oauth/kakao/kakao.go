@@ -26,12 +26,14 @@ func NewClient() *Client {
 }
 
 func (c *Client) GetUserInfo(token string) (ui UserInfo, err error) {
-	req := http.Request{}
-	req.RequestURI = uri
-	req.Header.Add("Authorization", "Bearer "+token)
-	req.Header.Add("Content-Type", "application/json")
+	req, err := http.NewRequest("GET", uri, nil)
+	if err != nil {
+		return ui, err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := c.client.Do(&req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return ui, err
 	}

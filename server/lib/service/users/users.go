@@ -50,7 +50,7 @@ func GetUser(container sqlserver.Container, id sqlserver.UUID) (result User, err
 }
 
 const insertUser = `DECLARE @insertedId TABLE (id UNIQUEIDENTIFIER)
-INSERT INTO [dbo].[Users] ([nickname], [create_at], [last_signin]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P2)
+INSERT INTO [dbo].[Users] ([nickname], [create_at], [last_signin]) OUTPUT INSERTED.id INTO @insertedId VALUES (@P1, @P2, @P2)
 SELECT id FROM @insertedId`
 
 type AddUserRequest struct {
