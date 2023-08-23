@@ -49,13 +49,24 @@ const (
 	UserId    = "user_id"
 	UserNick  = "user_nick"
 	ExpiredAt = "expired_at"
+	Kind      = "kind"
+)
+
+const (
+	KindAccessToken  = 0
+	KindRefreshToken = 1
 )
 
 func MakeUserToken(secretKey []byte, userId string, userNick string, lifetime time.Duration) (string, error) {
+	kind := KindAccessToken
+	if lifetime == RefreshTokenLifetime() {
+		kind = KindRefreshToken
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		UserId:    userId,
 		UserNick:  userNick,
 		ExpiredAt: time.Now().Add(lifetime).Unix(),
+		Kind:      kind,
 	})
 
 	value, err := token.SignedString(secretKey)

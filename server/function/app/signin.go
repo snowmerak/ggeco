@@ -25,6 +25,7 @@ type SignInRequest struct {
 
 type SignInResponse struct {
 	RefreshToken string `json:"refresh_token"`
+	AccessToken  string `json:"access_token"`
 }
 
 func SignIn(container bean.Container) httprouter.Handle {
@@ -37,17 +38,17 @@ func SignIn(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		var jwtToken string
+		jwtRefresh, jwtAccess := "", ""
 		switch {
 		case reqBody.NaverAccount:
-			jwtToken, err = signInNaver(req.Context(), container, reqBody.AccessToken)
+			jwtRefresh, jwtAccess, err = signInNaver(req.Context(), container, reqBody.AccessToken)
 			if err != nil {
 				log.Error().Err(err).Msg("sign in naver")
 				http.Error(wr, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		case reqBody.KakaoAccount:
-			jwtToken, err = signInKakao(req.Context(), container, reqBody.AccessToken)
+			jwtRefresh, jwtAccess, err = signInKakao(req.Context(), container, reqBody.AccessToken)
 			if err != nil {
 				log.Error().Err(err).Msg("sign in kakao")
 				http.Error(wr, err.Error(), http.StatusInternalServerError)
@@ -59,46 +60,46 @@ func SignIn(container bean.Container) httprouter.Handle {
 		}
 
 		encoder := json.NewEncoder(wr)
-		if err := encoder.Encode(SignInResponse{RefreshToken: jwtToken}); err != nil {
+		if err := encoder.Encode(SignInResponse{RefreshToken: jwtRefresh, AccessToken: jwtAccess}); err != nil {
 			http.Error(wr, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
 }
 
-func signInNaver(ctx context.Context, container bean.Container, token string) (string, error) {
+func signInNaver(ctx context.Context, container bean.Container, token string) (string, string, error) {
 	jwtSecretKey, err := auth.GetJwtSecretKey(ctx)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	client := naver.NewClient()
 
 	ui, err := client.GetUserInfo(token)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	rs, err := users.GetNaverUserByNaverId(container, ui.Response.Id)
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
-			return "", err
+			return "", "", err
 		}
 
 		userId, err := users.AddUser(container, names.MakeNewName())
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		buf, err := json.Marshal(ui.Response)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		info := base64.URLEncoding.EncodeToString(buf)
 
 		if err := users.AddNaverUser(container, userId, ui.Response.Id, info); err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		rs.NaverId = ui.Response.Id
@@ -109,50 +110,55 @@ func signInNaver(ctx context.Context, container bean.Container, token string) (s
 
 	user, err := users.GetUser(container, rs.Id)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	jwtToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.RefreshTokenLifetime())
+	jwtRefreshToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.RefreshTokenLifetime())
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return jwtToken, nil
+	jwtAccessToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.AccessTokenLifetime())
+	if err != nil {
+		return "", "", err
+	}
+
+	return jwtRefreshToken, jwtAccessToken, nil
 }
 
-func signInKakao(ctx context.Context, container bean.Container, token string) (string, error) {
+func signInKakao(ctx context.Context, container bean.Container, token string) (string, string, error) {
 	jwtSecretKey, err := auth.GetJwtSecretKey(ctx)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	client := kakao.NewClient()
 
 	ui, err := client.GetUserInfo(token)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
 	rs, err := users.GetKakaoUserByKakaoId(container, ui.Id)
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
-			return "", err
+			return "", "", err
 		}
 
 		userId, err := users.AddUser(container, names.MakeNewName())
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		buf, err := json.Marshal(ui)
 		if err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		info := base64.URLEncoding.EncodeToString(buf)
 
 		if err := users.AddKakaoUser(container, userId, ui.Id, info); err != nil {
-			return "", err
+			return "", "", err
 		}
 
 		rs.KakaoId = ui.Id
@@ -162,13 +168,18 @@ func signInKakao(ctx context.Context, container bean.Container, token string) (s
 
 	user, err := users.GetUser(container, rs.UserId)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	jwtToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.RefreshTokenLifetime())
+	jwtRefreshToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.RefreshTokenLifetime())
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
 
-	return jwtToken, nil
+	jwtAccessToken, err := auth.MakeUserToken(jwtSecretKey, base64.URLEncoding.EncodeToString(user.Id), user.Nickname, auth.AccessTokenLifetime())
+	if err != nil {
+		return "", "", err
+	}
+
+	return jwtRefreshToken, jwtAccessToken, nil
 }

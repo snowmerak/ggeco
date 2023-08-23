@@ -42,6 +42,17 @@ func Refresh(container bean.Container) httprouter.Handle {
 		userId := token[auth.UserId]
 		nickName := token[auth.UserNick]
 
+		kind, ok := token[auth.Kind].(float64)
+		if !ok {
+			http.Error(wr, "Invalid Kind", http.StatusInternalServerError)
+			return
+		}
+
+		if kind != float64(auth.KindRefreshToken) {
+			http.Error(wr, "Invalid Kind", http.StatusBadRequest)
+			return
+		}
+
 		accessToken, err := auth.MakeUserToken(jwtSecretKey, userId.(string), nickName.(string), auth.AccessTokenLifetime())
 		if err != nil {
 			http.Error(wr, err.Error(), http.StatusInternalServerError)
