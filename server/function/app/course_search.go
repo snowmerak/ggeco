@@ -14,7 +14,7 @@ import (
 )
 
 type FindCoursesBySearchPlaceRequest struct {
-	Query  string  `query:"query"`
+	Query  string  `query:"query" required:"true"`
 	Lat    float64 `query:"lat"`
 	Lng    float64 `query:"lng"`
 	Lang   string  `query:"lang"`
@@ -32,8 +32,7 @@ func FindCoursesBySearchPlace(container bean.Container) httprouter.Handle {
 
 		count, err := strconv.Atoi(r.URL.Query().Get("count"))
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+			count = 10
 		}
 
 		places, err := maps.SearchText(r.Context(), container, func(request *maps.SearchTextRequest) *maps.SearchTextRequest {
@@ -92,7 +91,12 @@ func FindCoursesBySearchPlace(container bean.Container) httprouter.Handle {
 		for i := range result.Courses {
 			result.Courses[i], result.Courses[rand.Int()/len(places)] = result.Courses[rand.Int()/len(places)], result.Courses[i]
 		}
-		result.Courses = result.Courses[:count]
+		if len(result.Courses) > count {
+			result.Courses = result.Courses[:count]
+		}
+		if len(result.Courses) == 0 {
+			result.Courses = []Course{}
+		}
 
 		encoder := json.NewEncoder(w)
 		if err := encoder.Encode(result); err != nil {
