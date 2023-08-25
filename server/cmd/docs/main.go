@@ -889,6 +889,31 @@ func main() {
 		panic(err)
 	}
 
+	addPlaceTypeToBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/back/badge/placetype")
+	if err != nil {
+		panic(err)
+	}
+	addPlaceTypeToBadgeOp.SetDescription("Add Place Type to Badge")
+	addPlaceTypeToBadgeOp.SetSummary("Add Place Type to Badge")
+	addPlaceTypeToBadgeOp.AddReqStructure(back.AddPlaceTypeToBadgeRequest{})
+	addPlaceTypeToBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusCreated
+		cu.Description = "Add Place Type to Badge Success."
+	})
+	addPlaceTypeToBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error."
+		cu.ContentType = "text/plain"
+	})
+	addPlaceTypeToBadgeOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(addPlaceTypeToBadgeOp); err != nil {
+		panic(err)
+	}
+
 	value, err := reflector.Spec.MarshalYAML()
 	if err != nil {
 		panic(err)
