@@ -178,6 +178,7 @@ func main() {
 	router.POST("/app/user/badge", app.UpdateBadge(container))
 
 	router.POST("/back/badge", back.AddBadge(container))
+	router.POST("/back/placetype", back.AddPlaceTypeToBadge(container))
 
 	router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
 
