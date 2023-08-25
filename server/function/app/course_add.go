@@ -6,6 +6,7 @@ import (
 	"github.com/snowmerak/ggeco/server/gen/bean"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"github.com/snowmerak/ggeco/server/lib/service/auth"
+	"github.com/snowmerak/ggeco/server/lib/service/badges"
 	"github.com/snowmerak/ggeco/server/lib/service/courses"
 	"github.com/snowmerak/ggeco/server/lib/service/place"
 	"net/http"
@@ -84,6 +85,48 @@ func AddCourse(container bean.Container) httprouter.Handle {
 		if err := courses.UpdateIsPublic(container, id, req.IsPublic); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+
+		{
+			placeTypeSet := make(map[string]struct{})
+
+			for i := range req.Places {
+				p, err := place.GetPlace(container, req.Places[i])
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+
+				for _, placeType := range p.Data.Types {
+					if placeType == "" {
+						continue
+					}
+					if err := place.AddOrInitVisitCount(container, userId, placeType); err != nil {
+						http.Error(w, err.Error(), http.StatusInternalServerError)
+						return
+					}
+					placeTypeSet[placeType] = struct{}{}
+				}
+			}
+
+			badgeSet := make(map[string]struct{})
+			badgeList := make([]sqlserver.UUID, 0, len(badgeSet))
+			for placeType := range placeTypeSet {
+				badge, err := badges.GetBadgeFromPlaceType(container, placeType)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				if _, ok := badgeSet[badge.String()]; !ok {
+					badgeSet[badge.String()] = struct{}{}
+					badgeList = append(badgeList, badge)
+				}
+			}
+
+			if err := courses.SetCourseBadges(container, userId, badgeList); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 		}
 	}
 }
