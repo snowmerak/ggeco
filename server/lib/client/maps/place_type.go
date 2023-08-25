@@ -303,7 +303,7 @@ func TranslatePlaceType(source string) (result string) {
 	case PlaceTypeBank:
 		result = "은행"
 	case PlaceTypeBar:
-		result = "바"
+		result = "술집"
 	case PlaceTypeBeautySalon:
 		result = "미용실"
 	case PlaceTypeBicycleStore:
