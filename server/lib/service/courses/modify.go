@@ -1,6 +1,8 @@
 package courses
 
-import "github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+import (
+	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+)
 
 type AddCourseRequest struct {
 	AuthorID string `json:"author_id" required:"true"`
@@ -13,15 +15,15 @@ type AddCourseResponse struct {
 	Id string `json:"id" required:"true"`
 }
 
-func Add(container sqlserver.Container, author sqlserver.UUID, name string, regDate string, review string) (id sqlserver.UUID, err error) {
+func Add(container sqlserver.Container, author sqlserver.UUID, name string, regDate string, review string, isPublic bool) (id sqlserver.UUID, err error) {
 	client, err := sqlserver.GetClient(container)
 	if err != nil {
 		return
 	}
 
 	row := client.QueryRow(`DECLARE @InsertedId table(id uniqueidentifier)
-INSERT INTO [dbo].[Courses] ([author_id], [name], [reg_date], [review]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P3, @P4)
-SELECT id from @InsertedId`, author, name, regDate, review)
+INSERT INTO [dbo].[Courses] ([author_id], [name], [reg_date], [review], [is_public]) OUTPUT INSERTED.id VALUES (@P1, @P2, @P3, @P4, @P5)
+SELECT id from @InsertedId`, author, name, regDate, review, isPublic)
 	if err := row.Err(); err != nil {
 		return id, err
 	}
