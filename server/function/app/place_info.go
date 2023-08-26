@@ -47,11 +47,11 @@ func GetPlaceInfo(container bean.Container) httprouter.Handle {
 
 		courseCount, err := strconv.Atoi(r.URL.Query().Get("course_count"))
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+			courseCount = 3
 		}
 
 		resp := GetPlaceInfoResponse{}
+		resp.Courses = make([]Course, 0)
 
 		placeInfo, err := place.GetPlace(container, placeId)
 		if err != nil {
