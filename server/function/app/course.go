@@ -2,6 +2,7 @@ package app
 
 import (
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/gen/bean"
@@ -108,6 +109,12 @@ func GetRecentCourses(container bean.Container) httprouter.Handle {
 				Review:    v.Review,
 				Favorites: favoriteCount,
 			})
+		}
+
+		enc := json.NewEncoder(w)
+		if err := enc.Encode(result); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
