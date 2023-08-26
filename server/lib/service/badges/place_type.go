@@ -3,6 +3,7 @@ package badges
 import (
 	"database/sql"
 	"encoding/hex"
+	"errors"
 	"github.com/snowmerak/ggeco/server/gen/bean"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"golang.org/x/crypto/blake2s"
@@ -39,6 +40,9 @@ func GetBadgeFromPlaceType(container bean.Container, pt string) (sqlserver.UUID,
 
 	var badgeId sqlserver.UUID
 	if err := row.Scan(&badgeId); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return sqlserver.UUID{}, nil
+		}
 		return sqlserver.UUID{}, err
 	}
 
