@@ -52,7 +52,7 @@ func AddCourse(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		id, err := courses.Add(container, userId, req.Name, req.Date, req.Review)
+		id, err := courses.Add(container, userId, req.Name, req.Date, req.Review, req.IsPublic)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -117,6 +117,10 @@ func AddCourse(container bean.Container) httprouter.Handle {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
+				badgeName := badge.String()
+				if badgeName == "" {
+					continue
+				}
 				if _, ok := badgeSet[badge.String()]; !ok {
 					badgeSet[badge.String()] = struct{}{}
 					badgeList = append(badgeList, badge)
@@ -127,6 +131,12 @@ func AddCourse(container bean.Container) httprouter.Handle {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
+		}
+
+		enc := json.NewEncoder(w)
+		if err := enc.Encode(SetCourseResponse{Id: id.String()}); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
 	}
 }
