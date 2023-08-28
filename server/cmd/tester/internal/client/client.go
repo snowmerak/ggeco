@@ -37,13 +37,14 @@ func (c *Client) Request(method string, authHeader string, route string, body io
 
 	q := req.URL.Query()
 	for _, query := range queries {
-		sp := strings.Split(query, "=")
+		sp := strings.SplitN(query, "=", 2)
 		if len(sp) != 2 {
 			continue
 		}
 		q.Add(sp[0], sp[1])
 	}
 	req.URL.RawQuery = q.Encode()
+	log.Printf("Request: %s %s\n", method, req.URL.String())
 
 	resp, err := c.Client.Do(req)
 	if err != nil {
