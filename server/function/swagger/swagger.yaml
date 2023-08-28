@@ -196,6 +196,11 @@ paths:
   https://ggeco-func.azurewebsites.net/app/course/edit:
     post:
       description: Update Course Data
+      parameters:
+      - in: query
+        name: course_id
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -956,6 +961,11 @@ components:
           type: number
         longitude:
           type: number
+        photos:
+          items:
+            $ref: '#/components/schemas/AppPlacePhoto'
+          nullable: true
+          type: array
         review:
           type: string
       type: object
@@ -981,13 +991,6 @@ components:
           type: boolean
         name:
           type: string
-        place_photos:
-          items:
-            items:
-              $ref: '#/components/schemas/AppPlacePhoto'
-            type: array
-          nullable: true
-          type: array
         place_reviews:
           items:
             $ref: '#/components/schemas/AppPlaceReview'
@@ -1033,8 +1036,6 @@ components:
       type: object
     AppUpdateCourseRequest:
       properties:
-        course_id:
-          type: string
         date:
           pattern: YYYY-MM-DD HH:mm:ss
           type: string
@@ -1042,13 +1043,6 @@ components:
           type: boolean
         name:
           type: string
-        place_photos:
-          items:
-            items:
-              $ref: '#/components/schemas/AppPlacePhoto'
-            type: array
-          nullable: true
-          type: array
         place_reviews:
           items:
             $ref: '#/components/schemas/AppPlaceReview'
