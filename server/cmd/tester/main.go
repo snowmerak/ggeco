@@ -28,14 +28,20 @@ func main() {
 
 	// ChIJJ0hjaMKYfDUR3vuPnM6MgS8
 	at := "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkX2F0IjoxNjkzNjM1NDE2LCJraW5kIjowLCJ1c2VyX2lkIjoiS0NiZEJrUFlFZTY2RndEX0VVd1gxUT09IiwidXNlcl9uaWNrIjoidGVzdCJ9.iX5xQms2-lD2E8Bzo-3NPvRnjCQBcyrxsRFNzcZl1FDpU6YoOncY1wnbWcwdqEJSZreTXUBiV5KpFsZsb7VAPQ"
-	resp, err := cli.GetPlaceInfo(at, app.GetPlaceInfoRequest{
-		PlaceId: "ChIJJ0hjaMKYfDUR3vuPnM6MgS8",
+	resp, err := cli.GetCourseInfo(at, app.GetCourseInfoRequest{
+		CourseId: "k3I5SjqX3U-0lr50sAXo1w==",
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	enc := json.NewEncoder(os.Stdout)
+	f, err := os.Create("./test.json")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	enc := json.NewEncoder(f)
 	enc.SetIndent("", "  ")
 	if err := enc.Encode(resp); err != nil {
 		panic(err)
