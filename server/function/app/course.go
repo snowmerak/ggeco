@@ -68,6 +68,14 @@ func GetPopularCourseOfBadge(container bean.Container) httprouter.Handle {
 				Favorites: favoriteCount,
 			})
 		}
+
+		enc := json.NewEncoder(w)
+		if err := enc.Encode(result); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }
 
@@ -116,6 +124,8 @@ func GetRecentCourses(container bean.Container) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }
 
@@ -165,5 +175,13 @@ func GetMyCourses(container bean.Container) httprouter.Handle {
 				Favorites: favoriteCount,
 			})
 		}
+
+		enc := json.NewEncoder(w)
+		if err := enc.Encode(result); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }

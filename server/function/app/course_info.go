@@ -22,6 +22,8 @@ type PlaceReview struct {
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
 	Review    string  `json:"review"`
+
+	Photos []PlacePhoto `json:"photos"`
 }
 
 type PlacePhoto struct {
@@ -148,5 +150,7 @@ func GetCourseInfo(container bean.Container) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }

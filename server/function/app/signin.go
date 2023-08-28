@@ -64,6 +64,8 @@ func SignIn(container bean.Container) httprouter.Handle {
 			http.Error(wr, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		wr.Header().Set("Content-Type", "application/json")
 	}
 }
 

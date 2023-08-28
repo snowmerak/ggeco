@@ -13,13 +13,12 @@ import (
 )
 
 type SetCourseRequest struct {
-	Name         string         `json:"name"`
-	Date         string         `json:"date" pattern:"YYYY-MM-DD HH:mm:ss"`
-	Review       string         `json:"review"`
-	Places       []string       `json:"places"`
-	PlaceReviews []PlaceReview  `json:"place_reviews"`
-	PlacePhotos  [][]PlacePhoto `json:"place_photos"`
-	IsPublic     bool           `json:"is_public"`
+	Name         string        `json:"name"`
+	Date         string        `json:"date" pattern:"YYYY-MM-DD HH:mm:ss"`
+	Review       string        `json:"review"`
+	Places       []string      `json:"places"`
+	PlaceReviews []PlaceReview `json:"place_reviews"`
+	IsPublic     bool          `json:"is_public"`
 }
 
 type SetCourseResponse struct {
@@ -70,9 +69,9 @@ func AddCourse(container bean.Container) httprouter.Handle {
 				return
 			}
 
-			origins := make([]string, len(req.PlacePhotos[i]))
-			thumbnails := make([]string, len(req.PlacePhotos[i]))
-			for j, v := range req.PlacePhotos[i] {
+			origins := make([]string, len(v.Photos))
+			thumbnails := make([]string, len(v.Photos))
+			for j, v := range v.Photos {
 				origins[j] = v.OriginUrl
 				thumbnails[j] = v.ThumbnailUrl
 			}
@@ -138,11 +137,13 @@ func AddCourse(container bean.Container) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }
 
 type UpdateCourseRequest struct {
-	CourseId string `json:"course_id"`
+	CourseId string `query:"course_id"`
 	SetCourseRequest
 }
 
@@ -165,15 +166,15 @@ func UpdateCourse(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		var req UpdateCourseRequest
-		decoder := json.NewDecoder(r.Body)
-		if err := decoder.Decode(&req); err != nil {
+		courseId := sqlserver.UUID{}
+		if err := courseId.From(r.URL.Query().Get("course_id")); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
-		courseId := sqlserver.UUID{}
-		if err := courseId.From(req.CourseId); err != nil {
+		var req UpdateCourseRequest
+		decoder := json.NewDecoder(r.Body)
+		if err := decoder.Decode(&req); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
@@ -216,10 +217,10 @@ func UpdateCourse(container bean.Container) httprouter.Handle {
 				return
 			}
 
-			origins := make([]string, len(req.PlacePhotos[step]))
-			thumbnails := make([]string, len(req.PlacePhotos[step]))
+			origins := make([]string, len(req.PlaceReviews[step].Photos))
+			thumbnails := make([]string, len(req.PlaceReviews[step].Photos))
 
-			for j, v := range req.PlacePhotos[step] {
+			for j, v := range req.PlaceReviews[step].Photos {
 				origins[j] = v.OriginUrl
 				thumbnails[j] = v.ThumbnailUrl
 			}
@@ -249,9 +250,9 @@ func UpdateCourse(container bean.Container) httprouter.Handle {
 				return
 			}
 
-			origins := make([]string, len(req.PlacePhotos[i]))
-			thumbnails := make([]string, len(req.PlacePhotos[i]))
-			for j, v := range req.PlacePhotos[i] {
+			origins := make([]string, len(req.PlaceReviews[i].Photos))
+			thumbnails := make([]string, len(req.PlaceReviews[i].Photos))
+			for j, v := range req.PlaceReviews[i].Photos {
 				origins[j] = v.OriginUrl
 				thumbnails[j] = v.ThumbnailUrl
 			}

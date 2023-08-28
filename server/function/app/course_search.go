@@ -103,5 +103,7 @@ func FindCoursesBySearchPlace(container bean.Container) httprouter.Handle {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/json")
 	}
 }
