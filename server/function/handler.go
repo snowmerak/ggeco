@@ -151,11 +151,13 @@ func main() {
 	router.POST("/app/auth/refresh", app.Refresh(container))
 
 	router.GET("/app/badge/list", app.GetBadges(container))
+	router.GET("/app/badge/searchables", app.GetSearchableBadges(container))
 	router.GET("/app/badge/earned", app.GetEarnedBadges(container))
 	router.GET("/app/badge", app.GetBadgeInfo(container))
 
 	router.GET("/app/course/popular", app.GetPopularCourseOfBadge(container))
 	router.GET("/app/course/recent", app.GetRecentCourses(container))
+	router.GET("/app/course/recommend", app.GetRecommendedCourses(container))
 	router.GET("/app/course/search", app.FindCoursesBySearchPlace(container))
 	router.GET("/app/course/my", app.GetMyCourses(container))
 	router.GET("/app/course", app.GetCourseInfo(container))
