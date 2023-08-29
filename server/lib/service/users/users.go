@@ -33,7 +33,7 @@ func GetUser(container sqlserver.Container, id sqlserver.UUID) (result User, err
 		return
 	}
 
-	stmt, err := client.Prepare("SELECT [id], [nickname], [create_at], [last_signin] FROM [dbo].[Users] WHERE [id] = @P1")
+	stmt, err := client.Prepare("SELECT [id], [nickname], [create_at], [last_signin], [badge] FROM [dbo].[Users] WHERE [id] = @P1")
 	if err != nil {
 		return
 	}
@@ -44,7 +44,7 @@ func GetUser(container sqlserver.Container, id sqlserver.UUID) (result User, err
 		return
 	}
 
-	err = row.Scan(&result.Id, &result.Nickname, &result.CreateAt, &result.LastSignin)
+	err = row.Scan(&result.Id, &result.Nickname, &result.CreateAt, &result.LastSignin, &result.Badge)
 
 	return
 }
