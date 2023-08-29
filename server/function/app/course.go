@@ -19,13 +19,19 @@ type GetPopularCourseOfBadgeRequest struct {
 }
 
 type Course struct {
-	Id         string `json:"id"`
-	AuthorId   string `json:"author_id"`
-	Name       string `json:"name"`
-	RegDate    string `json:"reg_date"`
-	Review     string `json:"review"`
-	Favorites  int    `json:"favorites"`
-	IsFavorite bool   `json:"is_favorite"`
+	Id               string `json:"id"`
+	AuthorId         string `json:"author_id"`
+	AuthorNickname   string `json:"author_nickname,omitempty"`
+	AuthorBadgeImage string `json:"author_badge_image,omitempty"`
+	AuthorBadgeName  string `json:"author_badge_name,omitempty"`
+	Name             string `json:"name"`
+	RegDate          string `json:"reg_date"`
+	Review           string `json:"review"`
+	Favorites        int    `json:"favorites"`
+	IsFavorite       bool   `json:"is_favorite"`
+	VillageAddress   string `json:"village_address,omitempty"`
+	Category         string `json:"category,omitempty"`
+	TitleImage       string `json:"title_image,omitempty"`
 }
 
 type GetPopularCourseOfBadgeResponse struct {
@@ -159,6 +165,55 @@ func GetMyCourses(container bean.Container) httprouter.Handle {
 		}
 
 		result := GetMyCoursesResponse{}
+		for _, v := range list {
+			favoriteCount, err := courses.CountFavoriteCourse(container, v.Id)
+			if err != nil && errors.Is(err, sql.ErrNoRows) {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			result.Courses = append(result.Courses, Course{
+				Id:        v.Id.String(),
+				AuthorId:  v.AuthorID.String(),
+				Name:      v.Name,
+				RegDate:   v.RegDate,
+				Review:    v.Review,
+				Favorites: favoriteCount,
+			})
+		}
+
+		enc := json.NewEncoder(w)
+		if err := enc.Encode(result); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+	}
+}
+
+type GetRecommendedCoursesRequest struct {
+	Count int `query:"count"`
+}
+
+type GetRecommendedCoursesResponse struct {
+	Courses []Course `json:"courses"`
+}
+
+func GetRecommendedCourses(container bean.Container) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		count, err := strconv.Atoi(r.URL.Query().Get("count"))
+		if err != nil {
+			count = 10
+		}
+
+		list, err := courses.GetRandom(container, count)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		result := GetRecommendedCoursesResponse{}
 		for _, v := range list {
 			favoriteCount, err := courses.CountFavoriteCourse(container, v.Id)
 			if err != nil && errors.Is(err, sql.ErrNoRows) {
