@@ -1,6 +1,9 @@
 package courses
 
-import "github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+import (
+	"github.com/snowmerak/ggeco/server/gen/bean"
+	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
+)
 
 type GetCourseRequest struct {
 	CourseID string `query:"course_id" required:"true"`
@@ -162,6 +165,35 @@ func GetPopularInBadge(container sqlserver.Container, badgeId sqlserver.UUID, co
 
 	if len(result) > count {
 		result = result[:count]
+	}
+
+	return
+}
+
+func GetRandom(container bean.Container, count int) (result []Course, err error) {
+	client, err := sqlserver.GetClient(container)
+	if err != nil {
+		return
+	}
+
+	stmt, err := client.Prepare("SELECT TOP (@P1) [id], [author_id], [name], [reg_date], [review] from [dbo].[Courses] WHERE [is_public] <> 0 ORDER BY NEWID()")
+	if err != nil {
+		return
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(count)
+	if err != nil {
+		return
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rs := Course{}
+		if err := rows.Scan(&rs.Id, &rs.AuthorID, &rs.Name, &rs.RegDate, &rs.Review); err != nil {
+			return result, err
+		}
+		result = append(result, rs)
 	}
 
 	return
