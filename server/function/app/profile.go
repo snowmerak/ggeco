@@ -70,7 +70,7 @@ func GetProfile(container bean.Container) httprouter.Handle {
 			Id:                  userInfo.Id.String(),
 			Nickname:            userInfo.Nickname,
 			BadgeId:             badge.Id.String(),
-			BadgeImage:          badge.Image,
+			BadgeImage:          badge.ActiveImage,
 			BadgeSummary:        badge.Summary,
 			FavoritePlaceCount:  favoritePlaceCount,
 			FavoriteCourseCount: favoriteCourseCount,
