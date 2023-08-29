@@ -138,6 +138,29 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Badge List
+  https://ggeco-func.azurewebsites.net/app/badge/searchables:
+    get:
+      description: Get Searchable Badges
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetSearchableBadgesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Searchable Badges
   https://ggeco-func.azurewebsites.net/app/course:
     get:
       description: Get Course Info
@@ -379,6 +402,34 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Get Recent Courses
+  https://ggeco-func.azurewebsites.net/app/course/recommend:
+    get:
+      description: Get Recommended Courses
+      parameters:
+      - in: query
+        name: count
+        schema:
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetRecommendedCoursesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get Recommended Courses
   https://ggeco-func.azurewebsites.net/app/course/search:
     get:
       description: Find Courses by Search Place
@@ -783,18 +834,30 @@ components:
       type: object
     AppBadge:
       properties:
+        active_image:
+          type: string
         id:
           type: string
-        image:
+        inactive_image:
           type: string
         name:
+          type: string
+        selected_image:
           type: string
         summary:
           type: string
       type: object
     AppCourse:
       properties:
+        author_badge_image:
+          type: string
+        author_badge_name:
+          type: string
         author_id:
+          type: string
+        author_nickname:
+          type: string
+        category:
           type: string
         favorites:
           type: integer
@@ -807,6 +870,10 @@ components:
         reg_date:
           type: string
         review:
+          type: string
+        title_image:
+          type: string
+        village_address:
           type: string
       type: object
     AppEarnedBadge:
@@ -851,13 +918,6 @@ components:
       properties:
         course:
           $ref: '#/components/schemas/AppCourse'
-        place_photos:
-          items:
-            items:
-              $ref: '#/components/schemas/AppPlacePhoto'
-            type: array
-          nullable: true
-          type: array
         place_reviews:
           items:
             $ref: '#/components/schemas/AppPlaceReview'
@@ -938,6 +998,22 @@ components:
           nullable: true
           type: array
       type: object
+    AppGetRecommendedCoursesResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
+          nullable: true
+          type: array
+      type: object
+    AppGetSearchableBadgesResponse:
+      properties:
+        badges:
+          items:
+            $ref: '#/components/schemas/AppBadge'
+          nullable: true
+          type: array
+      type: object
     AppIsFavoriteCourseResponse:
       properties:
         is_favorite:
@@ -957,15 +1033,13 @@ components:
       type: object
     AppPlaceReview:
       properties:
-        latitude:
-          type: number
-        longitude:
-          type: number
         photos:
           items:
             $ref: '#/components/schemas/AppPlacePhoto'
           nullable: true
           type: array
+        place_id:
+          type: string
         review:
           type: string
       type: object
@@ -994,11 +1068,6 @@ components:
         place_reviews:
           items:
             $ref: '#/components/schemas/AppPlaceReview'
-          nullable: true
-          type: array
-        places:
-          items:
-            type: string
           nullable: true
           type: array
         review:
@@ -1048,11 +1117,6 @@ components:
             $ref: '#/components/schemas/AppPlaceReview'
           nullable: true
           type: array
-        places:
-          items:
-            type: string
-          nullable: true
-          type: array
         review:
           type: string
       type: object
@@ -1084,11 +1148,15 @@ components:
       type: object
     BackBadge:
       properties:
+        active_image:
+          type: string
         id:
           type: string
-        image:
+        inactive_image:
           type: string
         name:
+          type: string
+        selected_image:
           type: string
         summary:
           type: string
