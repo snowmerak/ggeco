@@ -14,9 +14,11 @@ import axios from "axios";
 * */
 export class Badge {
     id: string;
-    image: string;
     name: string;
     summary: string;
+    active_image: string;
+    inactive_image: string;
+    selected_image: string;
 }
 
 export async function get_badges(url: string, key: string): Promise<Badge[]> {

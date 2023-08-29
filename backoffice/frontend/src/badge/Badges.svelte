@@ -8,7 +8,7 @@
         Tab,
         TabContent,
         Tabs,
-        TextInput
+        TextInput, Toggle
     } from "carbon-components-svelte";
     import {add_badge} from "./add_badge";
     import {config} from "../config/config";
@@ -17,7 +17,10 @@
 
     let name = "";
     let summary = "";
-    let files = [];
+    let activeImageFiles = [];
+    let inactiveImageFiles = [];
+    let selectedImageFiles = [];
+    let searchable = false;
 </script>
 
 <h2>배지</h2>
@@ -42,7 +45,9 @@
         { key: "id", value: "ID" },
         { key: "name", value: "이름" },
         { key: "summary", value: "설명" },
-        { key: "image", value: "이미지" },
+        { key: "active_image", value: "활성 이미지" },
+        { key: "inactive_image", value: "비활성 이미지" },
+        { key: "selected_image", value: "선택 이미지" },
     ]}
                     rows={badges}
             >
@@ -57,28 +62,52 @@
         </TabContent>
         <TabContent>
             <h3>배지 추가</h3>
+            <br/>
             <TextInput
                 labelText="이름"
                 placeholder="배지 이름을 입력해주세요."
                 bind:value={name}
             ></TextInput>
+            <br/>
             <TextInput
                 labelText="설명"
                 placeholder="배지 설명을 입력해주세요."
                 bind:value={summary}
             ></TextInput>
+            <br/>
             <FileUploader
-                    bind:files
-                    labelTitle="배지 이미지"
-                    labelDescription="배지 이미지를 선택해주세요."
+                    bind:files={activeImageFiles}
+                    labelDescription="활성 배지 이미지를 선택해주세요."
                     buttonLabel="파일 선택"
                     accept={[".png", ".jpg", ".jpeg", ".gif", ".webp"]}
                     status="edit"
             ></FileUploader>
+            <br />
+            <FileUploader
+                    bind:files={inactiveImageFiles}
+                    labelDescription="비활성 배지 이미지를 선택해주세요."
+                    buttonLabel="파일 선택"
+                    accept={[".png", ".jpg", ".jpeg", ".gif", ".webp"]}
+                    status="edit"
+            ></FileUploader>
+            <br />
+            <FileUploader
+                    bind:files={selectedImageFiles}
+                    labelDescription="선택 배지 이미지를 선택해주세요."
+                    buttonLabel="파일 선택"
+                    accept={[".png", ".jpg", ".jpeg", ".gif", ".webp"]}
+                    status="edit"
+            ></FileUploader>
+            <br/>
+            <Toggle
+                labelText="검색 가능"
+                bind:toggled={searchable}
+            ></Toggle>
+            <br/>
             <Button kind="secondary" on:click={async () => {
-                alert(`파일: ${files[0].name}을 업로드합니다.`);
+                alert("파일 업로드 중입니다. 잠시만 기다려주세요.");
                 try {
-                    let id = await add_badge($config.back_url, $config.back_key, name, summary, files[0]);
+                    let id = await add_badge($config.back_url, $config.back_key, name, summary, activeImageFiles[0], inactiveImageFiles[0], selectedImageFiles[0], searchable);
                     alert(`배지가 추가되었습니다. ID: ${id}`);
                 } catch (e) {
                     alert(`파일 업로드에 실패했습니다. ${e}`);

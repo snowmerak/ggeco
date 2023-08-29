@@ -8,13 +8,16 @@ import (
 	"github.com/snowmerak/ggeco/server/lib/service/badges"
 	"io"
 	"net/http"
+	"strconv"
 )
 
 type Badge struct {
-	Id      string `json:"id,omitempty"`
-	Name    string `json:"name,omitempty"`
-	Summary string `json:"summary,omitempty"`
-	Image   string `json:"image,omitempty"`
+	Id            string `json:"id,omitempty"`
+	Name          string `json:"name,omitempty"`
+	Summary       string `json:"summary,omitempty"`
+	ActiveImage   string `json:"active_image,omitempty"`
+	InactiveImage string `json:"inactive_image,omitempty"`
+	SelectedImage string `json:"selected_image,omitempty"`
 }
 
 type AddBadgeRequest struct {
@@ -41,35 +44,51 @@ func AddBadge(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		f, header, err := r.FormFile("image")
+		searchableValue := r.FormValue("searchable")
+		if searchableValue == "" {
+			searchableValue = "false"
+		}
+		searchable, err := strconv.ParseBool(searchableValue)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
+			searchable = false
 		}
 
-		data, err := io.ReadAll(f)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+		urls := []string{"", "", ""}
+		for i, n := range []string{"active_image", "inactive_image", "selected_image"} {
+			f, header, err := r.FormFile(n)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+
+			data, err := io.ReadAll(f)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			url, err := storage.UploadImage(container, "image-silo", header.Filename, data)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			urls[i] = url
 		}
 
-		url, err := storage.UploadImage(container, "image-silo", header.Filename, data)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		badgeId, err := badges.Add(container, name, description, url)
+		badgeId, err := badges.Add(container, name, description, urls[0], urls[1], urls[2], searchable)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		badge := Badge{
-			Id:      badgeId.String(),
-			Name:    name,
-			Summary: description,
-			Image:   url,
+			Id:            badgeId.String(),
+			Name:          name,
+			Summary:       description,
+			ActiveImage:   urls[0],
+			InactiveImage: urls[1],
+			SelectedImage: urls[2],
 		}
 
 		encoder := json.NewEncoder(w)

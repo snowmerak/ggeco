@@ -1,12 +1,15 @@
 import axios from "axios";
 
-export async function add_badge(url: string, key: string, name: string, summary: string, data: File): Promise<string> {
+export async function add_badge(url: string, key: string, name: string, summary: string, active_image_data: File, inactive_image_data: File, selected_image_data: File, searchable: boolean): Promise<string> {
     url = `${url}/badge`;
 
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", summary);
-    formData.append("image", data);
+    formData.append("active_image", active_image_data);
+    formData.append("inactive_image", inactive_image_data);
+    formData.append("selected_image", selected_image_data);
+    formData.append("searchable", searchable ? "true" : "false");
 
     let resp = await axios.post(url, formData, {
         headers: {

@@ -72,7 +72,7 @@ func GetEarnedBadges(container bean.Container) httprouter.Handle {
 				BadgeId:    earnedBadge.Id.String(),
 				Name:       badge.Name,
 				Summary:    badge.Summary,
-				Image:      badge.Image,
+				Image:      badge.ActiveImage,
 				EarnedRate: earnedRate,
 				EarnedAt:   earnedBadge.EarnedAt,
 			})
@@ -146,7 +146,7 @@ func GetBadgeInfo(container bean.Container) httprouter.Handle {
 				BadgeId:    badge.Id.String(),
 				Name:       badge.Name,
 				Summary:    badge.Summary,
-				Image:      badge.Image,
+				Image:      badge.ActiveImage,
 				EarnedRate: earnedRate,
 				EarnedAt:   earnedAt,
 			},
