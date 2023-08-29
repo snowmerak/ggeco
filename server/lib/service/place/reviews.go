@@ -119,9 +119,9 @@ func CreateReview(container sqlserver.Container, courseId sqlserver.UUID, placeI
 	stmt, err := client.Prepare(`DECLARE @maxOrder int
 SET @maxOrder = (SELECT MAX([order]) FROM [dbo].[PlaceReviews] WHERE [course_id] = @P1)
 SET @maxOrder = ISNULL(@maxOrder, 0) + 1
-DECLARE @insertedId uniqueidentifier
-INSERT INTO [dbo].[PlaceReviews] ([course_id], [place_id], [author_id], [latitude], [longitude], [review]) OUTPUT inserted.id VALUES (@P1, @P2, @P3, @P4, @P5, @P6)
-SELECT @insertedId
+DECLARE @insertedId TABLE (id UNIQUEIDENTIFIER)
+INSERT INTO [dbo].[PlaceReviews] ([course_id], [place_id], [author_id], [latitude], [longitude], [review], [order]) OUTPUT inserted.id INTO @insertedId VALUES (@P1, @P2, @P3, @P4, @P5, @P6, @maxOrder)
+SELECT id FROM @insertedId
 `)
 	if err != nil {
 		return sqlserver.UUID{}, err
