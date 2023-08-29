@@ -16,7 +16,6 @@ type SetCourseRequest struct {
 	Name         string        `json:"name"`
 	Date         string        `json:"date" pattern:"YYYY-MM-DD HH:mm:ss"`
 	Review       string        `json:"review"`
-	Places       []string      `json:"places"`
 	PlaceReviews []PlaceReview `json:"place_reviews"`
 	IsPublic     bool          `json:"is_public"`
 }
@@ -57,13 +56,18 @@ func AddCourse(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		if err := courses.SetPlaces(container, id, req.Places); err != nil {
+		places := make([]string, len(req.PlaceReviews))
+		for i, v := range req.PlaceReviews {
+			places[i] = v.PlaceId
+		}
+
+		if err := courses.SetPlaces(container, id, places); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		for i, v := range req.PlaceReviews {
-			reviewId, err := place.CreateReview(container, id, req.Places[i], userId, v.Latitude, v.Longitude, v.Review)
+		for _, v := range req.PlaceReviews {
+			reviewId, err := place.CreateReview(container, id, v.PlaceId, userId, 0, 0, v.Review)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -89,8 +93,8 @@ func AddCourse(container bean.Container) httprouter.Handle {
 		{
 			placeTypeSet := make(map[string]struct{})
 
-			for i := range req.Places {
-				p, err := place.GetPlace(container, req.Places[i])
+			for i := range places {
+				p, err := place.GetPlace(container, places[i])
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
@@ -199,7 +203,12 @@ func UpdateCourse(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		if err := courses.SetPlaces(container, courseId, req.Places); err != nil {
+		places := make([]string, len(req.PlaceReviews))
+		for i, v := range req.PlaceReviews {
+			places[i] = v.PlaceId
+		}
+
+		if err := courses.SetPlaces(container, courseId, places); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -244,7 +253,7 @@ func UpdateCourse(container bean.Container) httprouter.Handle {
 		}
 
 		for i := step; i < len(req.PlaceReviews); i++ {
-			reviewId, err := place.CreateReview(container, courseId, req.Places[i], userId, req.PlaceReviews[i].Latitude, req.PlaceReviews[i].Longitude, req.PlaceReviews[i].Review)
+			reviewId, err := place.CreateReview(container, courseId, req.PlaceReviews[i].PlaceId, userId, 0, 0, req.PlaceReviews[i].Review)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
