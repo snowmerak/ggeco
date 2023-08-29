@@ -9,8 +9,10 @@ import (
 	"github.com/snowmerak/ggeco/server/lib/client/maps"
 	"github.com/snowmerak/ggeco/server/lib/client/sqlserver"
 	"github.com/snowmerak/ggeco/server/lib/service/auth"
+	"github.com/snowmerak/ggeco/server/lib/service/badges"
 	"github.com/snowmerak/ggeco/server/lib/service/courses"
 	"github.com/snowmerak/ggeco/server/lib/service/place"
+	"github.com/snowmerak/ggeco/server/lib/service/users"
 	"net/http"
 )
 
@@ -19,9 +21,8 @@ type GetCourseInfoRequest struct {
 }
 
 type PlaceReview struct {
-	Latitude  float64 `json:"latitude"`
-	Longitude float64 `json:"longitude"`
-	Review    string  `json:"review"`
+	PlaceId string `json:"place_id"`
+	Review  string `json:"review"`
 
 	Photos []PlacePhoto `json:"photos"`
 }
@@ -35,7 +36,6 @@ type GetCourseInfoResponse struct {
 	Course       Course                       `json:"course"`
 	Places       []maps.SearchPlaceIdResponse `json:"places"`
 	PlaceReviews []PlaceReview                `json:"place_reviews"`
-	PlacePhotos  [][]PlacePhoto               `json:"place_photos"`
 }
 
 func GetCourseInfo(container bean.Container) httprouter.Handle {
@@ -71,13 +71,29 @@ func GetCourseInfo(container bean.Container) httprouter.Handle {
 			return
 		}
 
-		resp.Course = Course{
-			Id:       course.Id.String(),
-			AuthorId: course.AuthorID.String(),
-			Name:     course.Name,
-			RegDate:  course.RegDate,
-			Review:   course.Review,
+		userInfo, err := users.GetUser(container, course.AuthorID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+
+		resp.Course = Course{
+			Id:             course.Id.String(),
+			AuthorId:       course.AuthorID.String(),
+			AuthorNickname: userInfo.Nickname,
+			Name:           course.Name,
+			RegDate:        course.RegDate,
+			Review:         course.Review,
+		}
+
+		badge, err := badges.Get(container, userInfo.Badge)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		resp.Course.AuthorBadgeImage = badge.ActiveImage
+		resp.Course.AuthorBadgeName = badge.Name
 
 		favoriteCount, err := courses.CountFavoriteCourse(container, courseId)
 		if err != nil {
@@ -109,6 +125,26 @@ func GetCourseInfo(container bean.Container) httprouter.Handle {
 				return
 			}
 
+			if resp.Course.Category == "" && len(placeInfo.Data.Types) > 0 {
+				j := 0
+				for resp.Course.Category == "" && j < len(placeInfo.Data.Types) {
+					resp.Course.Category = placeInfo.Data.Types[j]
+					j++
+				}
+			}
+
+			if resp.Course.VillageAddress == "" && placeInfo.Data.FormattedAddress != "" {
+				// TODO: village address
+			}
+
+			if resp.Course.TitleImage == "" && len(placeInfo.Data.Photos) > 0 {
+				j := 0
+				for resp.Course.TitleImage == "" && j < len(placeInfo.Data.Photos) {
+					resp.Course.TitleImage = placeInfo.Data.Photos[j].PhotoReference
+					j++
+				}
+			}
+
 			resp.Places = append(resp.Places, placeInfo.Data)
 		}
 
@@ -120,14 +156,11 @@ func GetCourseInfo(container bean.Container) httprouter.Handle {
 		}
 		for _, review := range reviews {
 			resp.PlaceReviews = append(resp.PlaceReviews, PlaceReview{
-				Latitude:  review.Latitude,
-				Longitude: review.Longitude,
-				Review:    review.Review,
+				Review: review.Review,
 			})
 		}
 
-		resp.PlacePhotos = make([][]PlacePhoto, 0, len(placeList))
-		for _, review := range reviews {
+		for i, review := range reviews {
 			photos, err := place.GetReviewPictures(container, review.Id)
 			if err != nil && errors.Is(err, sql.ErrNoRows) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -142,7 +175,7 @@ func GetCourseInfo(container bean.Container) httprouter.Handle {
 				})
 			}
 
-			resp.PlacePhotos = append(resp.PlacePhotos, respPhotos)
+			resp.PlaceReviews[i].Photos = respPhotos
 		}
 
 		encoder := json.NewEncoder(w)
