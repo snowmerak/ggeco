@@ -25,8 +25,8 @@ namespace funcs
                 DataSource = Environment.GetEnvironmentVariable(SqlServerDatabase) ?? "block",
                 InitialCatalog = Environment.GetEnvironmentVariable(SqlServerHost) ?? "localhost" + ":" + Environment.GetEnvironmentVariable(SqlServerPort) ?? "1433",
                 Password = Environment.GetEnvironmentVariable(SqlServerPassword) ?? "password",
-                UserID = Environment.GetEnvironmentVariable(SqlServerUser) ?? "sa"
-                IntegratedSecurity = false;
+                UserID = Environment.GetEnvironmentVariable(SqlServerUser) ?? "sa",
+                IntegratedSecurity = false,
             };
             
             using var db = new GgecoDbContext(connectionStringBuilder.ToString());
@@ -78,7 +78,7 @@ namespace funcs
 
                 transaction.Commit();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 db.Database.RollbackTransaction();
             }
