@@ -154,6 +154,7 @@ func main() {
 	router.GET("/app/badge/searchables", app.GetSearchableBadges(container))
 	router.GET("/app/badge/earned", app.GetEarnedBadges(container))
 	router.GET("/app/badge", app.GetBadgeInfo(container))
+	router.GET("/app/badge/rank", app.GetBadgeRank(container))
 
 	router.GET("/app/course/popular", app.GetPopularCourseOfBadge(container))
 	router.GET("/app/course/recent", app.GetRecentCourses(container))
