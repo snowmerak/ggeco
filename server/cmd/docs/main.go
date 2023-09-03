@@ -667,6 +667,27 @@ func main() {
 		panic(err)
 	}
 
+	getMyBadgeRankOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/api/badge/rank")
+	if err != nil {
+		panic(err)
+	}
+	getMyBadgeRankOp.SetDescription("Get My Badge Rank. If rank is 0, it means that the user has not ranked yet. If delta is 0 and updated is empty string, it means that the user's previous rank is not exist.")
+	getMyBadgeRankOp.SetSummary("Get My Badge Rank")
+	getMyBadgeRankOp.AddRespStructure(app.GetBadgeRankResponse{})
+	getMyBadgeRankOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusInternalServerError
+		cu.Description = "Internal Server Error."
+		cu.ContentType = "text/plain"
+	})
+	getMyBadgeRankOp.AddRespStructure(nil, func(cu *openapi.ContentUnit) {
+		cu.HTTPStatus = http.StatusBadRequest
+		cu.Description = "Bad Request."
+		cu.ContentType = "text/plain"
+	})
+	if err := reflector.AddOperation(getMyBadgeRankOp); err != nil {
+		panic(err)
+	}
+
 	addBadgeOp, err := reflector.NewOperationContext(http.MethodPost, "https://ggeco-func.azurewebsites.net/back/badge")
 	if err != nil {
 		panic(err)

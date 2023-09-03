@@ -7,6 +7,31 @@ info:
   title: ggeco
   version: 1.1.0
 paths:
+  https://ggeco-func.azurewebsites.net/api/badge/rank:
+    get:
+      description: Get My Badge Rank. If rank is 0, it means that the user has not
+        ranked yet. If delta is 0 and updated is empty string, it means that the user's
+        previous rank is not exist.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetBadgeRankResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get My Badge Rank
   https://ggeco-func.azurewebsites.net/app/auth/refresh:
     post:
       description: Refresh Access Token
@@ -905,6 +930,15 @@ components:
       properties:
         earned_badge:
           $ref: '#/components/schemas/AppEarnedBadge'
+      type: object
+    AppGetBadgeRankResponse:
+      properties:
+        delta:
+          type: integer
+        rank:
+          type: integer
+        updated:
+          type: string
       type: object
     AppGetBadgesResponse:
       properties:
