@@ -5,29 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65af343c-6c12-4c33-ae44-225103c1a0b9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/server/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/cmd/docs/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/cmd/docs/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/doc/ER.puml" beforeDir="false" afterPath="$PROJECT_DIR$/server/doc/ER.puml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/badge.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/badge.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/cource.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/cource.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/course_modiy.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/course_modiy.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/place.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/place.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/place_favorite_count.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/place_favorite_count.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/api/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/api/search.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/function/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/function/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/server/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/server/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/badges/badges.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/badges/badges.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/courses.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/courses.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/get.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/get.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/courses/modify.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/courses/modify.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/image/image.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/image/image.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/place/list.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/place/list.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/place/place.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/place/place.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/users/kakao.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/kakao.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/users/naver.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/naver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/lib/service/users/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/lib/service/users/users.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcs/.vscode/extensions.json" beforeDir="false" afterPath="$PROJECT_DIR$/funcs/.vscode/extensions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcs/GgecoDbContext/GgecoDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/funcs/GgecoDbContext/GgecoDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/funcs/UpdateBadgeRank.cs" beforeDir="false" afterPath="$PROJECT_DIR$/funcs/UpdateBadgeRank.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,17 +21,27 @@
       <list>
         <option value="UML Sequence" />
         <option value="UML Use Case" />
+        <option value="BadgeList" />
+        <option value="TypeScript File" />
+        <option value="Config" />
         <option value="Go File" />
       </list>
     </option>
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/gotip/go1.21rc3" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/server" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2T0cZxwk5ITp4M6rw49noFgi9BC" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -58,39 +50,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "DefaultPlantUmlFileTemplate": "UML Use Case",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "dart.analysis.tool.window.visible": "false",
-    "go.import.settings.migrated": "true",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/snowm/projects/ggeco-backoffice",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;DefaultPlantUmlFileTemplate&quot;: &quot;UML Use Case&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/snowm/projects/ggeco&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\snowm\\projects\\ggeco\\backoffice\\frontend\\node_modules\\typescript\\lib&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "azure"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;azure&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\snowm\projects\ggeco\function" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\snowm\projects\ggeco\server" />
+      <recent name="C:\Users\snowm\projects\ggeco\server\function\back" />
+      <recent name="C:\Users\snowm\projects\ggeco\backoffice" />
+      <recent name="C:\Users\snowm\projects\ggeco\backoffice\frontend\src\config" />
       <recent name="C:\Users\snowm\projects\ggeco\function\api" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.go build github.com/snowmerak/ggeco/server/cmd/prac">
     <configuration name="go build ggeco-api" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="ggeco" />
       <working_directory value="$PROJECT_DIR$" />
@@ -101,8 +100,21 @@
       <option name="run" value="false" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="SwaggerCodegen">
+    <configuration name="go build github.com/snowmerak/ggeco/server/cmd/prac" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="ggeco" />
+      <working_directory value="$PROJECT_DIR$/server" />
+      <kind value="PACKAGE" />
+      <package value="github.com/snowmerak/ggeco/server/cmd/prac" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/server/cmd/prac/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="SwaggerCodegen" show_console_on_std_err="false" show_console_on_std_out="false">
+      <option name="allowRunningInParallel" value="false" />
       <option name="customTemplatesPath" value="" />
+      <option name="envs">
+        <map />
+      </option>
       <option name="generateToPath" value="C:\Users\snowm\projects\ggeco\gen" />
       <option name="generationParameters">
         <list />
@@ -110,9 +122,21 @@
       <option name="generatorType" value="OPENAPI_GENERATOR_V6" />
       <option name="jdkPath" value="" />
       <option name="language" value="java" />
+      <option name="passParentEnvs" value="true" />
+      <option name="programParameters" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
       <option name="specificationPath" value="C:\Users\snowm\projects\ggeco\doc\openapi.yml" />
+      <option name="workingDirectory" value="C:\Users\snowm\projects\ggeco\doc" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build github.com/snowmerak/ggeco/server/cmd/prac" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
