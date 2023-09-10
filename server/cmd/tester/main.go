@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"github.com/snowmerak/ggeco/server/cmd/tester/internal/client"
-	"github.com/snowmerak/ggeco/server/function/app"
 	"github.com/unsafe-risk/dotenv"
 	"os"
 	"strings"
@@ -27,10 +26,8 @@ func main() {
 	cli := client.New(url)
 
 	// ChIJJ0hjaMKYfDUR3vuPnM6MgS8
-	at := "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkX2F0IjoxNjkzNjM1NDE2LCJraW5kIjowLCJ1c2VyX2lkIjoiS0NiZEJrUFlFZTY2RndEX0VVd1gxUT09IiwidXNlcl9uaWNrIjoidGVzdCJ9.iX5xQms2-lD2E8Bzo-3NPvRnjCQBcyrxsRFNzcZl1FDpU6YoOncY1wnbWcwdqEJSZreTXUBiV5KpFsZsb7VAPQ"
-	resp, err := cli.GetCourseInfo(at, app.GetCourseInfoRequest{
-		CourseId: "k3I5SjqX3U-0lr50sAXo1w==",
-	})
+	at := "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJleHBpcmVkX2F0IjoxNjkzOTI4MTk4LCJraW5kIjowLCJ1c2VyX2lkIjoiNXdMT3k0ckFTUk9RdHUxRGU5TzlIQT09IiwidXNlcl9uaWNrIjoi6rO17IaQ7ZWcIOq5qOy9lCAxOTA5M-2YuCJ9.UY7nYk7h8DAl_NPT_07rz0hfuOfavb1MgBIO2eIW3WHAQIXYPo-BS5IdZbNHQHnS0KuXpphFHUw5FmySfAar6Q"
+	resp, err := cli.GetMyBadgeRank(at)
 	if err != nil {
 		panic(err)
 	}
