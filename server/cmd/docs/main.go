@@ -269,6 +269,9 @@ func main() {
 		cu.Description = "Bad Request with Error Message."
 		cu.ContentType = "text/plain"
 	})
+	if err := reflector.AddOperation(getMyCoursesOp); err != nil {
+		panic(err)
+	}
 
 	appGetCourseOp, err := reflector.NewOperationContext(http.MethodGet, "https://ggeco-func.azurewebsites.net/app/course")
 	if err != nil {
