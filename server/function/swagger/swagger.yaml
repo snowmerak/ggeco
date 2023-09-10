@@ -367,6 +367,29 @@ paths:
                 type: string
           description: Internal Server Error
       summary: Check Favorite Course
+  https://ggeco-func.azurewebsites.net/app/course/my:
+    get:
+      description: Get My Courses
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppGetMyCoursesResponse'
+          description: OK
+        "400":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Bad Request
+        "500":
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: Internal Server Error
+      summary: Get My Courses
   https://ggeco-func.azurewebsites.net/app/course/popular:
     get:
       description: Get Popular Course of Badge
@@ -984,6 +1007,14 @@ components:
         places:
           items:
             $ref: '#/components/schemas/MapsSearchPlaceIdResponse'
+          nullable: true
+          type: array
+      type: object
+    AppGetMyCoursesResponse:
+      properties:
+        courses:
+          items:
+            $ref: '#/components/schemas/AppCourse'
           nullable: true
           type: array
       type: object
