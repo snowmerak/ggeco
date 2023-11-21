@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"net/http"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/gen/bean"
 	"github.com/snowmerak/ggeco/server/lib/client/maps"
@@ -13,7 +15,6 @@ import (
 	"github.com/snowmerak/ggeco/server/lib/service/courses"
 	"github.com/snowmerak/ggeco/server/lib/service/place"
 	"github.com/snowmerak/ggeco/server/lib/service/users"
-	"net/http"
 )
 
 type GetCourseInfoRequest struct {
