@@ -1,6 +1,6 @@
 module github.com/snowmerak/ggeco/server
 
-go 1.20
+go 1.21.4
 
 require (
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.0.0
