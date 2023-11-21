@@ -4,15 +4,16 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"github.com/rs/zerolog"
-	"github.com/snowmerak/ggeco/server/function/back"
-	"github.com/snowmerak/ggeco/server/lib/client/imgmnger"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
+	"github.com/snowmerak/ggeco/server/function/back"
+	"github.com/snowmerak/ggeco/server/lib/client/imgmnger"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/snowmerak/ggeco/server/function/app"
@@ -30,7 +31,7 @@ func main() {
 
 	defer func() {
 		if err := recover(); err != nil {
-
+			log.Error().Msgf("panic: %v", err)
 		}
 	}()
 
@@ -183,7 +184,7 @@ func main() {
 	router.POST("/back/badge", back.AddBadge(container))
 	router.POST("/back/placetype", back.AddPlaceTypeToBadge(container))
 
-	router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
+	// router.ServeFiles("/app/swagger/*filepath", http.Dir("./swagger"))
 
 	listenFullAddr := fmt.Sprintf("https://127.0.0.1%s/", listenAddr)
 
@@ -204,5 +205,5 @@ func main() {
 	})
 
 	log.Printf("About to listen on %s. Go to %s", listenAddr, listenFullAddr)
-	log.Fatal(http.ListenAndServe(listenAddr, mux))
+	log.Fatal().Msg(http.ListenAndServe(listenAddr, mux).Error())
 }
