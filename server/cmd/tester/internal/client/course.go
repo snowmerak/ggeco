@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/snowmerak/ggeco/server/function/app"
 	"strconv"
+
+	"github.com/snowmerak/ggeco/server/function/app"
 )
 
 func (c *Client) AddCourse(at string, req app.SetCourseRequest) (app.SetCourseResponse, error) {
@@ -73,4 +74,19 @@ func (c *Client) GetCourseInfo(at string, req app.GetCourseInfoRequest) (app.Get
 	}
 
 	return resp, nil
+}
+
+func (c *Client) GetMyCourses(at string) (app.GetMyCoursesResponse, error) {
+	resp, err := c.Get("/course/my", at)
+	if err != nil {
+		return app.GetMyCoursesResponse{}, err
+	}
+
+	var result app.GetMyCoursesResponse
+	err = json.Unmarshal(resp, &result)
+	if err != nil {
+		return app.GetMyCoursesResponse{}, err
+	}
+
+	return result, nil
 }
